@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Cases — Cinemataztic</title>
+    <!-- Page-to-page transitions (must load before first paint) -->
+    <script src="page-transitions.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            cyan: '#3dc0c8',
+                            mint: '#6ceec4',
+                            pink: '#f869b9',
+                            orange: '#fea917',
+                            yellow: '#fece00',
+                            dark: '#0a0a0c',
+                            card: '#121216',
+                            border: '#1f1f26'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Klavika', 'Titillium Web', 'Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Fallback for Klavika Geometric Style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Conveyor mode (set by JS): the window is pinned and cards are placed along the snake path */
+        .conveyor-on #conveyorWindow {
+            position: sticky;
+            top: 5rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .conveyor-on #conveyorWindow > .sticky { position: static; }
+        .conveyor-on #casesGrid {
+            display: block;
+            position: relative;
+            flex: 1;
+            overflow: hidden;
+        }
+        .conveyor-on .case-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            will-change: transform, opacity;
+        }
+        .conveyor-on .case-card.is-lifting .case-media {
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.55);
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <span class="text-2xl sm:text-3xl font-black tracking-wider uppercase text-white group-hover:opacity-90 transition">
+                    CINEMATAZTIC
+                </span>
+            </a>
+
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-widest uppercase">
+                <a href="cases.html" class="text-brand-cyan">Cases</a>
+                <a href="products.html" class="hover:text-brand-cyan transition">Products</a>
+                <a href="index.html#cms" class="px-4 py-2 uppercase tracking-widest font-bold border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition">
+                    <i class="fa-solid fa-gear mr-1"></i> CMS
+                </a>
+                <a href="index.html#contact" class="px-5 py-2.5 bg-brand-cyan text-black hover:bg-brand-mint transition">Get in Touch</a>
+            </nav>
+
+            <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
+            <a href="cases.html" class="block text-lg font-bold uppercase text-brand-cyan">Cases</a>
+            <a href="products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
+            <a href="index.html#contact" class="block text-lg font-bold uppercase hover:text-brand-cyan">Get in Touch</a>
+            <hr class="border-brand-border my-2">
+            <a href="index.html#cms" class="block w-full text-left py-2 text-sm uppercase font-bold text-brand-cyan">
+                <i class="fa-solid fa-gear mr-2"></i> Open CMS Admin
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+
+        <!-- CASES INDEX -->
+        <section class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+
+                <!-- Sticky Sidebar -->
+                <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                    <span class="block text-xs font-bold uppercase tracking-widest text-brand-cyan">Portfolio</span>
+                    <h1 class="text-4xl sm:text-5xl font-black uppercase leading-none">All<br>Cases</h1>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Every published Cinemataztic campaign in one place. Filter by product.
+                    </p>
+                    <div class="flex flex-wrap lg:flex-col lg:items-start gap-2" id="filterContainer">
+                        <!-- Filter buttons populated by JS -->
+                    </div>
+                    <div class="hidden lg:block pt-4">
+                        <span id="caseCount" class="block text-6xl font-black text-white">0</span>
+                        <span class="text-xs uppercase tracking-wider text-gray-400">Cases</span>
+                    </div>
+                </aside>
+
+                <!-- Case Grid -->
+                <div class="lg:col-span-9">
+                  <!-- Conveyor: a tall scroll track; the window inside stays pinned while cards move along a snake path -->
+                  <div id="conveyor" class="relative">
+                   <div id="conveyorWindow">
+                    <!-- Sticky progress bar -->
+                    <div class="sticky top-20 z-30 bg-brand-dark/90 backdrop-blur-md py-4 mb-6">
+                        <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">
+                            <span id="gridHeading">All Cases</span>
+                            <span id="progressCounter" class="text-white">0 / 0</span>
+                        </div>
+                        <div class="h-px bg-brand-border relative overflow-hidden">
+                            <div id="progressBar" class="absolute inset-y-0 left-0 bg-brand-cyan transition-[width] duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-12" id="casesGrid">
+                        <!-- Dynamically Populated by JS -->
+                    </div>
+                   </div>
+                  </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- CASE PUBLIC DETAIL MODAL -->
+    <div id="caseDetailModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div class="bg-brand-card border border-brand-border max-w-4xl w-full rounded-2xl overflow-hidden relative my-8">
+            <button onclick="closeCaseDetailModal()" class="absolute top-4 right-4 z-20 w-10 h-10 bg-black/80 text-white flex items-center justify-center hover:bg-brand-cyan hover:text-black transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="caseModalMediaContainer" class="aspect-video w-full bg-black relative">
+                <!-- Video or Image injected via JS -->
+            </div>
+            <div class="p-8 space-y-6">
+                <div class="flex items-center space-x-3">
+                    <span id="caseModalCategory" class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-brand-cyan text-black">Category</span>
+                    <span id="caseModalClient" class="text-xs font-bold uppercase tracking-wider text-gray-400">Client Name</span>
+                </div>
+                <h2 id="caseModalTitle" class="text-3xl sm:text-4xl font-black uppercase">Case Title</h2>
+                <p id="caseModalDescription" class="text-gray-300 text-base leading-relaxed">Full description content...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-black border-t border-brand-border py-12 text-sm text-gray-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="space-y-2 text-center md:text-left">
+                <span class="text-2xl font-black uppercase text-white">CINEMATAZTIC</span>
+                <p class="text-xs text-gray-400">© 2026 Cinemataztic ApS. All rights reserved.</p>
+            </div>
+            <div class="flex space-x-6 text-xs uppercase tracking-wider font-bold">
+                <a href="index.html#about" class="hover:text-brand-cyan">Studio</a>
+                <a href="products.html" class="hover:text-brand-cyan">Products</a>
+                <a href="cases.html" class="hover:text-brand-cyan">Cases</a>
+                <a href="index.html#contact" class="hover:text-brand-cyan">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- CASE DATA ---
+        // Same CMS store as index.html; falls back to the demo cases when nothing is saved.
+        const defaultCases = [
+            {
+                id: "c1",
+                title: "Samsung Galaxy Arena Challenge",
+                client: "Samsung",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
+                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                description: "An arena-scale multiplayer game synchronized on the big screen, allowing moviegoers to race flagship Samsung smartphones using their own mobile phones."
+            },
+            {
+                id: "c2",
+                title: "Coca-Cola Refresh Programmatic Spot",
+                client: "Coca-Cola",
+                category: "Programmatic",
+                mediaType: "video",
+                cover: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80",
+                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+                description: "Programmatically targeted heatwave campaign triggered across 120 cinema auditoriums as outdoor temperatures surpassed 25°C."
+            },
+            {
+                id: "c3",
+                title: "Tivoli Halloween CineFun Quiz",
+                client: "Tivoli",
+                category: "CineFun",
+                mediaType: "image",
+                cover: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80",
+                video: "",
+                description: "Interactive pre-show horror trivia challenge engaging 45,000 cinema visitors across Denmark ahead of Tivoli's seasonal opening."
+            },
+            {
+                id: "c4",
+                title: "Danske Spil Jackpot Live Draw",
+                client: "Danske Spil",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80",
+                video: "",
+                description: "A live big-screen lottery draw where every seat in the auditorium played along on their phone, with instant prize reveals before the feature started."
+            },
+            {
+                id: "c5",
+                title: "Sprite Summer Chill Countdown",
+                client: "Sprite",
+                category: "Programmatic",
+                mediaType: "image",
+                cover: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=800&q=80",
+                video: "",
+                description: "Weather-triggered pre-show spots that switched creative by local temperature and showtime, reaching 1.2M young moviegoers over the summer holidays."
+            },
+            {
+                id: "c6",
+                title: "Telenor 5G Speed Race",
+                client: "Telenor",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80",
+                video: "",
+                description: "A reaction-speed race where the audience competed row against row on their phones, showing off 5G latency in a packed auditorium."
+            },
+            {
+                id: "c7",
+                title: "Boozt Fashion Week Lookbook",
+                client: "Boozt",
+                category: "CineFun",
+                mediaType: "image",
+                cover: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80",
+                video: "",
+                description: "Interactive style poll where moviegoers voted on looks from the big screen and received a personal discount code for their favourite outfit."
+            },
+            {
+                id: "c8",
+                title: "Subway Pick Your Sub",
+                client: "Subway",
+                category: "CineFun",
+                mediaType: "image",
+                cover: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=800&q=80",
+                video: "",
+                description: "A crowd-built sandwich challenge where the whole auditorium voted ingredient by ingredient, with the winning sub offered at nearby restaurants."
+            },
+            {
+                id: "c9",
+                title: "Samsung Galaxy Fold Premiere Takeover",
+                client: "Samsung",
+                category: "Programmatic",
+                mediaType: "image",
+                cover: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80",
+                video: "",
+                description: "A full premiere-weekend takeover booked programmatically across Nordic blockbuster screenings, synced to launch-day retail availability."
+            },
+            {
+                id: "c10",
+                title: "Coca-Cola Share a Seat Quiz",
+                client: "Coca-Cola",
+                category: "CineFun",
+                mediaType: "image",
+                cover: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80",
+                video: "",
+                description: "A movie trivia quiz played in pairs with the person in the next seat, rewarding the fastest duos with free drinks at the concession stand."
+            },
+            {
+                id: "c11",
+                title: "Tivoli Christmas Market Sing-Along",
+                client: "Tivoli",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?auto=format&fit=crop&w=800&q=80",
+                video: "",
+                description: "A voice-powered sing-along game where the auditorium's volume lit up Tivoli's Christmas tree on screen and unlocked ticket offers."
+            },
+            {
+                id: "c12",
+                title: "Danske Spil Matchday Predictor",
+                client: "Danske Spil",
+                category: "Programmatic",
+                mediaType: "image",
+                cover: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=800&q=80",
+                video: "",
+                description: "Fixture-aware pre-show spots scheduled automatically ahead of national team matches, with live odds pulled into the creative."
+            },
+            {
+                id: "c13",
+                title: "Telenor Family Movie Night",
+                client: "Telenor",
+                category: "CineFun",
+                mediaType: "image",
+                cover: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=800&q=80",
+                video: "",
+                description: "A kid-friendly picture quiz for weekend family screenings, where every correct answer added data to a shared family prize pot."
+            }
+        ];
+
+        function loadCases() {
+            try {
+                const saved = JSON.parse(localStorage.getItem('cinemataztic_cms_data'));
+                if (saved && Array.isArray(saved.cases)) return saved.cases;
+            } catch (e) { /* storage unavailable */ }
+            return defaultCases;
+        }
+
+        const allCases = loadCases();
+        const categories = ['All', 'CineGame', 'Programmatic', 'CineFun'];
+        // ?category=CineGame (from the Product section on the front page) opens pre-filtered
+        const requestedCategory = new URLSearchParams(window.location.search).get('category');
+        let currentFilter = categories.includes(requestedCategory) ? requestedCategory : 'All';
+        let cardStates = [];
+
+        // --- FILTERS ---
+        function renderFilters() {
+            document.getElementById('gridHeading').innerText = currentFilter === 'All' ? 'All Cases' : currentFilter;
+            const container = document.getElementById('filterContainer');
+            container.innerHTML = categories.map(cat => {
+                const count = cat === 'All' ? allCases.length : allCases.filter(c => c.category === cat).length;
+                const active = cat === currentFilter;
+                return `
+                    <button onclick="filterCases('${cat}')" class="px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${active ? 'bg-brand-cyan text-black' : 'border border-brand-border text-gray-300 hover:border-brand-cyan hover:text-white'}">
+                        ${cat} <span class="${active ? 'text-black/60' : 'text-gray-500'} ml-1">${count}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function filterCases(category) {
+            currentFilter = category;
+            renderFilters();
+            renderCasesGrid();
+        }
+
+        // --- GRID ---
+        function renderCasesGrid() {
+            const grid = document.getElementById('casesGrid');
+            const filtered = currentFilter === 'All' ? allCases : allCases.filter(c => c.category === currentFilter);
+            document.getElementById('caseCount').innerText = filtered.length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-500 font-bold uppercase">No cases found in this category.</div>`;
+                cardStates = [];
+                layoutConveyor();
+                return;
+            }
+
+            grid.innerHTML = filtered.map((c, i) => `
+                <article onclick="openCaseDetailModal('${c.id}')" class="case-card group cursor-pointer relative">
+                    <div class="case-media relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
+                        <img src="${c.cover}" alt="${c.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        ${c.mediaType === 'video' ? `
+                            <div class="absolute top-3 right-3 bg-black/80 text-brand-cyan px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-brand-cyan/40">
+                                <i class="fa-solid fa-play mr-1"></i> Video
+                            </div>
+                        ` : ''}
+                        <span class="absolute bottom-3 left-3 text-[10px] font-bold uppercase tracking-widest text-white/70">${String(i + 1).padStart(2, '0')}</span>
+                    </div>
+                    <div class="pt-4 grid grid-cols-2 gap-3">
+                        <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">${c.title}</h3>
+                        <div class="space-y-2">
+                            <span class="block w-max ml-auto text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border border-white text-white">${c.category}</span>
+                            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">${c.description}</p>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+
+            cardStates = [...grid.querySelectorAll('.case-card')].map(card => ({ card }));
+            layoutConveyor();
+        }
+
+        // --- SNAKE CONVEYOR SCROLL ---
+        // While the grid is pinned, scrolling moves every card one slot along a snake path:
+        // row 1 runs right and its last card slides out, row 2 runs left and its first card lifts
+        // up into row 1, row 3 runs right and lifts into row 2, and so on. Once the last cards
+        // are in view the pin releases and the page scrolls on to the footer.
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const HEADER_H = 80;
+        const STEP_PX = 170;   // scroll distance per slot
+        const GAP_X = 24, GAP_Y = 48;
+        const conveyor = { active: false, cols: 1, steps: 0, visibleSlots: 0, cardW: 0, rowH: 0, s: 0, target: 0 };
+
+        function columnsForWidth() {
+            return window.innerWidth >= 1280 ? 3 : window.innerWidth >= 640 ? 2 : 1;
+        }
+
+        // Path slot n -> top-left position. Slot 0 is the exit end of row 1 (right side);
+        // negative slots continue off to the right.
+        function slotPosition(n) {
+            const { cols, cardW, rowH } = conveyor;
+            if (n < 0) return { x: (cols - 1 - n) * (cardW + GAP_X), y: 0, row: 0 };
+            const row = Math.floor(n / cols);
+            const i = n % cols;
+            const col = row % 2 === 0 ? cols - 1 - i : i;
+            return { x: col * (cardW + GAP_X), y: row * rowH, row };
+        }
+
+        function layoutConveyor() {
+            const track = document.getElementById('conveyor');
+            const win = document.getElementById('conveyorWindow');
+            const grid = document.getElementById('casesGrid');
+            const cols = columnsForWidth();
+            conveyor.active = !reduceMotion && cols >= 2 && cardStates.length > 0;
+            track.classList.toggle('conveyor-on', conveyor.active);
+
+            if (!conveyor.active) {
+                track.style.height = '';
+                win.style.height = '';
+                cardStates.forEach(({ card }) => { card.style.cssText = ''; card.classList.remove('is-lifting'); });
+                updateProgress();
+                return;
+            }
+
+            conveyor.cols = cols;
+            conveyor.cardW = (grid.clientWidth - (cols - 1) * GAP_X) / cols;
+            cardStates.forEach(({ card }) => { card.style.width = `${conveyor.cardW}px`; });
+            conveyor.rowH = Math.max(...cardStates.map(({ card }) => card.offsetHeight)) + GAP_Y;
+
+            const winH = window.innerHeight - HEADER_H;
+            win.style.height = `${winH}px`;
+            const stageH = grid.clientHeight;
+            const visibleRows = Math.max(1, Math.floor((stageH + GAP_Y) / conveyor.rowH));
+            conveyor.visibleSlots = Math.min(cardStates.length, visibleRows * cols);
+            conveyor.steps = Math.max(0, cardStates.length - conveyor.visibleSlots);
+            track.style.height = `${winH + conveyor.steps * STEP_PX}px`;
+
+            // Reading order -> path order, so the starting layout reads left to right, top to bottom
+            cardStates.forEach((state, j) => {
+                const row = Math.floor(j / cols), c = j % cols;
+                state.k = row * cols + (row % 2 === 0 ? cols - 1 - c : c);
+            });
+
+            conveyor.target = conveyor.s = scrollToShift();
+            placeCards();
+        }
+
+        function scrollToShift() {
+            if (!conveyor.steps) return 0;
+            const track = document.getElementById('conveyor');
+            const start = track.getBoundingClientRect().top + window.scrollY - HEADER_H;
+            const t = (window.scrollY - start) / (conveyor.steps * STEP_PX);
+            return Math.min(1, Math.max(0, t)) * conveyor.steps;
+        }
+
+        function placeCards() {
+            const s = conveyor.s;
+            cardStates.forEach(({ card, k }) => {
+                const p = k - s;
+                const n = Math.floor(p), f = p - n;
+                const a = slotPosition(n), b = slotPosition(n + 1);
+                const x = a.x + (b.x - a.x) * f;
+                const y = a.y + (b.y - a.y) * f;
+                const lifting = f > 0.001 && a.row !== b.row;
+                card.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+                card.style.opacity = p < 0 ? String(Math.max(0, 1 + p)) : '1';
+                card.style.visibility = p < -1 ? 'hidden' : '';
+                card.style.zIndex = lifting ? '5' : '';
+                card.classList.toggle('is-lifting', lifting);
+            });
+
+            const total = cardStates.length;
+            const seen = Math.min(total, conveyor.visibleSlots + Math.round(s));
+            document.getElementById('progressCounter').innerText = `${seen} / ${total}`;
+            document.getElementById('progressBar').style.width = `${(seen / total) * 100}%`;
+        }
+
+        // Without the conveyor (phones, reduced motion) the counter tracks cards scrolled into view
+        function updateProgress() {
+            if (conveyor.active) return;
+            const total = cardStates.length;
+            const seen = cardStates.filter(s => s.card.getBoundingClientRect().top < window.innerHeight * 0.85).length;
+            document.getElementById('progressCounter').innerText = `${seen} / ${total}`;
+            document.getElementById('progressBar').style.width = total ? `${(seen / total) * 100}%` : '0%';
+        }
+
+        function tick() {
+            if (conveyor.active) {
+                conveyor.target = scrollToShift();
+                // Ease towards the scroll position so the cards glide rather than jump
+                const diff = conveyor.target - conveyor.s;
+                if (Math.abs(diff) > 0.0005) {
+                    conveyor.s += diff * 0.18;
+                    placeCards();
+                }
+            }
+            requestAnimationFrame(tick);
+        }
+
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        let resizeTimer;
+        function scheduleLayout() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(layoutConveyor, 80);
+        }
+        window.addEventListener('resize', scheduleLayout);
+        // Card heights settle after Tailwind (CDN) styles the freshly rendered cards, so measure again then
+        const cardSizeObserver = new ResizeObserver(scheduleLayout);
+        new MutationObserver(() => {
+            cardSizeObserver.disconnect();
+            document.querySelectorAll('#casesGrid .case-card').forEach(card => cardSizeObserver.observe(card));
+        }).observe(document.getElementById('casesGrid'), { childList: true });
+
+        // --- CASE DETAIL MODAL ---
+        function openCaseDetailModal(caseId) {
+            const item = allCases.find(c => c.id === caseId);
+            if (!item) return;
+
+            document.getElementById('caseModalTitle').innerText = item.title;
+            document.getElementById('caseModalClient').innerText = item.client;
+            document.getElementById('caseModalCategory').innerText = item.category;
+            document.getElementById('caseModalDescription').innerText = item.description;
+
+            const mediaBox = document.getElementById('caseModalMediaContainer');
+            if (item.mediaType === 'video' && item.video) {
+                mediaBox.innerHTML = `
+                    <video src="${item.video}" controls autoplay class="w-full h-full object-contain bg-black"></video>
+                `;
+            } else {
+                mediaBox.innerHTML = `
+                    <img src="${item.cover}" class="w-full h-full object-cover">
+                `;
+            }
+
+            document.getElementById('caseDetailModal').classList.remove('hidden');
+        }
+
+        function closeCaseDetailModal() {
+            const modal = document.getElementById('caseDetailModal');
+            const mediaBox = document.getElementById('caseModalMediaContainer');
+            modal.classList.add('hidden');
+            mediaBox.innerHTML = '';
+        }
+
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileDrawer').classList.toggle('hidden');
+        });
+
+        // --- INIT ---
+        renderFilters();
+        renderCasesGrid();
+        if (!reduceMotion) requestAnimationFrame(tick);
+    </script>
+</body>
+</html>

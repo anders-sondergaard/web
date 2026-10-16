@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinemataztic — Digital Cinema Advertising</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            cyan: '#3dc0c8',
+                            mint: '#6ceec4',
+                            pink: '#f869b9',
+                            orange: '#fea917',
+                            yellow: '#fece00',
+                            dark: '#0a0a0c',
+                            card: '#121216',
+                            border: '#1f1f26'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Klavika', 'Titillium Web', 'Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Fallback for Klavika Geometric Style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .animate-blink {
+            animation: cursorBlink 1s infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: flex;
+            width: 200%;
+            animation: marquee 25s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
+
+    <!-- Global Error Guard for Video Promises -->
+    <script>
+        window.addEventListener('unhandledrejection', function(e) {
+            if (e.reason && (e.reason.name === 'AbortError' || e.reason.name === 'NotAllowedError')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#hero" onclick="navigateToSection('hero')" class="flex items-center space-x-2 group">
+                <span class="text-2xl sm:text-3xl font-black tracking-wider uppercase text-white group-hover:opacity-90 transition">
+                    CINEMATAZTIC
+                </span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold tracking-wide uppercase">
+                <a href="#about" onclick="navigateToSection('about')" class="hover:text-brand-cyan transition">Studio</a>
+                <a href="#work" onclick="navigateToSection('work')" class="hover:text-brand-cyan transition">Cases</a>
+                <a href="#products" onclick="navigateToSection('products')" class="hover:text-brand-cyan transition">Products</a>
+                <a href="#faq" onclick="navigateToSection('faq')" class="hover:text-brand-cyan transition">FAQ</a>
+                <a href="#contact" onclick="navigateToSection('contact')" class="hover:text-brand-cyan transition">Contact</a>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="hidden md:flex items-center space-x-4">
+                <button onclick="switchView('admin')" class="px-4 py-2 text-xs uppercase tracking-wider font-bold border border-brand-border rounded-full hover:border-brand-cyan hover:text-brand-cyan transition">
+                    <i class="fa-solid fa-gear mr-1"></i> CMS Admin
+                </button>
+                <a href="#contact" onclick="navigateToSection('contact')" class="px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-brand-cyan text-black rounded-full hover:bg-brand-mint transition shadow-lg shadow-brand-cyan/20">
+                    Get in Touch
+                </a>
+            </div>
+
+            <!-- Mobile Hamburger -->
+            <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
+            <a href="#about" onclick="navigateToSection('about')" class="block text-lg font-bold uppercase hover:text-brand-cyan">Studio</a>
+            <a href="#work" onclick="navigateToSection('work')" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
+            <a href="#products" onclick="navigateToSection('products')" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
+            <a href="#faq" onclick="navigateToSection('faq')" class="block text-lg font-bold uppercase hover:text-brand-cyan">FAQ</a>
+            <a href="#contact" onclick="navigateToSection('contact')" class="block text-lg font-bold uppercase hover:text-brand-cyan">Contact</a>
+            <hr class="border-brand-border my-2">
+            <button onclick="switchView('admin')" class="w-full text-left py-2 text-sm uppercase font-bold text-brand-cyan">
+                <i class="fa-solid fa-gear mr-2"></i> Open CMS Admin
+            </button>
+        </div>
+    </header>
+
+    <!-- PUBLIC VIEW CONTAINER -->
+    <main id="publicView" class="flex-grow pt-20">
+
+        <!-- HERO SECTION WITH INTERACTIVE CANVAS -->
+        <section id="hero" class="relative min-h-[85vh] flex items-center justify-center overflow-hidden border-b border-brand-border">
+            <!-- Canvas Interactive Background -->
+            <canvas id="heroCanvas" class="absolute inset-0 z-0 pointer-events-auto w-full h-full"></canvas>
+
+            <!-- Hero Glow Effects -->
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-cyan/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+            <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-8 py-20 pointer-events-none">
+                <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-brand-card/80 border border-brand-border text-xs uppercase tracking-widest text-brand-cyan pointer-events-auto">
+                    <span class="w-2 h-2 rounded-full bg-brand-cyan animate-ping"></span>
+                    <span>Next-Gen Cinema Advertising</span>
+                </div>
+
+                <h1 class="text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight leading-none pointer-events-auto" id="heroHeadlineDisplay">
+                    WE DO DIGITAL <br>
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-cyan via-brand-mint to-brand-pink">CINEMA ADVERTISING</span>
+                </h1>
+
+                <p class="text-lg sm:text-2xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed pointer-events-auto" id="heroSubtitleDisplay">
+                    We help cinema companies create enduring and lasting value through digital advertising formats. Anticipate the next<span class="text-brand-cyan font-bold animate-blink">_</span>
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 pointer-events-auto">
+                    <a href="#work" onclick="navigateToSection('work')" class="w-full sm:w-auto px-8 py-4 bg-brand-cyan text-black font-bold uppercase tracking-wider text-sm rounded-full hover:bg-brand-mint transition shadow-xl shadow-brand-cyan/20">
+                        Explore Cases
+                    </a>
+                    <a href="#products" onclick="navigateToSection('products')" class="w-full sm:w-auto px-8 py-4 border border-brand-border bg-brand-card/50 text-white font-bold uppercase tracking-wider text-sm rounded-full hover:border-brand-cyan hover:text-brand-cyan transition">
+                        Our Products
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CINEMA PARTNERS MARQUEE TICKER -->
+        <section class="py-8 bg-brand-card border-b border-brand-border overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 text-left">
+                <p class="text-xs uppercase tracking-widest text-gray-400 font-bold">TRUSTED BY CINEMA PARTNERS</p>
+            </div>
+            <div class="relative w-full overflow-hidden">
+                <div class="animate-marquee flex items-center space-x-12 sm:space-x-20 text-xl sm:text-2xl font-bold uppercase tracking-wider text-gray-400 opacity-80" id="cinemaTickerContainer">
+                    <!-- Dynamic Ticker Content Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- STUDIO / ABOUT SECTION -->
+        <section id="about" class="py-24 border-b border-brand-border scroll-mt-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6">
+                        <span class="text-xs font-bold uppercase tracking-widest text-brand-pink">Who We Are</span>
+                        <h2 class="text-3xl sm:text-5xl font-black uppercase">REDEFINING THE BIG SCREEN EXPERIENCE</h2>
+                        <p class="text-gray-400 text-lg leading-relaxed">
+                            Cinemataztic bridges the gap between traditional silver screen advertising and interactive digital engagement. We turn passive cinema audiences into active participants using high-impact programmatic delivery, mobile connectivity, and synchronized big-screen gaming.
+                        </p>
+                        <div class="grid grid-cols-2 gap-6 pt-4">
+                            <div class="border border-brand-border p-4 rounded-xl bg-brand-card">
+                                <span class="block text-3xl font-black text-brand-cyan">98%</span>
+                                <span class="text-xs uppercase tracking-wider text-gray-400">Recall Rate</span>
+                            </div>
+                            <div class="border border-brand-border p-4 rounded-xl bg-brand-card">
+                                <span class="block text-3xl font-black text-brand-mint">15M+</span>
+                                <span class="text-xs uppercase tracking-wider text-gray-400">Players Engaged</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="aspect-video rounded-2xl overflow-hidden border border-brand-border bg-brand-card relative group">
+                            <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=1200&q=80" alt="Cinema theater" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CASES SECTION -->
+        <section id="work" class="py-24 border-b border-brand-border scroll-mt-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-brand-cyan">Portfolio</span>
+                        <h2 class="text-3xl sm:text-5xl font-black uppercase">Cases</h2>
+                    </div>
+
+                    <!-- Category Filters -->
+                    <div class="flex flex-wrap gap-2" id="filterContainer">
+                        <button onclick="filterCases('All')" class="filter-btn active px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-cyan text-black transition">All</button>
+                        <button onclick="filterCases('CineGame')" class="filter-btn px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider border border-brand-border hover:border-brand-pink transition">CineGame</button>
+                        <button onclick="filterCases('Programmatic')" class="filter-btn px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider border border-brand-border hover:border-brand-orange transition">Programmatic</button>
+                        <button onclick="filterCases('CineFun')" class="filter-btn px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider border border-brand-border hover:border-brand-yellow transition">CineFun</button>
+                    </div>
+                </div>
+
+                <!-- Case Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="casesGrid">
+                    <!-- Dynamically Populated by JS -->
+                </div>
+
+                <div class="flex justify-center">
+                    <a href="cases.html" class="px-8 py-4 border border-brand-border bg-brand-card/50 text-white font-bold uppercase tracking-wider text-sm rounded-full hover:border-brand-cyan hover:text-brand-cyan transition">
+                        View All Cases <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CLIENT MARQUEE TICKER -->
+        <section class="py-8 bg-brand-card border-b border-brand-border overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 text-left">
+                <p class="text-xs uppercase tracking-widest text-gray-400 font-bold">TRUSTED BY GLOBAL CLIENTS</p>
+            </div>
+            <div class="relative w-full overflow-hidden">
+                <div class="animate-marquee flex items-center space-x-12 sm:space-x-20 text-xl sm:text-2xl font-bold uppercase tracking-wider text-gray-400 opacity-80" id="tickerContainer">
+                    <!-- Dynamic Ticker Content Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- OUR PRODUCTS SECTION -->
+        <section id="products" class="py-24 border-b border-brand-border scroll-mt-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-brand-mint">Our Offerings</span>
+                    <h2 class="text-3xl sm:text-5xl font-black uppercase">Our Products</h2>
+                </div>
+
+                <!-- Product Accordion Cards -->
+                <div class="space-y-6">
+
+                    <!-- PRODUCT 1: CINEGAME -->
+                    <div class="border border-brand-border rounded-2xl bg-brand-card overflow-hidden">
+                        <button onclick="toggleProduct('prod-cinegame')" class="w-full p-6 sm:p-8 flex items-center justify-between text-left focus:outline-none hover:bg-white/5 transition">
+                            <div class="flex items-center space-x-6">
+                                <span class="text-3xl font-black text-brand-pink">01</span>
+                                <h3 class="text-2xl sm:text-3xl font-bold uppercase">CineGame</h3>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xl transition-transform duration-300" id="icon-prod-cinegame"></i>
+                        </button>
+                        <div id="prod-cinegame" class="hidden px-6 pb-8 sm:px-8 text-gray-300 space-y-6">
+                            <p class="text-lg leading-relaxed">
+                                Transform whole movie auditoriums into multiplayer gaming arenas. Audience members use their smartphones as controllers to play branded interactive games on the main cinema screen before the movie starts.
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+                                <div class="bg-brand-dark p-6 rounded-xl border border-brand-border">
+                                    <h4 class="font-bold text-white uppercase mb-2 text-brand-pink">High Engagement</h4>
+                                    <p class="text-sm text-gray-400">Up to 80% audience participation rate with direct phone-to-screen synchronization.</p>
+                                </div>
+                                <div class="bg-brand-dark p-6 rounded-xl border border-brand-border">
+                                    <h4 class="font-bold text-white uppercase mb-2 text-brand-pink">Voucher Rewards</h4>
+                                    <p class="text-sm text-gray-400">Instant digital coupon delivery straight to players' phones for post-cinema conversion.</p>
+                                </div>
+                                <div class="bg-brand-dark p-6 rounded-xl border border-brand-border">
+                                    <h4 class="font-bold text-white uppercase mb-2 text-brand-pink">Live Leaderboards</h4>
+                                    <p class="text-sm text-gray-400">Real-time competitive scoring creates unforgettable shared social moments.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PRODUCT 2: PROGRAMMATIC -->
+                    <div class="border border-brand-border rounded-2xl bg-brand-card overflow-hidden">
+                        <button onclick="toggleProduct('prod-programmatic')" class="w-full p-6 sm:p-8 flex items-center justify-between text-left focus:outline-none hover:bg-white/5 transition">
+                            <div class="flex items-center space-x-6">
+                                <span class="text-3xl font-black text-brand-orange">02</span>
+                                <h3 class="text-2xl sm:text-3xl font-bold uppercase">Programmatic</h3>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xl transition-transform duration-300" id="icon-prod-programmatic"></i>
+                        </button>
+                        <div id="prod-programmatic" class="hidden px-6 pb-8 sm:px-8 text-gray-300 space-y-8">
+                            <p class="text-lg leading-relaxed">
+                                Automated, targetable, and transparent digital cinema ad buying. Connect your media plan directly to cinema screens with real-time impression reporting and geographic audience targeting.
+                            </p>
+
+                            <!-- Requested Full-Width Box 1 -->
+                            <div class="p-8 rounded-2xl bg-brand-dark border border-brand-orange/30 space-y-4">
+                                <h4 class="text-xl sm:text-2xl font-black uppercase text-brand-orange">
+                                    DIGITAL TRANSFORMATION OF THE CINEMA MEDIA
+                                </h4>
+                                <p class="text-gray-300 leading-relaxed text-base">
+                                    Discover the most premium marketplace for new digital ad formats. Cinemataztic combines interactivity, targeting and measurement of digital with the scale and quality of traditional cinema advertising. We use technology, data, user engagement and premium inventory to enable buyers and sellers to transact across all cinema screens.
+                                </p>
+                            </div>
+
+                            <!-- Requested Full-Width Box 2 (How Advertisers Buy) -->
+                            <div class="p-8 rounded-2xl bg-brand-dark border border-brand-border space-y-8">
+                                <div>
+                                    <h4 class="text-xl sm:text-2xl font-black uppercase text-white mb-2">
+                                        HOW ADVERTISERS BUY PROGRAMMATIC CINEMA?
+                                    </h4>
+                                    <p class="text-gray-400">
+                                        Once signed up to the platform advertisers and agencies book programmatic cinema in 6 easy steps.
+                                    </p>
+                                </div>
+
+                                <!-- 6 STEPS CIRCULAR DIAGRAM AND LIST -->
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                                    <!-- Interactive SVG Diagram -->
+                                    <div class="relative max-w-md mx-auto w-full aspect-square flex items-center justify-center p-4">
+                                        <svg viewBox="0 0 400 400" class="w-full h-full transform -rotate-90">
+                                            <!-- Ring Segments -->
+                                            <circle cx="200" cy="200" r="120" fill="none" stroke="#1a1a22" stroke-width="40" />
+                                            <circle cx="200" cy="200" r="120" fill="none" stroke="#3dc0c8" stroke-width="36" stroke-dasharray="120 630" stroke-dashoffset="0" class="hover:stroke-brand-mint transition cursor-pointer" />
+                                            <circle cx="200" cy="200" r="120" fill="none" stroke="#31b2ba" stroke-dasharray="120 630" stroke-dashoffset="-125" class="hover:stroke-brand-mint transition cursor-pointer" />
+                                            <circle cx="200" cy="200" r="120" fill="none" stroke="#25a4ad" stroke-width="36" stroke-dasharray="120 630" stroke-dashoffset="-250" class="hover:stroke-brand-mint transition cursor-pointer" />
+                                            <circle cx="200" cy="200" r="120" fill="none" stroke="#1d939b" stroke-width="36" stroke-dasharray="120 630" stroke-dashoffset="-375" class="hover:stroke-brand-mint transition cursor-pointer" />
+                                            <circle cx="200" cy="200" r="120" fill="none" stroke="#16838a" stroke-width="36" stroke-dasharray="120 630" stroke-dashoffset="-500" class="hover:stroke-brand-mint transition cursor-pointer" />
+                                            <circle cx="200" cy="200" r="120" fill="none" stroke="#6ceec4" stroke-width="36" stroke-dasharray="120 630" stroke-dashoffset="-625" class="hover:stroke-brand-mint transition cursor-pointer" />
+                                        </svg>
+                                        <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                                            <span class="text-4xl font-black text-brand-cyan">6</span>
+                                            <span class="text-xs uppercase tracking-widest text-gray-400 font-bold">Easy Steps</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Step Item List -->
+                                    <div class="space-y-4">
+                                        <div class="p-3 rounded-lg bg-brand-card border border-brand-border flex items-start space-x-3">
+                                            <span class="w-7 h-7 rounded-full bg-brand-cyan text-black font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">1</span>
+                                            <div>
+                                                <h5 class="font-bold text-white text-sm">Spot details:</h5>
+                                                <p class="text-xs text-gray-400">Choose the number of spots and spot duration</p>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 rounded-lg bg-brand-card border border-brand-border flex items-start space-x-3">
+                                            <span class="w-7 h-7 rounded-full bg-brand-cyan text-black font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">2</span>
+                                            <div>
+                                                <h5 class="font-bold text-white text-sm">Creatives:</h5>
+                                                <p class="text-xs text-gray-400">Upload your spot (add a voucher if applicable)</p>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 rounded-lg bg-brand-card border border-brand-border flex items-start space-x-3">
+                                            <span class="w-7 h-7 rounded-full bg-brand-cyan text-black font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">3</span>
+                                            <div>
+                                                <h5 class="font-bold text-white text-sm">Day & Time:</h5>
+                                                <p class="text-xs text-gray-400">Select the campaign period and time slots</p>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 rounded-lg bg-brand-card border border-brand-border flex items-start space-x-3">
+                                            <span class="w-7 h-7 rounded-full bg-brand-cyan text-black font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">4</span>
+                                            <div>
+                                                <h5 class="font-bold text-white text-sm">Audience:</h5>
+                                                <p class="text-xs text-gray-400">Define your target audience</p>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 rounded-lg bg-brand-card border border-brand-border flex items-start space-x-3">
+                                            <span class="w-7 h-7 rounded-full bg-brand-cyan text-black font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">5</span>
+                                            <div>
+                                                <h5 class="font-bold text-white text-sm">Distribution:</h5>
+                                                <p class="text-xs text-gray-400">Choose cinemas based on geography</p>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 rounded-lg bg-brand-card border border-brand-border flex items-start space-x-3">
+                                            <span class="w-7 h-7 rounded-full bg-brand-cyan text-black font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">6</span>
+                                            <div>
+                                                <h5 class="font-bold text-white text-sm">Budget:</h5>
+                                                <p class="text-xs text-gray-400">Enter your bid percentage (%), budget, and suggest a new base-CPM if needed</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PRODUCT 3: CINEFUN -->
+                    <div class="border border-brand-border rounded-2xl bg-brand-card overflow-hidden">
+                        <button onclick="toggleProduct('prod-cinefun')" class="w-full p-6 sm:p-8 flex items-center justify-between text-left focus:outline-none hover:bg-white/5 transition">
+                            <div class="flex items-center space-x-6">
+                                <span class="text-3xl font-black text-brand-yellow">03</span>
+                                <h3 class="text-2xl sm:text-3xl font-bold uppercase">CineFun</h3>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xl transition-transform duration-300" id="icon-prod-cinefun"></i>
+                        </button>
+                        <div id="prod-cinefun" class="hidden px-6 pb-8 sm:px-8 text-gray-300 space-y-6">
+                            <p class="text-lg leading-relaxed">
+                                Mobile app integration and lobby activations that keep moviegoers entertained before, during, and after the cinema screening.
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+                                <div class="bg-brand-dark p-6 rounded-xl border border-brand-border">
+                                    <h4 class="font-bold text-white uppercase mb-2 text-brand-yellow">Trivia & Quizzes</h4>
+                                    <p class="text-sm text-gray-400">Movie themed interactive games tailored to incoming film audiences.</p>
+                                </div>
+                                <div class="bg-brand-dark p-6 rounded-xl border border-brand-border">
+                                    <h4 class="font-bold text-white uppercase mb-2 text-brand-yellow">Lobby Kiosks</h4>
+                                    <p class="text-sm text-gray-400">Touchscreen units and AR photo booths placed in cinema foyers.</p>
+                                </div>
+                                <div class="bg-brand-dark p-6 rounded-xl border border-brand-border">
+                                    <h4 class="font-bold text-white uppercase mb-2 text-brand-yellow">Loyalty Connect</h4>
+                                    <p class="text-sm text-gray-400">Direct integration with cinema app memberships and reward points.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ SECTION -->
+        <section id="faq" class="py-24 border-b border-brand-border scroll-mt-20">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                <div class="text-center">
+                    <span class="text-xs font-bold uppercase tracking-widest text-brand-cyan">Knowledge Base</span>
+                    <h2 class="text-3xl sm:text-5xl font-black uppercase">Frequently Asked Questions</h2>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="border border-brand-border rounded-xl bg-brand-card overflow-hidden">
+                        <button onclick="toggleFaq('faq-1')" class="w-full p-6 text-left font-bold text-lg flex items-center justify-between">
+                            <span>How do moviegoers connect their smartphones to CineGame?</span>
+                            <i class="fa-solid fa-plus text-brand-cyan" id="icon-faq-1"></i>
+                        </button>
+                        <div id="faq-1" class="hidden px-6 pb-6 text-gray-400 text-sm leading-relaxed">
+                            Audiences simply scan the QR code displayed on the big screen or open a simple web URL. No app download is required to play.
+                        </div>
+                    </div>
+
+                    <div class="border border-brand-border rounded-xl bg-brand-card overflow-hidden">
+                        <button onclick="toggleFaq('faq-2')" class="w-full p-6 text-left font-bold text-lg flex items-center justify-between">
+                            <span>Is programmatic cinema ad booking available globally?</span>
+                            <i class="fa-solid fa-plus text-brand-cyan" id="icon-faq-2"></i>
+                        </button>
+                        <div id="faq-2" class="hidden px-6 pb-6 text-gray-400 text-sm leading-relaxed">
+                            Yes, Cinemataztic connects directly to primary cinema chains across Europe, North America, and select Nordic markets.
+                        </div>
+                    </div>
+
+                    <div class="border border-brand-border rounded-xl bg-brand-card overflow-hidden">
+                        <button onclick="toggleFaq('faq-3')" class="w-full p-6 text-left font-bold text-lg flex items-center justify-between">
+                            <span>What video specifications are supported for programmatic spots?</span>
+                            <i class="fa-solid fa-plus text-brand-cyan" id="icon-faq-3"></i>
+                        </button>
+                        <div id="faq-3" class="hidden px-6 pb-6 text-gray-400 text-sm leading-relaxed">
+                            We accept standard DCP cinema formats as well as high-bitrate MP4/MOV files (1080p / 4K) which our platform automatically transcodes.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT & INQUIRY SECTION -->
+        <section id="contact" class="py-24 scroll-mt-20">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                <div class="text-center space-y-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-brand-pink">Start a Campaign</span>
+                    <h2 class="text-3xl sm:text-5xl font-black uppercase">LET'S CREATE SOMETHING UN-ORDINARY</h2>
+                    <p class="text-gray-400 max-w-xl mx-auto">Fill in your campaign details and our cinema ad team will reach out within 24 hours.</p>
+                </div>
+
+                <form id="publicInquiryForm" onsubmit="handleInquirySubmit(event)" class="bg-brand-card border border-brand-border p-8 sm:p-10 rounded-2xl space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider font-bold text-gray-400 mb-2">Name *</label>
+                            <input type="text" id="inqName" required class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-cyan">
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider font-bold text-gray-400 mb-2">Company Email *</label>
+                            <input type="email" id="inqEmail" required class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-cyan">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider font-bold text-gray-400 mb-2">Company / Agency *</label>
+                            <input type="text" id="inqCompany" required class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-cyan">
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider font-bold text-gray-400 mb-2">Product Interest</label>
+                            <select id="inqProduct" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-cyan">
+                                <option value="CineGame">CineGame</option>
+                                <option value="Programmatic">Programmatic Cinema</option>
+                                <option value="CineFun">CineFun</option>
+                                <option value="All Products">All Products</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider font-bold text-gray-400 mb-2">Project Brief & Objectives *</label>
+                        <textarea id="inqBrief" rows="4" required class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-cyan" placeholder="Tell us about your target audience, launch timeline, or campaign goals..."></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-brand-cyan text-black font-bold uppercase tracking-wider rounded-lg hover:bg-brand-mint transition shadow-xl shadow-brand-cyan/20">
+                        Submit Inquiry
+                    </button>
+                    <p id="inquirySuccessMsg" class="hidden text-brand-mint text-center text-sm font-bold pt-2">
+                        <i class="fa-solid fa-circle-check mr-1"></i> Thank you! Your inquiry has been logged into the CMS Inbox.
+                    </p>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- CMS ADMIN PORTAL CONTAINER -->
+    <main id="adminView" class="hidden flex-grow pt-20 bg-black min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+            
+            <!-- Admin Top Bar -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-brand-border pb-6 gap-4">
+                <div>
+                    <span class="text-xs uppercase font-bold text-brand-cyan tracking-widest">Internal Management Portal</span>
+                    <h1 class="text-3xl font-black uppercase">Cinemataztic CMS</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="resetDataToDefault()" class="px-4 py-2 border border-red-500/40 text-red-400 hover:bg-red-500/10 rounded-lg text-xs font-bold uppercase tracking-wider transition">
+                        Reset Demo Data
+                    </button>
+                    <button onclick="switchView('public')" class="px-5 py-2.5 bg-brand-cyan text-black rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-brand-mint transition">
+                        Back to Website
+                    </button>
+                </div>
+            </div>
+
+            <!-- Admin Tabs -->
+            <div class="flex space-x-2 border-b border-brand-border overflow-x-auto pb-2">
+                <button onclick="switchAdminTab('cases')" id="tabBtn-cases" class="admin-tab active px-5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider bg-brand-cyan text-black transition shrink-0">
+                    Manage Cases
+                </button>
+                <button onclick="switchAdminTab('ticker')" id="tabBtn-ticker" class="admin-tab px-5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider bg-brand-card border border-brand-border text-gray-300 hover:text-white transition shrink-0">
+                    Client Marquee
+                </button>
+                <button onclick="switchAdminTab('inquiries')" id="tabBtn-inquiries" class="admin-tab px-5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider bg-brand-card border border-brand-border text-gray-300 hover:text-white transition shrink-0 flex items-center">
+                    <span>Inquiries Inbox</span>
+                    <span id="inquiryBadge" class="ml-2 px-2 py-0.5 rounded-full text-[10px] bg-brand-pink text-black font-black">0</span>
+                </button>
+            </div>
+
+            <!-- TAB 1: MANAGE CASES -->
+            <div id="tab-cases" class="admin-content space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-bold uppercase">Case Studies & Video Reels</h3>
+                    <button onclick="openCaseModal()" class="px-4 py-2 bg-brand-cyan text-black font-bold text-xs uppercase tracking-wider rounded-lg hover:bg-brand-mint transition">
+                        + Add New Case
+                    </button>
+                </div>
+
+                <div class="bg-brand-card border border-brand-border rounded-xl overflow-hidden">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-brand-dark border-b border-brand-border text-xs uppercase text-gray-400">
+                            <tr>
+                                <th class="p-4">Case Title</th>
+                                <th class="p-4">Client</th>
+                                <th class="p-4">Category</th>
+                                <th class="p-4">Media Type</th>
+                                <th class="p-4">Front Page <span id="featuredCountLabel" class="text-brand-cyan"></span></th>
+                                <th class="p-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminCasesTable" class="divide-y divide-brand-border text-gray-300">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 2: CLIENT MARQUEE -->
+            <div id="tab-ticker" class="admin-content hidden space-y-6">
+                <h3 class="text-xl font-bold uppercase">Trusted Client Brands</h3>
+                <div class="bg-brand-card border border-brand-border p-6 rounded-xl space-y-4">
+                    <div class="flex gap-4">
+                        <input type="text" id="newTickerInput" placeholder="Add brand name (e.g. Adidas)" class="flex-grow bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-brand-cyan">
+                        <button onclick="addTickerBrand()" class="px-5 py-2 bg-brand-cyan text-black font-bold text-xs uppercase rounded-lg hover:bg-brand-mint transition">Add</button>
+                    </div>
+                    <div id="tickerBrandsList" class="flex flex-wrap gap-2 pt-2">
+                        <!-- Dynamic brand pills -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: INQUIRIES INBOX -->
+            <div id="tab-inquiries" class="admin-content hidden space-y-6">
+                <h3 class="text-xl font-bold uppercase">Received Client Inquiries</h3>
+                <div class="bg-brand-card border border-brand-border rounded-xl overflow-hidden">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-brand-dark border-b border-brand-border text-xs uppercase text-gray-400">
+                            <tr>
+                                <th class="p-4">Date</th>
+                                <th class="p-4">Client Name</th>
+                                <th class="p-4">Company</th>
+                                <th class="p-4">Product</th>
+                                <th class="p-4">Brief</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminInquiriesTable" class="divide-y divide-brand-border text-gray-300">
+                            <!-- Dynamic Table Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- CASE PUBLIC DETAIL MODAL -->
+    <div id="caseDetailModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div class="bg-brand-card border border-brand-border max-w-4xl w-full rounded-2xl overflow-hidden relative my-8">
+            <button onclick="closeCaseDetailModal()" class="absolute top-4 right-4 z-20 w-10 h-10 bg-black/80 text-white rounded-full flex items-center justify-center hover:bg-brand-cyan hover:text-black transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="caseModalMediaContainer" class="aspect-video w-full bg-black relative">
+                <!-- Video or Image injected via JS -->
+            </div>
+            <div class="p-8 space-y-6">
+                <div class="flex items-center space-x-3">
+                    <span id="caseModalCategory" class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-brand-cyan text-black">Category</span>
+                    <span id="caseModalClient" class="text-xs font-bold uppercase tracking-wider text-gray-400">Client Name</span>
+                </div>
+                <h2 id="caseModalTitle" class="text-3xl sm:text-4xl font-black uppercase">Case Title</h2>
+                <p id="caseModalDescription" class="text-gray-300 text-base leading-relaxed">Full description content...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CMS CASE EDIT/CREATE MODAL -->
+    <div id="caseEditModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-brand-card border border-brand-border max-w-2xl w-full rounded-2xl p-6 sm:p-8 space-y-6 my-8">
+            <div class="flex justify-between items-center border-b border-brand-border pb-4">
+                <h3 id="editModalHeaderTitle" class="text-xl font-bold uppercase">Add New Case</h3>
+                <button onclick="closeCaseModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <form onsubmit="saveCaseForm(event)" class="space-y-4">
+                <input type="hidden" id="editCaseId">
+                <div>
+                    <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Title *</label>
+                    <input type="text" id="editCaseTitle" required class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Client *</label>
+                        <input type="text" id="editCaseClient" required class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Category *</label>
+                        <select id="editCaseCategory" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
+                            <option value="CineGame">CineGame</option>
+                            <option value="Programmatic">Programmatic</option>
+                            <option value="CineFun">CineFun</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Media Type</label>
+                        <select id="editCaseMediaType" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
+                            <option value="image">Image Only</option>
+                            <option value="video">Video Reel (MP4)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Cover Image URL *</label>
+                        <input type="url" id="editCaseCover" required class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Video URL (MP4 / WebM)</label>
+                    <input type="url" id="editCaseVideo" placeholder="https://domain.com/video.mp4" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Description *</label>
+                    <textarea id="editCaseDescription" rows="4" required class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none"></textarea>
+                </div>
+                <label class="flex items-center space-x-3 cursor-pointer select-none">
+                    <input type="checkbox" id="editCaseFeatured" class="w-4 h-4 accent-[#3dc0c8]">
+                    <span class="text-xs uppercase font-bold text-gray-300">Show on front page <span id="editFeaturedCount" class="text-gray-500"></span></span>
+                </label>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeCaseModal()" class="px-5 py-2 border border-brand-border text-gray-400 rounded-lg text-xs font-bold uppercase">Cancel</button>
+                    <button type="submit" class="px-5 py-2 bg-brand-cyan text-black rounded-lg text-xs font-bold uppercase hover:bg-brand-mint transition">Save Case</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-black border-t border-brand-border py-12 text-sm text-gray-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="space-y-2 text-center md:text-left">
+                <span class="text-2xl font-black uppercase text-white">CINEMATAZTIC</span>
+                <p class="text-xs text-gray-400">© 2026 Cinemataztic ApS. All rights reserved.</p>
+            </div>
+            <div class="flex space-x-6 text-xs uppercase tracking-wider font-bold">
+                <a href="#about" onclick="navigateToSection('about')" class="hover:text-brand-cyan">Studio</a>
+                <a href="#work" onclick="navigateToSection('work')" class="hover:text-brand-cyan">Cases</a>
+                <a href="#products" onclick="navigateToSection('products')" class="hover:text-brand-cyan">Products</a>
+                <a href="#contact" onclick="navigateToSection('contact')" class="hover:text-brand-cyan">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MAIN APPLICATION JAVASCRIPT -->
+    <script>
+        // --- DEFAULT STATE FOR CMS STORE ---
+        const defaultState = {
+            tickerBrands: ["Coca Cola", "Sprite", "Danske Spil", "Samsung", "Tivoli", "Boozt", "Subway", "Telenor"],
+            cases: [
+                {
+                    id: "c1",
+                    featured: true,
+                    title: "Samsung Galaxy Arena Challenge",
+                    client: "Samsung",
+                    category: "CineGame",
+                    mediaType: "video",
+                    cover: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
+                    video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                    description: "An arena-scale multiplayer game synchronized on the big screen, allowing moviegoers to race flagship Samsung smartphones using their own mobile phones."
+                },
+                {
+                    id: "c2",
+                    featured: true,
+                    title: "Coca-Cola Refresh Programmatic Spot",
+                    client: "Coca-Cola",
+                    category: "Programmatic",
+                    mediaType: "video",
+                    cover: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80",
+                    video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+                    description: "Programmatically targeted heatwave campaign triggered across 120 cinema auditoriums as outdoor temperatures surpassed 25°C."
+                },
+                {
+                    id: "c3",
+                    featured: true,
+                    title: "Tivoli Halloween CineFun Quiz",
+                    client: "Tivoli",
+                    category: "CineFun",
+                    mediaType: "image",
+                    cover: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80",
+                    video: "",
+                    description: "Interactive pre-show horror trivia challenge engaging 45,000 cinema visitors across Denmark ahead of Tivoli's seasonal opening."
+                },
+                {
+                    id: "c4",
+                    featured: true,
+                    title: "Danske Spil Jackpot Live Draw",
+                    client: "Danske Spil",
+                    category: "CineGame",
+                    mediaType: "image",
+                    cover: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80",
+                    video: "",
+                    description: "A live big-screen lottery draw where every seat in the auditorium played along on their phone, with instant prize reveals before the feature started."
+                },
+                {
+                    id: "c5",
+                    featured: true,
+                    title: "Sprite Summer Chill Countdown",
+                    client: "Sprite",
+                    category: "Programmatic",
+                    mediaType: "image",
+                    cover: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=800&q=80",
+                    video: "",
+                    description: "Weather-triggered pre-show spots that switched creative by local temperature and showtime, reaching 1.2M young moviegoers over the summer holidays."
+                },
+                {
+                    id: "c6",
+                    featured: true,
+                    title: "Telenor 5G Speed Race",
+                    client: "Telenor",
+                    category: "CineGame",
+                    mediaType: "image",
+                    cover: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80",
+                    video: "",
+                    description: "A reaction-speed race where the audience competed row against row on their phones, showing off 5G latency in a packed auditorium."
+                },
+                {
+                    id: "c7",
+                    featured: true,
+                    title: "Boozt Fashion Week Lookbook",
+                    client: "Boozt",
+                    category: "CineFun",
+                    mediaType: "image",
+                    cover: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80",
+                    video: "",
+                    description: "Interactive style poll where moviegoers voted on looks from the big screen and received a personal discount code for their favourite outfit."
+                },
+                {
+                    id: "c8",
+                    featured: true,
+                    title: "Subway Pick Your Sub",
+                    client: "Subway",
+                    category: "CineFun",
+                    mediaType: "image",
+                    cover: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=800&q=80",
+                    video: "",
+                    description: "A crowd-built sandwich challenge where the whole auditorium voted ingredient by ingredient, with the winning sub offered at nearby restaurants."
+                },
+                {
+                    id: "c9",
+                    featured: true,
+                    title: "Samsung Galaxy Fold Premiere Takeover",
+                    client: "Samsung",
+                    category: "Programmatic",
+                    mediaType: "image",
+                    cover: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80",
+                    video: "",
+                    description: "A full premiere-weekend takeover booked programmatically across Nordic blockbuster screenings, synced to launch-day retail availability."
+                },
+                {
+                    id: "c10",
+                    featured: false,
+                    title: "Coca-Cola Share a Seat Quiz",
+                    client: "Coca-Cola",
+                    category: "CineFun",
+                    mediaType: "image",
+                    cover: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80",
+                    video: "",
+                    description: "A movie trivia quiz played in pairs with the person in the next seat, rewarding the fastest duos with free drinks at the concession stand."
+                },
+                {
+                    id: "c11",
+                    featured: false,
+                    title: "Tivoli Christmas Market Sing-Along",
+                    client: "Tivoli",
+                    category: "CineGame",
+                    mediaType: "image",
+                    cover: "https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?auto=format&fit=crop&w=800&q=80",
+                    video: "",
+                    description: "A voice-powered sing-along game where the auditorium's volume lit up Tivoli's Christmas tree on screen and unlocked ticket offers."
+                },
+                {
+                    id: "c12",
+                    featured: false,
+                    title: "Danske Spil Matchday Predictor",
+                    client: "Danske Spil",
+                    category: "Programmatic",
+                    mediaType: "image",
+                    cover: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=800&q=80",
+                    video: "",
+                    description: "Fixture-aware pre-show spots scheduled automatically ahead of national team matches, with live odds pulled into the creative."
+                },
+                {
+                    id: "c13",
+                    featured: false,
+                    title: "Telenor Family Movie Night",
+                    client: "Telenor",
+                    category: "CineFun",
+                    mediaType: "image",
+                    cover: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=800&q=80",
+                    video: "",
+                    description: "A kid-friendly picture quiz for weekend family screenings, where every correct answer added data to a shared family prize pot."
+                }
+            ],
+            inquiries: []
+        };
+
+        // --- APP STATE INIT ---
+        let appData = defaultState;
+        try {
+            appData = JSON.parse(localStorage.getItem('cinemataztic_cms_data')) || defaultState;
+        } catch (e) { /* storage unavailable (private mode, sandboxed preview) */ }
+
+        function saveAppData() {
+            try {
+                localStorage.setItem('cinemataztic_cms_data', JSON.stringify(appData));
+            } catch (e) { /* storage unavailable: changes last for this visit only */ }
+            renderAllViews();
+        }
+
+        function resetDataToDefault() {
+            if (confirm("Reset all CMS cases, ticker brands, and inquiries to default demo data?")) {
+                appData = JSON.parse(JSON.stringify(defaultState));
+                saveAppData();
+            }
+        }
+
+        // --- NAVIGATION HANDLER ---
+        function navigateToSection(targetId) {
+            switchView('public');
+            const element = document.getElementById(targetId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+            document.getElementById('mobileDrawer').classList.add('hidden');
+        }
+
+        function switchView(view) {
+            const pub = document.getElementById('publicView');
+            const adm = document.getElementById('adminView');
+            if (view === 'admin') {
+                pub.classList.add('hidden');
+                adm.classList.remove('hidden');
+                window.scrollTo(0, 0);
+            } else {
+                adm.classList.add('hidden');
+                pub.classList.remove('hidden');
+            }
+        }
+
+        // --- RENDER FUNCTIONS ---
+        function renderAllViews() {
+            renderTicker();
+            renderCasesGrid('All');
+            renderAdminCases();
+            renderAdminTicker();
+            renderAdminInquiries();
+        }
+
+        // Ticker Renderer
+        const cinemaBrands = ["DRF", "FinnKino", "FilmStaden", "UCI", "CineDome", "Odeon"];
+
+        function renderTicker() {
+            renderTickerList('tickerContainer', appData.tickerBrands);
+            renderTickerList('cinemaTickerContainer', cinemaBrands);
+        }
+
+        function renderTickerList(containerId, list) {
+            const container = document.getElementById(containerId);
+            // Duplicate list 3x for smooth continuous loop
+            const fullList = [...list, ...list, ...list, ...list];
+            container.innerHTML = fullList.map(b => `<span class="shrink-0 flex items-center"><i class="fa-solid fa-sparkles text-xs text-brand-cyan mr-3"></i>${b}</span>`).join('');
+        }
+
+        // Public Cases Grid
+        let currentFilter = 'All';
+        function filterCases(category) {
+            currentFilter = category;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.innerText.trim().toLowerCase() === category.toLowerCase()) {
+                    btn.className = 'filter-btn active px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-cyan text-black transition';
+                } else {
+                    btn.className = 'filter-btn px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider border border-brand-border hover:border-brand-cyan transition';
+                }
+            });
+            renderCasesGrid(category);
+        }
+
+        // Front page shows the cases ticked in the CMS (max 9).
+        // Data saved before the field existed has no flags, so it falls back to the first 9.
+        const MAX_FEATURED = 9;
+
+        function featuredCount() {
+            return appData.cases.filter(c => c.featured).length;
+        }
+
+        function frontPageCases() {
+            const hasFlags = appData.cases.some(c => 'featured' in c);
+            const list = hasFlags ? appData.cases.filter(c => c.featured) : appData.cases;
+            return list.slice(0, MAX_FEATURED);
+        }
+
+        function renderCasesGrid(category) {
+            const grid = document.getElementById('casesGrid');
+            const featured = frontPageCases();
+            const filtered = category === 'All' ? featured : featured.filter(c => c.category.toLowerCase() === category.toLowerCase());
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-500 font-bold uppercase">No cases found in this category.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(c => {
+                const categoryColor = c.category === 'CineGame' ? 'text-brand-pink border-brand-pink' :
+                                      c.category === 'Programmatic' ? 'text-brand-orange border-brand-orange' : 'text-brand-yellow border-brand-yellow';
+                return `
+                    <div onclick="openCaseDetailModal('${c.id}')" class="group bg-brand-card border border-brand-border rounded-2xl overflow-hidden cursor-pointer hover:border-brand-cyan transition duration-300 flex flex-col">
+                        <div class="aspect-video relative overflow-hidden bg-black">
+                            <img src="${c.cover}" alt="${c.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            ${c.mediaType === 'video' ? `
+                                <div class="absolute top-3 right-3 bg-black/80 text-brand-cyan px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-brand-cyan/40">
+                                    <i class="fa-solid fa-play mr-1"></i> Video
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="p-6 space-y-3 flex-grow flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 border rounded-full ${categoryColor}">${c.category}</span>
+                                    <span class="text-xs text-gray-400 uppercase tracking-wider font-bold">${c.client}</span>
+                                </div>
+                                <h3 class="text-xl font-bold uppercase text-white group-hover:text-brand-cyan transition">${c.title}</h3>
+                            </div>
+                            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">${c.description}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Case Public Detail Modal
+        function openCaseDetailModal(caseId) {
+            const item = appData.cases.find(c => c.id === caseId);
+            if (!item) return;
+
+            document.getElementById('caseModalTitle').innerText = item.title;
+            document.getElementById('caseModalClient').innerText = item.client;
+            document.getElementById('caseModalCategory').innerText = item.category;
+            document.getElementById('caseModalDescription').innerText = item.description;
+
+            const mediaBox = document.getElementById('caseModalMediaContainer');
+            if (item.mediaType === 'video' && item.video) {
+                mediaBox.innerHTML = `
+                    <video src="${item.video}" controls autoplay class="w-full h-full object-contain bg-black"></video>
+                `;
+            } else {
+                mediaBox.innerHTML = `
+                    <img src="${item.cover}" class="w-full h-full object-cover">
+                `;
+            }
+
+            document.getElementById('caseDetailModal').classList.remove('hidden');
+        }
+
+        function closeCaseDetailModal() {
+            const modal = document.getElementById('caseDetailModal');
+            const mediaBox = document.getElementById('caseModalMediaContainer');
+            modal.classList.add('hidden');
+            mediaBox.innerHTML = '';
+        }
+
+        // --- PRODUCT ACCORDION TOGGLE ---
+        function toggleProduct(id) {
+            const el = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                el.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function toggleFaq(id) {
+            const el = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                icon.className = 'fa-solid fa-minus text-brand-cyan';
+            } else {
+                el.classList.add('hidden');
+                icon.className = 'fa-solid fa-plus text-brand-cyan';
+            }
+        }
+
+        // --- PUBLIC INQUIRY FORM ---
+        function handleInquirySubmit(e) {
+            e.preventDefault();
+            const newInquiry = {
+                id: 'inq_' + Date.now(),
+                date: new Date().toLocaleDateString(),
+                name: document.getElementById('inqName').value,
+                email: document.getElementById('inqEmail').value,
+                company: document.getElementById('inqCompany').value,
+                product: document.getElementById('inqProduct').value,
+                brief: document.getElementById('inqBrief').value
+            };
+            appData.inquiries.unshift(newInquiry);
+            saveAppData();
+
+            document.getElementById('publicInquiryForm').reset();
+            const msg = document.getElementById('inquirySuccessMsg');
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 5000);
+        }
+
+        // --- CMS ADMIN TAB SYSTEM ---
+        function switchAdminTab(tabName) {
+            document.querySelectorAll('.admin-tab').forEach(b => {
+                b.className = 'admin-tab px-5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider bg-brand-card border border-brand-border text-gray-300 hover:text-white transition shrink-0';
+            });
+            document.querySelectorAll('.admin-content').forEach(c => c.classList.add('hidden'));
+
+            document.getElementById(`tabBtn-${tabName}`).className = 'admin-tab active px-5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider bg-brand-cyan text-black transition shrink-0';
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+        }
+
+        // Admin Table Renders
+        function renderAdminCases() {
+            const tbody = document.getElementById('adminCasesTable');
+            tbody.innerHTML = appData.cases.map(c => `
+                <tr>
+                    <td class="p-4 font-bold text-white">${c.title}</td>
+                    <td class="p-4">${c.client}</td>
+                    <td class="p-4"><span class="px-2 py-1 rounded bg-brand-dark text-xs border border-brand-border">${c.category}</span></td>
+                    <td class="p-4 uppercase text-xs font-bold text-brand-cyan">${c.mediaType}</td>
+                    <td class="p-4">
+                        <input type="checkbox" ${c.featured ? 'checked' : ''} onchange="toggleFeatured('${c.id}', this)" class="w-4 h-4 accent-[#3dc0c8] cursor-pointer" title="Show on front page">
+                    </td>
+                    <td class="p-4 text-right space-x-2">
+                        <button onclick="openCaseModal('${c.id}')" class="text-xs text-brand-cyan font-bold uppercase hover:underline">Edit</button>
+                        <button onclick="deleteCase('${c.id}')" class="text-xs text-red-400 font-bold uppercase hover:underline">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+            document.getElementById('featuredCountLabel').innerText = `${featuredCount()} / ${MAX_FEATURED}`;
+        }
+
+        function toggleFeatured(id, checkbox) {
+            const item = appData.cases.find(c => c.id === id);
+            if (checkbox.checked && featuredCount() >= MAX_FEATURED) {
+                alert(`Only ${MAX_FEATURED} cases can be shown on the front page. Untick another case first.`);
+                checkbox.checked = false;
+                return;
+            }
+            item.featured = checkbox.checked;
+            saveAppData();
+        }
+
+        function renderAdminTicker() {
+            const container = document.getElementById('tickerBrandsList');
+            container.innerHTML = appData.tickerBrands.map((b, index) => `
+                <span class="px-3 py-1.5 rounded-lg bg-brand-dark border border-brand-border text-xs font-bold uppercase flex items-center space-x-2">
+                    <span>${b}</span>
+                    <button onclick="removeTickerBrand(${index})" class="text-gray-500 hover:text-red-400"><i class="fa-solid fa-xmark"></i></button>
+                </span>
+            `).join('');
+        }
+
+        function addTickerBrand() {
+            const input = document.getElementById('newTickerInput');
+            if (input.value.trim()) {
+                appData.tickerBrands.push(input.value.trim());
+                input.value = '';
+                saveAppData();
+            }
+        }
+
+        function removeTickerBrand(index) {
+            appData.tickerBrands.splice(index, 1);
+            saveAppData();
+        }
+
+        function renderAdminInquiries() {
+            const badge = document.getElementById('inquiryBadge');
+            badge.innerText = appData.inquiries.length;
+            const tbody = document.getElementById('adminInquiriesTable');
+            if (appData.inquiries.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-500">No inquiries received yet.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = appData.inquiries.map(i => `
+                <tr>
+                    <td class="p-4 text-xs text-gray-400">${i.date}</td>
+                    <td class="p-4 font-bold text-white">${i.name} (${i.email})</td>
+                    <td class="p-4">${i.company}</td>
+                    <td class="p-4"><span class="px-2 py-1 bg-brand-pink/20 text-brand-pink text-xs font-bold rounded">${i.product}</span></td>
+                    <td class="p-4 text-xs text-gray-300 max-w-xs truncate">${i.brief}</td>
+                </tr>
+            `).join('');
+        }
+
+        // CMS Case Create/Edit Modal
+        function openCaseModal(id = null) {
+            const modal = document.getElementById('caseEditModal');
+            if (id) {
+                const c = appData.cases.find(item => item.id === id);
+                document.getElementById('editModalHeaderTitle').innerText = 'Edit Case';
+                document.getElementById('editCaseId').value = c.id;
+                document.getElementById('editCaseTitle').value = c.title;
+                document.getElementById('editCaseClient').value = c.client;
+                document.getElementById('editCaseCategory').value = c.category;
+                document.getElementById('editCaseMediaType').value = c.mediaType || 'image';
+                document.getElementById('editCaseCover').value = c.cover;
+                document.getElementById('editCaseVideo').value = c.video || '';
+                document.getElementById('editCaseDescription').value = c.description;
+                document.getElementById('editCaseFeatured').checked = !!c.featured;
+            } else {
+                document.getElementById('editModalHeaderTitle').innerText = 'Add New Case';
+                document.getElementById('editCaseId').value = '';
+                document.getElementById('editCaseTitle').value = '';
+                document.getElementById('editCaseClient').value = '';
+                document.getElementById('editCaseCategory').value = 'CineGame';
+                document.getElementById('editCaseMediaType').value = 'image';
+                document.getElementById('editCaseCover').value = '';
+                document.getElementById('editCaseVideo').value = '';
+                document.getElementById('editCaseDescription').value = '';
+                document.getElementById('editCaseFeatured').checked = false;
+            }
+            document.getElementById('editFeaturedCount').innerText = `(${featuredCount()} / ${MAX_FEATURED} selected)`;
+            modal.classList.remove('hidden');
+        }
+
+        function closeCaseModal() {
+            document.getElementById('caseEditModal').classList.add('hidden');
+        }
+
+        function saveCaseForm(e) {
+            e.preventDefault();
+            const id = document.getElementById('editCaseId').value;
+            const newObj = {
+                id: id || 'c_' + Date.now(),
+                title: document.getElementById('editCaseTitle').value,
+                client: document.getElementById('editCaseClient').value,
+                category: document.getElementById('editCaseCategory').value,
+                mediaType: document.getElementById('editCaseMediaType').value,
+                cover: document.getElementById('editCaseCover').value,
+                video: document.getElementById('editCaseVideo').value,
+                description: document.getElementById('editCaseDescription').value,
+                featured: document.getElementById('editCaseFeatured').checked
+            };
+
+            const wasFeatured = id ? !!appData.cases.find(c => c.id === id)?.featured : false;
+            if (newObj.featured && !wasFeatured && featuredCount() >= MAX_FEATURED) {
+                alert(`Only ${MAX_FEATURED} cases can be shown on the front page. Untick another case first.`);
+                return;
+            }
+
+            if (id) {
+                const idx = appData.cases.findIndex(c => c.id === id);
+                appData.cases[idx] = newObj;
+            } else {
+                appData.cases.unshift(newObj);
+            }
+
+            saveAppData();
+            closeCaseModal();
+        }
+
+        function deleteCase(id) {
+            if (confirm("Are you sure you want to delete this case?")) {
+                appData.cases = appData.cases.filter(c => c.id !== id);
+                saveAppData();
+            }
+        }
+
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            const drawer = document.getElementById('mobileDrawer');
+            drawer.classList.toggle('hidden');
+        });
+
+        // --- INTERACTIVE HERO CANVAS CONSTELLATION MESH ---
+        (function initHeroCanvas() {
+            const canvas = document.getElementById('heroCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let width, height;
+            let particles = [];
+            const particleCount = 45;
+            const maxDistance = 140;
+
+            const mouse = { x: null, y: null, radius: 180 };
+
+            function resize() {
+                width = canvas.width = canvas.parentElement.offsetWidth;
+                height = canvas.height = canvas.parentElement.offsetHeight;
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Track Mouse Position
+            const heroSection = document.getElementById('hero');
+            heroSection.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+
+            heroSection.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.8;
+                    this.vy = (Math.random() - 0.5) * 0.8;
+                    this.radius = Math.random() * 2 + 1.5;
+                    this.color = Math.random() > 0.3 ? '#3dc0c8' : '#f869b9';
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    // Mouse Interaction
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const dx = mouse.x - this.x;
+                        const dy = mouse.y - this.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < mouse.radius) {
+                            const angle = Math.atan2(dy, dx);
+                            const force = (mouse.radius - dist) / mouse.radius;
+                            this.x -= Math.cos(angle) * force * 2;
+                            this.y -= Math.sin(angle) * force * 2;
+                        }
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = this.color;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw connecting lines between particles
+                for (let a = 0; a < particles.length; a++) {
+                    particles[a].update();
+                    particles[a].draw();
+
+                    for (let b = a + 1; b < particles.length; b++) {
+                        const dx = particles[a].x - particles[b].x;
+                        const dy = particles[a].y - particles[b].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < maxDistance) {
+                            const opacity = 1 - (dist / maxDistance);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.strokeStyle = `rgba(61, 192, 200, ${opacity * 0.25})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Draw line to mouse if close
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const mdx = particles[a].x - mouse.x;
+                        const mdy = particles[a].y - mouse.y;
+                        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                        if (mdist < mouse.radius) {
+                            const mOpacity = 1 - (mdist / mouse.radius);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.strokeStyle = `rgba(248, 105, 185, ${mOpacity * 0.4})`;
+                            ctx.lineWidth = 1.2;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // Initial Boot Render
+        renderAllViews();
+    </script>
+</body>
+</html>

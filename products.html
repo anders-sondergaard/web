@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products — Cinemataztic</title>
+    <!-- Page-to-page transitions (must load before first paint) -->
+    <script src="page-transitions.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            cyan: '#3dc0c8',
+                            mint: '#6ceec4',
+                            pink: '#f869b9',
+                            orange: '#fea917',
+                            yellow: '#fece00',
+                            dark: '#0a0a0c',
+                            card: '#121216',
+                            border: '#1f1f26'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Klavika', 'Titillium Web', 'Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Fallback for Klavika Geometric Style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Audience chart tooltip: shown when hovering a bar column */
+        .audience-tip {
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 8px); /* overridden per bar to sit just above it */
+            transform: translateX(-50%);
+            white-space: nowrap;
+            padding: 4px 8px;
+            background: #0a0a0c;
+            border: 1px solid #1f1f26;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 120ms linear;
+            z-index: 10;
+        }
+        .audience-bar:hover .audience-tip { opacity: 1; }
+        /* Outer bars: keep the tooltip inside the chart */
+        .audience-tip-start { left: 0; transform: none; }
+        .audience-tip-end { left: auto; right: 0; transform: none; }
+        /* Legend wraps on phones; from sm up it sits over the age groups (14 half-columns = 7 bars) */
+        @media (min-width: 640px) {
+            .audience-legend { grid-template-columns: repeat(14, minmax(0, 1fr)); }
+        }
+        .audience-bar:hover > div { filter: brightness(1.15); }
+    </style>
+</head>
+<body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <span class="text-2xl sm:text-3xl font-black tracking-wider uppercase text-white group-hover:opacity-90 transition">
+                    CINEMATAZTIC
+                </span>
+            </a>
+
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-widest uppercase">
+                <a href="cases.html" class="hover:text-brand-cyan transition">Cases</a>
+                <a href="products.html" class="text-brand-cyan">Products</a>
+                <a href="index.html#cms" class="px-4 py-2 uppercase tracking-widest font-bold border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition">
+                    <i class="fa-solid fa-gear mr-1"></i> CMS
+                </a>
+                <a href="index.html#contact" class="px-5 py-2.5 bg-brand-cyan text-black hover:bg-brand-mint transition">Get in Touch</a>
+            </nav>
+
+            <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
+            <a href="cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
+            <a href="products.html" class="block text-lg font-bold uppercase text-brand-cyan">Products</a>
+            <a href="index.html#contact" class="block text-lg font-bold uppercase hover:text-brand-cyan">Get in Touch</a>
+            <hr class="border-brand-border my-2">
+            <a href="index.html#cms" class="block w-full text-left py-2 text-sm uppercase font-bold text-brand-cyan">
+                <i class="fa-solid fa-gear mr-2"></i> Open CMS Admin
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+        <!-- AUDIENCE: age distribution chart + "best of two worlds" -->
+        <section id="audience" class="border-b border-brand-border scroll-mt-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+                    <!-- Chart: share of engaged audience by age group -->
+                    <figure class="lg:col-span-7">
+                        <!-- Generation legend, placed over the age groups it covers (14 half-columns = 7 bars) -->
+                        <div class="audience-legend ml-10 flex flex-wrap gap-x-5 gap-y-2 sm:grid mb-6 text-[11px] font-bold uppercase tracking-widest text-gray-200">
+                            <span class="flex items-center justify-center gap-2" style="grid-column: 1 / span 4;"><span class="w-2.5 h-2.5 shrink-0" style="background:#f869b9"></span>Gen Z</span>
+                            <span class="flex items-center justify-center gap-2" style="grid-column: 5 / span 3;"><span class="w-2.5 h-2.5 shrink-0" style="background:#fea917"></span>Millennials</span>
+                            <span class="flex items-center justify-center gap-2" style="grid-column: 8 / span 3;"><span class="w-2.5 h-2.5 shrink-0" style="background:#6ceec4"></span>Gen X</span>
+                            <span class="flex items-center justify-center gap-2" style="grid-column: 11 / span 4;"><span class="w-2.5 h-2.5 shrink-0" style="background:#00a8b0"></span>Boomers</span>
+                        </div>
+
+                        <div class="flex" aria-hidden="true">
+                            <!-- Y axis -->
+                            <div class="relative w-10 shrink-0 h-64 sm:h-72 text-[11px] text-gray-400">
+                                <span class="absolute right-2 translate-y-1/2" style="bottom:0%">0%</span>
+                                <span class="absolute right-2 translate-y-1/2" style="bottom:14.286%">5%</span>
+                                <span class="absolute right-2 translate-y-1/2" style="bottom:28.571%">10%</span>
+                                <span class="absolute right-2 translate-y-1/2" style="bottom:42.857%">15%</span>
+                                <span class="absolute right-2 translate-y-1/2" style="bottom:57.143%">20%</span>
+                                <span class="absolute right-2 translate-y-1/2" style="bottom:71.429%">25%</span>
+                                <span class="absolute right-2 translate-y-1/2" style="bottom:85.714%">30%</span>
+                                <span class="absolute right-2 translate-y-1/2" style="bottom:100%">35%</span>
+                            </div>
+
+                            <!-- Plot -->
+                            <div class="relative flex-1 h-64 sm:h-72">
+                                <div class="absolute inset-x-0 bottom-0 h-px bg-white/30"></div>
+                                <div class="absolute inset-x-0 h-px bg-white/10" style="bottom:14.286%"></div>
+                                <div class="absolute inset-x-0 h-px bg-white/10" style="bottom:28.571%"></div>
+                                <div class="absolute inset-x-0 h-px bg-white/10" style="bottom:42.857%"></div>
+                                <div class="absolute inset-x-0 h-px bg-white/10" style="bottom:57.143%"></div>
+                                <div class="absolute inset-x-0 h-px bg-white/10" style="bottom:71.429%"></div>
+                                <div class="absolute inset-x-0 h-px bg-white/10" style="bottom:85.714%"></div>
+                                <div class="absolute inset-x-0 h-px bg-white/10" style="bottom:100%"></div>
+
+                                <!-- Bars: heights are % of the 35% axis max; each column is the hover target -->
+                                <div class="absolute inset-0 grid grid-cols-7 gap-2 sm:gap-4 px-1 sm:px-3">
+                                    <div class="audience-bar group relative h-full flex items-end">
+                                        <div class="w-full" style="height:57.143%;background:#f869b9"></div>
+                                        <span class="audience-tip audience-tip-start" style="bottom:calc(57.143% + 8px)">13–17 · 20% · Gen Z</span>
+                                    </div>
+                                    <div class="audience-bar group relative h-full flex items-end">
+                                        <div class="w-full" style="height:95.714%;background:#f869b9"></div>
+                                        <span class="audience-tip" style="bottom:calc(95.714% + 8px)">18–24 · 33.5% · Gen Z</span>
+                                    </div>
+                                    <div class="audience-bar group relative h-full flex items-end">
+                                        <div class="w-full" style="height:50%;background:#fea917"></div>
+                                        <span class="audience-tip" style="bottom:calc(50% + 8px)">25–34 · 17.5% · Millennials</span>
+                                    </div>
+                                    <div class="audience-bar group relative h-full flex items-end gap-[2px]">
+                                        <div class="flex-1" style="height:45.714%;background:#fea917"></div>
+                                        <div class="flex-1" style="height:45.714%;background:#6ceec4"></div>
+                                        <span class="audience-tip" style="bottom:calc(45.714% + 8px)">35–44 · 16% · Millennials / Gen X</span>
+                                    </div>
+                                    <div class="audience-bar group relative h-full flex items-end">
+                                        <div class="w-full" style="height:25.714%;background:#6ceec4"></div>
+                                        <span class="audience-tip" style="bottom:calc(25.714% + 8px)">45–54 · 9% · Gen X</span>
+                                    </div>
+                                    <div class="audience-bar group relative h-full flex items-end">
+                                        <div class="w-full" style="height:7.143%;background:#00a8b0"></div>
+                                        <span class="audience-tip audience-tip-end" style="bottom:calc(7.143% + 8px)">55–64 · 2.5% · Boomers</span>
+                                    </div>
+                                    <div class="audience-bar group relative h-full flex items-end">
+                                        <div class="w-full" style="height:2.857%;background:#00a8b0"></div>
+                                        <span class="audience-tip audience-tip-end" style="bottom:calc(2.857% + 8px)">65+ · 1% · Boomers</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- X axis -->
+                        <div class="ml-10 grid grid-cols-7 gap-2 sm:gap-4 px-1 sm:px-3 pt-3 text-center text-xs sm:text-sm font-bold text-gray-300" aria-hidden="true">
+                            <span>13–17</span><span>18–24</span><span>25–34</span><span>35–44</span><span>45–54</span><span>55–64</span><span>65+</span>
+                        </div>
+
+                        <figcaption class="sr-only">Share of the engaged cinema audience by age group</figcaption>
+                        <table class="sr-only">
+                            <thead><tr><th>Age group</th><th>Share</th><th>Generation</th></tr></thead>
+                            <tbody>
+                                <tr><td>13–17</td><td>20%</td><td>Gen Z</td></tr>
+                                <tr><td>18–24</td><td>33.5%</td><td>Gen Z</td></tr>
+                                <tr><td>25–34</td><td>17.5%</td><td>Millennials</td></tr>
+                                <tr><td>35–44</td><td>16%</td><td>Millennials / Gen X</td></tr>
+                                <tr><td>45–54</td><td>9%</td><td>Gen X</td></tr>
+                                <tr><td>55–64</td><td>2.5%</td><td>Boomers</td></tr>
+                                <tr><td>65+</td><td>1%</td><td>Boomers</td></tr>
+                            </tbody>
+                        </table>
+                    </figure>
+
+                    <!-- Text -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <h2 class="text-4xl sm:text-5xl font-black uppercase leading-none">The best of two worlds</h2>
+                        <div class="w-10 h-px bg-white/40"></div>
+                        <p class="text-gray-300 leading-relaxed">
+                            Cinemataztic's advertising formats are designed to both enhance the cinema preshow and create new revenue streams for the cinema industry.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed">
+                            10–15% of the cinema audience engage with one or more Cinemataztic products on their cinema journey, and the user profile is primarily between the age of 13 and 45.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRODUCT: sticky sidebar + grid, same look as Featured Work -->
+        <section id="products" class="border-b border-brand-border scroll-mt-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-500">What we do</span>
+                        <h1 class="text-4xl sm:text-5xl font-black leading-none">Products</h1>
+                        <div class="space-y-2">
+                            <h3 class="text-xs font-bold uppercase tracking-widest text-white">Engage the cinema core audience</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                Bringing interactivity to the cinema preshow with a range of engaging advertising formats for the cinema core audience.
+                            </p>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-xs font-bold uppercase tracking-widest text-white">New ways to digitize cinema advertising</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                Cinemataztic has launched the new Digital Cinema Hub (DCH) – a platform for interactivity and display of digital advertising content on the cinema screen. The platform offers cinemas five new digital revenue streams.
+                            </p>
+                        </div>
+                        <a href="index.html#contact" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">
+                            Get in Touch <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </aside>
+
+                    <div class="lg:col-span-9">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-12">
+                            <a href="programmatic.html" class="group block">
+                                <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
+                                    <!-- Live auction: cells are cinema screens, the cursor is the targeting -->
+                                    <div id="rtbViz" class="absolute inset-0 flex flex-col p-4 select-none" role="img" aria-label="Animated illustration of a programmatic real-time auction across cinema screens">
+                                        <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest">
+                                            <span class="flex items-center text-gray-300"><span class="w-1.5 h-1.5 bg-brand-cyan mr-2 animate-pulse"></span>Live auction</span>
+                                            <span class="text-gray-400">CPM <span id="rtbCpm" class="text-white">0.00</span></span>
+                                        </div>
+                                        <div class="relative flex-1 my-3">
+                                            <div id="rtbGrid" class="absolute inset-0 grid grid-cols-8 grid-rows-8 gap-[3px]"></div>
+                                            <span id="rtbTag" class="absolute pointer-events-none px-1.5 py-0.5 bg-brand-cyan text-black text-[9px] font-bold uppercase tracking-wider whitespace-nowrap transition-[left,top] duration-150 ease-out"></span>
+                                        </div>
+                                        <div id="rtbBids" class="space-y-1.5"></div>
+                                        <div class="flex items-center justify-between pt-3 text-[10px] font-bold uppercase tracking-widest">
+                                            <span class="text-white/70">01</span>
+                                            <span class="text-gray-400">Impressions <span id="rtbImps" class="text-white">0</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pt-4 space-y-2">
+                                    <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">Programmatic</h3>
+                                    <div class="space-y-2">
+                                        <p class="text-xs text-gray-400 leading-relaxed">Automated, targetable and transparent cinema ad buying with real-time impression reporting.</p>
+                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <a href="cinegame.html" class="group block">
+                                <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
+                                    <!-- Live game: the cinema screen runs a catch game, the cursor is your phone, seats are players -->
+                                    <div id="cgViz" class="absolute inset-0 flex flex-col p-4 select-none" role="img" aria-label="Animated illustration of a CineGame round played on the cinema screen with mobile phones">
+                                        <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest">
+                                            <span class="flex items-center text-gray-300"><span class="w-1.5 h-1.5 bg-brand-pink mr-2 animate-pulse"></span>Live game</span>
+                                            <span class="text-gray-400">Players <span id="cgPlayers" class="text-white">0</span></span>
+                                        </div>
+                                        <div class="relative mt-3 h-[52%] border border-white/15 bg-black">
+                                            <canvas id="cgScreen" class="absolute inset-0 w-full h-full"></canvas>
+                                            <span id="cgHint" class="absolute top-1.5 left-2 text-[9px] font-bold uppercase tracking-wider text-white/50">Move to play</span>
+                                        </div>
+                                        <div id="cgSeats" class="flex-1 mt-3 grid grid-cols-12 grid-rows-5 gap-[3px]"></div>
+                                        <div class="flex items-center justify-between pt-3 text-[10px] font-bold uppercase tracking-widest">
+                                            <span class="text-white/70">02</span>
+                                            <span class="text-gray-400">Score <span id="cgScore" class="text-white">0</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pt-4 space-y-2">
+                                    <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">CineGame</h3>
+                                    <div class="space-y-2">
+                                        <p class="text-xs text-gray-400 leading-relaxed">Whole auditoriums play branded games on the big screen, using their phones as controllers.</p>
+                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <a href="cinefun.html" class="group block">
+                                <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
+                                    <!-- Casual games in the app: the board is "Popcorn Pop", the cursor is your finger, bars are the app's games -->
+                                    <div id="cfViz" class="absolute inset-0 flex flex-col p-4 select-none" role="img" aria-label="Animated illustration of casual games being played in the CineGame app">
+                                        <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest">
+                                            <span class="flex items-center text-gray-300"><span class="w-1.5 h-1.5 bg-brand-yellow mr-2 animate-pulse"></span>In-app games</span>
+                                            <span class="text-gray-400">Level <span id="cfLevel" class="text-white">1</span></span>
+                                        </div>
+                                        <div class="relative flex-1 my-3 border border-white/15 bg-black p-2 flex flex-col">
+                                            <div class="flex items-center justify-between text-[9px] font-bold uppercase tracking-wider text-white/50 mb-1.5">
+                                                <span>Popcorn Pop</span>
+                                                <span id="cfHint">Hover to pop</span>
+                                            </div>
+                                            <div id="cfBoard" class="relative flex-1 grid grid-cols-10 grid-rows-6 gap-[3px]"></div>
+                                            <div id="cfLevelUp" class="absolute inset-0 hidden items-center justify-center bg-black/70">
+                                                <span class="px-2 py-1 bg-brand-yellow text-black text-[10px] font-black uppercase tracking-wider">Level up!</span>
+                                            </div>
+                                        </div>
+                                        <div id="cfGames" class="space-y-1.5"></div>
+                                        <div class="flex items-center justify-between pt-3 text-[10px] font-bold uppercase tracking-widest">
+                                            <span class="text-white/70">03</span>
+                                            <span class="text-gray-400">Pops <span id="cfScore" class="text-white">0</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pt-4 space-y-2">
+                                    <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">CineFun</h3>
+                                    <div class="space-y-2">
+                                        <p class="text-xs text-gray-400 leading-relaxed">Quizzes, lobby kiosks and loyalty tie-ins that entertain moviegoers before and after the film.</p>
+                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <footer class="bg-black border-t border-brand-border py-12 text-sm text-gray-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="space-y-2 text-center md:text-left">
+                <span class="text-2xl font-black uppercase text-white">CINEMATAZTIC</span>
+                <p class="text-xs text-gray-400">© 2026 Cinemataztic ApS. All rights reserved.</p>
+            </div>
+            <div class="flex space-x-6 text-xs uppercase tracking-wider font-bold">
+                <a href="index.html#about" class="hover:text-brand-cyan">Studio</a>
+                <a href="products.html" class="hover:text-brand-cyan">Products</a>
+                <a href="cases.html" class="hover:text-brand-cyan">Cases</a>
+                <a href="index.html#contact" class="hover:text-brand-cyan">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileDrawer').classList.toggle('hidden');
+        });
+
+        // --- PROGRAMMATIC CARD: LIVE AUCTION ---
+        // Cells are cinema screens; the cursor (or a slow auto-pilot when idle) is the audience targeting.
+        // Screens near the target light up, advertisers bid for them, and the winner sets the CPM.
+        (function initRtbViz() {
+            const viz = document.getElementById('rtbViz');
+            if (!viz) return;
+            const grid = document.getElementById('rtbGrid');
+            const tag = document.getElementById('rtbTag');
+            const bidsBox = document.getElementById('rtbBids');
+            const cpmEl = document.getElementById('rtbCpm');
+            const impsEl = document.getElementById('rtbImps');
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            const SIZE = 8;
+            const RADIUS = 0.3;
+            const cells = [];
+            for (let i = 0; i < SIZE * SIZE; i++) {
+                const el = document.createElement('div');
+                el.style.transition = 'background-color 150ms linear';
+                grid.appendChild(el);
+                cells.push({ el, x: (i % SIZE + 0.5) / SIZE, y: (Math.floor(i / SIZE) + 0.5) / SIZE, flicker: Math.random() });
+            }
+
+            const bidders = [
+                { name: 'Telco', color: '#fece00' },
+                { name: 'Retail', color: '#f869b9' },
+                { name: 'Drinks', color: '#6ceec4' }
+            ].map(b => {
+                const row = document.createElement('div');
+                row.className = 'flex items-center gap-2 text-[9px] font-bold uppercase tracking-wider';
+                row.innerHTML = `
+                    <span class="w-10 text-gray-400">${b.name}</span>
+                    <span class="flex-1 h-1.5 bg-white/10 overflow-hidden"><span class="block h-full transition-[width] duration-500 ease-out" style="width:0%;background:${b.color}"></span></span>
+                    <span class="w-9 text-right text-gray-400">0.00</span>
+                `;
+                bidsBox.appendChild(row);
+                const [label, track, value] = row.children;
+                return { ...b, label, bar: track.firstElementChild, value };
+            });
+
+            let target = { x: 0.5, y: 0.5 };
+            let hovering = false;
+            let activeCount = 0;
+            let impressions = 0;
+            let t0 = performance.now();
+
+            viz.addEventListener('pointermove', e => {
+                const r = grid.getBoundingClientRect();
+                hovering = true;
+                target = {
+                    x: Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)),
+                    y: Math.min(1, Math.max(0, (e.clientY - r.top) / r.height))
+                };
+            });
+            viz.addEventListener('pointerleave', () => { hovering = false; });
+
+            function paintScreens(now) {
+                if (!hovering && !reduceMotion) {
+                    // Idle: targeting drifts on a slow figure-eight so the card is never static
+                    const t = (now - t0) / 4000;
+                    target = { x: 0.5 + Math.sin(t) * 0.3, y: 0.5 + Math.sin(t * 2) * 0.22 };
+                }
+                activeCount = 0;
+                cells.forEach(c => {
+                    const d = Math.hypot(c.x - target.x, c.y - target.y);
+                    if (d < RADIUS) {
+                        activeCount++;
+                        const strength = 1 - d / RADIUS;
+                        c.el.style.backgroundColor = `rgba(61, 192, 200, ${0.25 + strength * 0.75})`;
+                    } else {
+                        c.flicker = (c.flicker + 0.01 + Math.random() * 0.02) % 1;
+                        c.el.style.backgroundColor = `rgba(255, 255, 255, ${0.05 + (c.flicker > 0.97 ? 0.15 : 0)})`;
+                    }
+                });
+                tag.textContent = `${activeCount} screens targeted`;
+                const r = grid.getBoundingClientRect();
+                const tagW = tag.offsetWidth;
+                tag.style.left = `${Math.min(r.width - tagW, Math.max(0, target.x * r.width - tagW / 2))}px`;
+                tag.style.top = `${Math.max(0, target.y * r.height - 28)}px`;
+            }
+
+            function runAuction() {
+                const reach = Math.max(1, activeCount);
+                const bids = bidders.map(() => 18 + Math.random() * 30 + reach * 0.4);
+                const top = Math.max(...bids);
+                bidders.forEach((b, i) => {
+                    const won = bids[i] === top;
+                    b.bar.style.width = `${(bids[i] / 60) * 100}%`;
+                    b.value.textContent = bids[i].toFixed(2);
+                    b.value.style.color = won ? '#ffffff' : '';
+                    b.label.style.color = won ? '#ffffff' : '';
+                });
+                cpmEl.textContent = top.toFixed(2);
+                impressions += activeCount * (40 + Math.floor(Math.random() * 60));
+                impsEl.textContent = impressions.toLocaleString('en-US');
+            }
+
+            function loop(now) {
+                paintScreens(now);
+                requestAnimationFrame(loop);
+            }
+
+            paintScreens(performance.now());
+            runAuction();
+            if (reduceMotion) return;
+            requestAnimationFrame(loop);
+            // Auctions clear faster while someone is steering the targeting
+            (function schedule() {
+                setTimeout(() => { runAuction(); schedule(); }, hovering ? 650 : 1400);
+            })();
+        })();
+
+        // --- CINEGAME CARD: LIVE GAME ---
+        // The cinema screen runs a catch game; the cursor is your phone steering the paddle
+        // (an auto-player takes over when idle). Seats light up as players, and cheer on every catch.
+        (function initCineGameViz() {
+            const viz = document.getElementById('cgViz');
+            if (!viz) return;
+            const canvas = document.getElementById('cgScreen');
+            const ctx = canvas.getContext('2d');
+            const seatsBox = document.getElementById('cgSeats');
+            const playersEl = document.getElementById('cgPlayers');
+            const scoreEl = document.getElementById('cgScore');
+            const hintEl = document.getElementById('cgHint');
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            const PINK = '#f869b9';
+            const COIN_COLORS = ['#3dc0c8', '#6ceec4', '#fece00'];
+            const PADDLE_W = 0.24;
+
+            let W = 0, H = 0, dpr = 1;
+            function resize() {
+                dpr = window.devicePixelRatio || 1;
+                W = canvas.clientWidth;
+                H = canvas.clientHeight;
+                canvas.width = W * dpr;
+                canvas.height = H * dpr;
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            }
+            new ResizeObserver(resize).observe(canvas);
+            resize();
+
+            // Seats: 5 rows x 12, each one a phone in the audience
+            const seats = [];
+            for (let i = 0; i < 60; i++) {
+                const el = document.createElement('div');
+                el.style.transition = 'background-color 250ms linear';
+                seatsBox.appendChild(el);
+                seats.push({ el, col: i % 12, on: Math.random() < 0.5, cheer: 0 });
+            }
+
+            let hovering = false;
+            let pointerX = 0.5;
+            let paddleX = 0.5;
+            let coins = [];
+            let sparks = [];
+            let score = 0;
+            let spawnIn = 0;
+            let last = performance.now();
+
+            viz.addEventListener('pointermove', e => {
+                const r = canvas.getBoundingClientRect();
+                hovering = true;
+                pointerX = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+                hintEl.textContent = "You're playing";
+            });
+            viz.addEventListener('pointerleave', () => {
+                hovering = false;
+                hintEl.textContent = 'Move to play';
+            });
+
+            function cheer() {
+                // A wave of green runs across the auditorium
+                seats.forEach(s => { s.cheer = performance.now() + s.col * 35; });
+            }
+
+            function paintSeats(now) {
+                let lit = 0;
+                seats.forEach(s => {
+                    const cheering = s.cheer && now >= s.cheer && now < s.cheer + 220;
+                    if (s.on) lit++;
+                    s.el.style.backgroundColor = cheering ? '#6ceec4' : s.on ? 'rgba(248, 105, 185, 0.8)' : 'rgba(255, 255, 255, 0.06)';
+                });
+                playersEl.textContent = lit;
+            }
+
+            // More phones join while someone is playing along
+            setInterval(() => {
+                const joinRate = hovering ? 0.88 : 0.5;
+                seats.forEach(s => { if (Math.random() < 0.12) s.on = Math.random() < joinRate; });
+            }, 400);
+
+            function step(now) {
+                const dt = Math.min(0.05, (now - last) / 1000);
+                last = now;
+
+                spawnIn -= dt;
+                if (spawnIn <= 0) {
+                    coins.push({ x: 0.08 + Math.random() * 0.84, y: -0.05, vy: 0.35 + Math.random() * 0.25, color: COIN_COLORS[Math.floor(Math.random() * COIN_COLORS.length)] });
+                    spawnIn = hovering ? 0.45 : 0.7;
+                }
+
+                // Paddle follows your phone, or the lowest coin when nobody is playing
+                let target = pointerX;
+                if (!hovering) {
+                    const next = coins.filter(c => c.y < 0.9).sort((a, b) => b.y - a.y)[0];
+                    target = next ? next.x : 0.5;
+                }
+                paddleX += (target - paddleX) * Math.min(1, dt * (hovering ? 18 : 5));
+
+                const paddleY = 0.88;
+                coins = coins.filter(c => {
+                    const prevY = c.y;
+                    c.y += c.vy * dt;
+                    if (prevY < paddleY && c.y >= paddleY && Math.abs(c.x - paddleX) < PADDLE_W / 2) {
+                        score += 10;
+                        scoreEl.textContent = score;
+                        for (let i = 0; i < 8; i++) {
+                            sparks.push({ x: c.x, y: paddleY, vx: (Math.random() - 0.5) * 0.8, vy: -Math.random() * 0.8, life: 1, color: c.color });
+                        }
+                        cheer();
+                        return false;
+                    }
+                    return c.y < 1.05;
+                });
+
+                sparks = sparks.filter(p => {
+                    p.x += p.vx * dt;
+                    p.y += p.vy * dt;
+                    p.vy += 1.6 * dt;
+                    p.life -= dt * 1.8;
+                    return p.life > 0;
+                });
+
+                draw(paddleY);
+                paintSeats(now);
+                requestAnimationFrame(step);
+            }
+
+            function draw(paddleY) {
+                ctx.clearRect(0, 0, W, H);
+                // Faint projector light from the top
+                const glow = ctx.createLinearGradient(0, 0, 0, H);
+                glow.addColorStop(0, 'rgba(248, 105, 185, 0.10)');
+                glow.addColorStop(1, 'rgba(248, 105, 185, 0)');
+                ctx.fillStyle = glow;
+                ctx.fillRect(0, 0, W, H);
+
+                const s = Math.max(5, W * 0.035);
+                coins.forEach(c => {
+                    ctx.fillStyle = c.color;
+                    ctx.fillRect(c.x * W - s / 2, c.y * H - s / 2, s, s);
+                });
+                sparks.forEach(p => {
+                    ctx.globalAlpha = Math.max(0, p.life);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(p.x * W - 1.5, p.y * H - 1.5, 3, 3);
+                });
+                ctx.globalAlpha = 1;
+
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = PINK;
+                ctx.fillStyle = PINK;
+                ctx.fillRect((paddleX - PADDLE_W / 2) * W, paddleY * H, PADDLE_W * W, Math.max(3, H * 0.035));
+                ctx.shadowBlur = 0;
+            }
+
+            if (reduceMotion) {
+                draw(0.88);
+                paintSeats(performance.now());
+                return;
+            }
+            requestAnimationFrame(step);
+        })();
+
+        // --- CINEFUN CARD: CASUAL GAMES IN THE APP ---
+        // The board is "Popcorn Pop" in the CineGame app: kernels near the cursor (your finger) pop,
+        // or a slow auto-finger when idle. A full board levels up. The bars below are the app's
+        // casual games racing for plays, with Pop fed by your pops.
+        (function initCineFunViz() {
+            const viz = document.getElementById('cfViz');
+            if (!viz) return;
+            const board = document.getElementById('cfBoard');
+            const gamesBox = document.getElementById('cfGames');
+            const scoreEl = document.getElementById('cfScore');
+            const levelEl = document.getElementById('cfLevel');
+            const levelUpEl = document.getElementById('cfLevelUp');
+            const hintEl = document.getElementById('cfHint');
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            const COLS = 10, ROWS = 6;
+            const RADIUS = 1.4; // in cells
+            const kernels = [];
+            for (let i = 0; i < COLS * ROWS; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'flex items-center justify-center';
+                const dot = document.createElement('span');
+                dot.className = 'block';
+                cell.appendChild(dot);
+                board.appendChild(cell);
+                kernels.push({ cell, dot, x: (i % COLS + 0.5) / COLS, y: (Math.floor(i / COLS) + 0.5) / ROWS, popped: false });
+            }
+
+            const games = [
+                { name: 'Pop', color: '#fece00', plays: 0 },
+                { name: 'Trivia', color: '#3dc0c8', plays: 40 + Math.floor(Math.random() * 30) },
+                { name: 'Match', color: '#f869b9', plays: 40 + Math.floor(Math.random() * 30) }
+            ].map(g => {
+                const row = document.createElement('div');
+                row.className = 'flex items-center gap-2 text-[9px] font-bold uppercase tracking-wider';
+                row.innerHTML = `
+                    <span class="w-10 text-gray-400">${g.name}</span>
+                    <span class="flex-1 h-1.5 bg-white/10 overflow-hidden"><span class="block h-full transition-[width] duration-500 ease-out" style="width:0%;background:${g.color}"></span></span>
+                    <span class="w-9 text-right text-gray-400">0</span>
+                `;
+                gamesBox.appendChild(row);
+                const [label, track, value] = row.children;
+                return { ...g, label, bar: track.firstElementChild, value };
+            });
+
+            let target = { x: 0.5, y: 0.5 };
+            let hovering = false;
+            let levelling = false;
+            let popped = 0;
+            let pops = 0;
+            let level = 1;
+            const t0 = performance.now();
+
+            function paintKernel(k) {
+                k.dot.style.width = k.popped ? '90%' : '40%';
+                k.dot.style.height = k.popped ? '90%' : '40%';
+                k.dot.style.background = k.popped ? '#fff8e1' : '#fece00';
+                k.dot.style.boxShadow = k.popped ? 'inset 0 0 0 2px #fece00' : 'none';
+            }
+
+            function paintGames() {
+                const most = Math.max(...games.map(g => g.plays), 1);
+                games.forEach(g => {
+                    g.bar.style.width = `${(g.plays / most) * 100}%`;
+                    g.value.textContent = g.plays;
+                    const leading = g.plays === most;
+                    g.label.style.color = leading ? '#ffffff' : '';
+                    g.value.style.color = leading ? '#ffffff' : '';
+                });
+            }
+
+            function resetBoard() {
+                kernels.forEach(k => { k.popped = false; paintKernel(k); });
+                popped = 0;
+            }
+
+            function pop(k) {
+                k.popped = true;
+                paintKernel(k);
+                popped++;
+                pops++;
+                games[0].plays++;
+                scoreEl.textContent = pops;
+                if (!reduceMotion) {
+                    k.dot.animate([{ transform: 'scale(0.4)' }, { transform: 'scale(1.2)' }, { transform: 'scale(1)' }], { duration: 240, easing: 'ease-out' });
+                }
+                if (popped === kernels.length) {
+                    levelling = true;
+                    levelUpEl.classList.replace('hidden', 'flex');
+                    setTimeout(() => {
+                        levelUpEl.classList.replace('flex', 'hidden');
+                        level++;
+                        levelEl.textContent = level;
+                        resetBoard();
+                        levelling = false;
+                    }, 900);
+                }
+            }
+
+            viz.addEventListener('pointermove', e => {
+                const r = board.getBoundingClientRect();
+                hovering = true;
+                hintEl.textContent = 'Popping!';
+                target = { x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height };
+            });
+            viz.addEventListener('pointerleave', () => {
+                hovering = false;
+                hintEl.textContent = 'Hover to pop';
+            });
+
+            function popAround(now) {
+                if (!hovering) {
+                    // Idle: a finger sweeps the board on a slow loop
+                    const t = (now - t0) / 2600;
+                    target = { x: 0.5 + Math.sin(t * 1.3) * 0.42, y: 0.5 + Math.sin(t * 2.1) * 0.4 };
+                }
+                if (levelling) return;
+                kernels.forEach(k => {
+                    if (!k.popped && Math.hypot((k.x - target.x) * COLS, (k.y - target.y) * ROWS) < RADIUS) pop(k);
+                });
+            }
+
+            resetBoard();
+            paintGames();
+            if (reduceMotion) return;
+
+            (function loop(now) {
+                popAround(now);
+                requestAnimationFrame(loop);
+            })(performance.now());
+
+            // Other players in the app keep Trivia and Match busy
+            setInterval(() => {
+                games[1].plays += Math.floor(Math.random() * 4);
+                games[2].plays += Math.floor(Math.random() * 4);
+                paintGames();
+            }, 700);
+        })();
+
+    </script>
+</body>
+</html>
