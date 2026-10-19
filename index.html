@@ -186,20 +186,11 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-12">
                             <a href="programmatic.html" class="group block">
                                 <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
-                                    <!-- Live auction: cells are cinema screens, the cursor is the targeting -->
-                                    <div id="rtbViz" class="absolute inset-0 flex flex-col p-4 select-none" role="img" aria-label="Animated illustration of a programmatic real-time auction across cinema screens">
-                                        <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest">
-                                            <span class="flex items-center text-gray-300"><span class="w-1.5 h-1.5 bg-brand-cyan mr-2 animate-pulse"></span>Live auction</span>
-                                            <span class="text-gray-400">CPM <span id="rtbCpm" class="text-white">0.00</span></span>
-                                        </div>
-                                        <div class="relative flex-1 my-3">
+                                    <!-- Programmatic: cells are cinema screens, the cursor is the targeting -->
+                                    <div id="rtbViz" class="absolute inset-0 p-4 select-none" role="img" aria-label="Animated illustration of programmatic targeting across cinema screens">
+                                        <div class="relative w-full h-full">
                                             <div id="rtbGrid" class="absolute inset-0 grid grid-cols-8 grid-rows-8 gap-[3px]"></div>
                                             <span id="rtbTag" class="absolute pointer-events-none px-1.5 py-0.5 bg-brand-cyan text-black text-[9px] font-bold uppercase tracking-wider whitespace-nowrap transition-[left,top] duration-150 ease-out"></span>
-                                        </div>
-                                        <div id="rtbBids" class="space-y-1.5"></div>
-                                        <div class="flex items-center justify-between pt-3 text-[10px] font-bold uppercase tracking-widest">
-                                            <span class="text-white/70">01</span>
-                                            <span class="text-gray-400">Impressions <span id="rtbImps" class="text-white">0</span></span>
                                         </div>
                                     </div>
                                 </div>
@@ -214,21 +205,10 @@
 
                             <a href="cinegame.html" class="group block">
                                 <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
-                                    <!-- Live game: the cinema screen runs a catch game, the cursor is your phone, seats are players -->
-                                    <div id="cgViz" class="absolute inset-0 flex flex-col p-4 select-none" role="img" aria-label="Animated illustration of a CineGame round played on the cinema screen with mobile phones">
-                                        <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest">
-                                            <span class="flex items-center text-gray-300"><span class="w-1.5 h-1.5 bg-brand-pink mr-2 animate-pulse"></span>Live game</span>
-                                            <span class="text-gray-400">Players <span id="cgPlayers" class="text-white">0</span></span>
-                                        </div>
-                                        <div class="relative mt-3 h-[52%] border border-white/15 bg-black">
-                                            <canvas id="cgScreen" class="absolute inset-0 w-full h-full"></canvas>
-                                            <span id="cgHint" class="absolute top-1.5 left-2 text-[9px] font-bold uppercase tracking-wider text-white/50">Move to play</span>
-                                        </div>
-                                        <div id="cgSeats" class="flex-1 mt-3 grid grid-cols-12 grid-rows-5 gap-[3px]"></div>
-                                        <div class="flex items-center justify-between pt-3 text-[10px] font-bold uppercase tracking-widest">
-                                            <span class="text-white/70">02</span>
-                                            <span class="text-gray-400">Score <span id="cgScore" class="text-white">0</span></span>
-                                        </div>
+                                    <!-- CineGame: the cinema screen runs a catch game, the cursor is your phone -->
+                                    <div id="cgViz" class="absolute inset-0 bg-black select-none" role="img" aria-label="Animated illustration of a CineGame round played on the cinema screen">
+                                        <canvas id="cgScreen" class="absolute inset-0 w-full h-full"></canvas>
+                                        <span id="cgHint" class="absolute top-3 left-4 text-[10px] font-bold uppercase tracking-wider text-white/50">Move to play</span>
                                     </div>
                                 </div>
                                 <div class="pt-4 space-y-2">
@@ -242,27 +222,9 @@
 
                             <a href="cinefun.html" class="group block">
                                 <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
-                                    <!-- Casual games in the app: the board is "Popcorn Pop", the cursor is your finger, bars are the app's games -->
-                                    <div id="cfViz" class="absolute inset-0 flex flex-col p-4 select-none" role="img" aria-label="Animated illustration of casual games being played in the CineGame app">
-                                        <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest">
-                                            <span class="flex items-center text-gray-300"><span class="w-1.5 h-1.5 bg-brand-yellow mr-2 animate-pulse"></span>In-app games</span>
-                                            <span class="text-gray-400">Level <span id="cfLevel" class="text-white">1</span></span>
-                                        </div>
-                                        <div class="relative flex-1 my-3 border border-white/15 bg-black p-2 flex flex-col">
-                                            <div class="flex items-center justify-between text-[9px] font-bold uppercase tracking-wider text-white/50 mb-1.5">
-                                                <span>Popcorn Pop</span>
-                                                <span id="cfHint">Hover to pop</span>
-                                            </div>
-                                            <div id="cfBoard" class="relative flex-1 grid grid-cols-10 grid-rows-6 gap-[3px]"></div>
-                                            <div id="cfLevelUp" class="absolute inset-0 hidden items-center justify-center bg-black/70">
-                                                <span class="px-2 py-1 bg-brand-yellow text-black text-[10px] font-black uppercase tracking-wider">Level up!</span>
-                                            </div>
-                                        </div>
-                                        <div id="cfGames" class="space-y-1.5"></div>
-                                        <div class="flex items-center justify-between pt-3 text-[10px] font-bold uppercase tracking-widest">
-                                            <span class="text-white/70">03</span>
-                                            <span class="text-gray-400">Pops <span id="cfScore" class="text-white">0</span></span>
-                                        </div>
+                                    <!-- CineFun: a casual popcorn game, the cursor is your finger -->
+                                    <div id="cfViz" class="absolute inset-0 p-4 bg-black select-none" role="img" aria-label="Animated illustration of a casual popcorn game in the CineGame app">
+                                        <div id="cfBoard" class="w-full h-full grid grid-cols-10 grid-rows-10 gap-[3px]"></div>
                                     </div>
                                 </div>
                                 <div class="pt-4 space-y-2">
@@ -1431,17 +1393,13 @@
             animate();
         })();
 
-        // --- PROGRAMMATIC CARD: LIVE AUCTION ---
+        // --- PROGRAMMATIC CARD: TARGETING ---
         // Cells are cinema screens; the cursor (or a slow auto-pilot when idle) is the audience targeting.
-        // Screens near the target light up, advertisers bid for them, and the winner sets the CPM.
         (function initRtbViz() {
             const viz = document.getElementById('rtbViz');
             if (!viz) return;
             const grid = document.getElementById('rtbGrid');
             const tag = document.getElementById('rtbTag');
-            const bidsBox = document.getElementById('rtbBids');
-            const cpmEl = document.getElementById('rtbCpm');
-            const impsEl = document.getElementById('rtbImps');
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
             const SIZE = 8;
@@ -1454,28 +1412,9 @@
                 cells.push({ el, x: (i % SIZE + 0.5) / SIZE, y: (Math.floor(i / SIZE) + 0.5) / SIZE, flicker: Math.random() });
             }
 
-            const bidders = [
-                { name: 'Telco', color: '#fece00' },
-                { name: 'Retail', color: '#f869b9' },
-                { name: 'Drinks', color: '#6ceec4' }
-            ].map(b => {
-                const row = document.createElement('div');
-                row.className = 'flex items-center gap-2 text-[9px] font-bold uppercase tracking-wider';
-                row.innerHTML = `
-                    <span class="w-10 text-gray-400">${b.name}</span>
-                    <span class="flex-1 h-1.5 bg-white/10 overflow-hidden"><span class="block h-full transition-[width] duration-500 ease-out" style="width:0%;background:${b.color}"></span></span>
-                    <span class="w-9 text-right text-gray-400">0.00</span>
-                `;
-                bidsBox.appendChild(row);
-                const [label, track, value] = row.children;
-                return { ...b, label, bar: track.firstElementChild, value };
-            });
-
             let target = { x: 0.5, y: 0.5 };
             let hovering = false;
-            let activeCount = 0;
-            let impressions = 0;
-            let t0 = performance.now();
+            const t0 = performance.now();
 
             viz.addEventListener('pointermove', e => {
                 const r = grid.getBoundingClientRect();
@@ -1487,83 +1426,57 @@
             });
             viz.addEventListener('pointerleave', () => { hovering = false; });
 
-            function paintScreens(now) {
+            function paint(now) {
                 if (!hovering && !reduceMotion) {
                     // Idle: targeting drifts on a slow figure-eight so the card is never static
                     const t = (now - t0) / 4000;
                     target = { x: 0.5 + Math.sin(t) * 0.3, y: 0.5 + Math.sin(t * 2) * 0.22 };
                 }
-                activeCount = 0;
+                let active = 0;
                 cells.forEach(c => {
                     const d = Math.hypot(c.x - target.x, c.y - target.y);
                     if (d < RADIUS) {
-                        activeCount++;
-                        const strength = 1 - d / RADIUS;
-                        c.el.style.backgroundColor = `rgba(61, 192, 200, ${0.25 + strength * 0.75})`;
+                        active++;
+                        c.el.style.backgroundColor = `rgba(61, 192, 200, ${0.25 + (1 - d / RADIUS) * 0.75})`;
                     } else {
                         c.flicker = (c.flicker + 0.01 + Math.random() * 0.02) % 1;
                         c.el.style.backgroundColor = `rgba(255, 255, 255, ${0.05 + (c.flicker > 0.97 ? 0.15 : 0)})`;
                     }
                 });
-                tag.textContent = `${activeCount} screens targeted`;
+                tag.textContent = `${active} screens targeted`;
                 const r = grid.getBoundingClientRect();
                 const tagW = tag.offsetWidth;
                 tag.style.left = `${Math.min(r.width - tagW, Math.max(0, target.x * r.width - tagW / 2))}px`;
                 tag.style.top = `${Math.max(0, target.y * r.height - 28)}px`;
             }
 
-            function runAuction() {
-                const reach = Math.max(1, activeCount);
-                const bids = bidders.map(() => 18 + Math.random() * 30 + reach * 0.4);
-                const top = Math.max(...bids);
-                bidders.forEach((b, i) => {
-                    const won = bids[i] === top;
-                    b.bar.style.width = `${(bids[i] / 60) * 100}%`;
-                    b.value.textContent = bids[i].toFixed(2);
-                    b.value.style.color = won ? '#ffffff' : '';
-                    b.label.style.color = won ? '#ffffff' : '';
-                });
-                cpmEl.textContent = top.toFixed(2);
-                impressions += activeCount * (40 + Math.floor(Math.random() * 60));
-                impsEl.textContent = impressions.toLocaleString('en-US');
-            }
-
-            function loop(now) {
-                paintScreens(now);
-                requestAnimationFrame(loop);
-            }
-
-            paintScreens(performance.now());
-            runAuction();
+            paint(performance.now());
             if (reduceMotion) return;
-            requestAnimationFrame(loop);
-            // Auctions clear faster while someone is steering the targeting
-            (function schedule() {
-                setTimeout(() => { runAuction(); schedule(); }, hovering ? 650 : 1400);
-            })();
+            (function loop(now) {
+                paint(now);
+                requestAnimationFrame(loop);
+            })(performance.now());
         })();
 
-        // --- CINEGAME CARD: LIVE GAME ---
-        // The cinema screen runs a catch game; the cursor is your phone steering the paddle
-        // (an auto-player takes over when idle). Seats light up as players, and cheer on every catch.
+        // --- CINEGAME CARD: GAME ON THE BIG SCREEN ---
+        // A catch game on the cinema screen; the cursor is your phone steering the paddle
+        // (an auto-player takes over when idle).
         (function initCineGameViz() {
             const viz = document.getElementById('cgViz');
             if (!viz) return;
             const canvas = document.getElementById('cgScreen');
             const ctx = canvas.getContext('2d');
-            const seatsBox = document.getElementById('cgSeats');
-            const playersEl = document.getElementById('cgPlayers');
-            const scoreEl = document.getElementById('cgScore');
             const hintEl = document.getElementById('cgHint');
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
             const PINK = '#f869b9';
             const COIN_COLORS = ['#3dc0c8', '#6ceec4', '#fece00'];
             const PADDLE_W = 0.24;
+            const PADDLE_Y = 0.88;
 
-            let W = 0, H = 0, dpr = 1;
+            let W = 0, H = 0;
             function resize() {
-                dpr = window.devicePixelRatio || 1;
+                const dpr = window.devicePixelRatio || 1;
                 W = canvas.clientWidth;
                 H = canvas.clientHeight;
                 canvas.width = W * dpr;
@@ -1573,21 +1486,11 @@
             new ResizeObserver(resize).observe(canvas);
             resize();
 
-            // Seats: 5 rows x 12, each one a phone in the audience
-            const seats = [];
-            for (let i = 0; i < 60; i++) {
-                const el = document.createElement('div');
-                el.style.transition = 'background-color 250ms linear';
-                seatsBox.appendChild(el);
-                seats.push({ el, col: i % 12, on: Math.random() < 0.5, cheer: 0 });
-            }
-
             let hovering = false;
             let pointerX = 0.5;
             let paddleX = 0.5;
             let coins = [];
             let sparks = [];
-            let score = 0;
             let spawnIn = 0;
             let last = performance.now();
 
@@ -1601,27 +1504,6 @@
                 hovering = false;
                 hintEl.textContent = 'Move to play';
             });
-
-            function cheer() {
-                // A wave of green runs across the auditorium
-                seats.forEach(s => { s.cheer = performance.now() + s.col * 35; });
-            }
-
-            function paintSeats(now) {
-                let lit = 0;
-                seats.forEach(s => {
-                    const cheering = s.cheer && now >= s.cheer && now < s.cheer + 220;
-                    if (s.on) lit++;
-                    s.el.style.backgroundColor = cheering ? '#6ceec4' : s.on ? 'rgba(248, 105, 185, 0.8)' : 'rgba(255, 255, 255, 0.06)';
-                });
-                playersEl.textContent = lit;
-            }
-
-            // More phones join while someone is playing along
-            setInterval(() => {
-                const joinRate = hovering ? 0.88 : 0.5;
-                seats.forEach(s => { if (Math.random() < 0.12) s.on = Math.random() < joinRate; });
-            }, 400);
 
             function step(now) {
                 const dt = Math.min(0.05, (now - last) / 1000);
@@ -1641,17 +1523,13 @@
                 }
                 paddleX += (target - paddleX) * Math.min(1, dt * (hovering ? 18 : 5));
 
-                const paddleY = 0.88;
                 coins = coins.filter(c => {
                     const prevY = c.y;
                     c.y += c.vy * dt;
-                    if (prevY < paddleY && c.y >= paddleY && Math.abs(c.x - paddleX) < PADDLE_W / 2) {
-                        score += 10;
-                        scoreEl.textContent = score;
+                    if (prevY < PADDLE_Y && c.y >= PADDLE_Y && Math.abs(c.x - paddleX) < PADDLE_W / 2) {
                         for (let i = 0; i < 8; i++) {
-                            sparks.push({ x: c.x, y: paddleY, vx: (Math.random() - 0.5) * 0.8, vy: -Math.random() * 0.8, life: 1, color: c.color });
+                            sparks.push({ x: c.x, y: PADDLE_Y, vx: (Math.random() - 0.5) * 0.8, vy: -Math.random() * 0.8, life: 1, color: c.color });
                         }
-                        cheer();
                         return false;
                     }
                     return c.y < 1.05;
@@ -1665,12 +1543,11 @@
                     return p.life > 0;
                 });
 
-                draw(paddleY);
-                paintSeats(now);
+                draw();
                 requestAnimationFrame(step);
             }
 
-            function draw(paddleY) {
+            function draw() {
                 ctx.clearRect(0, 0, W, H);
                 // Faint projector light from the top
                 const glow = ctx.createLinearGradient(0, 0, 0, H);
@@ -1679,7 +1556,7 @@
                 ctx.fillStyle = glow;
                 ctx.fillRect(0, 0, W, H);
 
-                const s = Math.max(5, W * 0.035);
+                const s = Math.max(6, W * 0.04);
                 coins.forEach(c => {
                     ctx.fillStyle = c.color;
                     ctx.fillRect(c.x * W - s / 2, c.y * H - s / 2, s, s);
@@ -1694,34 +1571,27 @@
                 ctx.shadowBlur = 12;
                 ctx.shadowColor = PINK;
                 ctx.fillStyle = PINK;
-                ctx.fillRect((paddleX - PADDLE_W / 2) * W, paddleY * H, PADDLE_W * W, Math.max(3, H * 0.035));
+                ctx.fillRect((paddleX - PADDLE_W / 2) * W, PADDLE_Y * H, PADDLE_W * W, Math.max(4, H * 0.02));
                 ctx.shadowBlur = 0;
             }
 
             if (reduceMotion) {
-                draw(0.88);
-                paintSeats(performance.now());
+                draw();
                 return;
             }
             requestAnimationFrame(step);
         })();
 
-        // --- CINEFUN CARD: CASUAL GAMES IN THE APP ---
-        // The board is "Popcorn Pop" in the CineGame app: kernels near the cursor (your finger) pop,
-        // or a slow auto-finger when idle. A full board levels up. The bars below are the app's
-        // casual games racing for plays, with Pop fed by your pops.
+        // --- CINEFUN CARD: CASUAL GAME IN THE APP ---
+        // A popcorn board: kernels near the cursor (your finger) pop, or a slow auto-finger when idle.
+        // A full board starts over.
         (function initCineFunViz() {
             const viz = document.getElementById('cfViz');
             if (!viz) return;
             const board = document.getElementById('cfBoard');
-            const gamesBox = document.getElementById('cfGames');
-            const scoreEl = document.getElementById('cfScore');
-            const levelEl = document.getElementById('cfLevel');
-            const levelUpEl = document.getElementById('cfLevelUp');
-            const hintEl = document.getElementById('cfHint');
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            const COLS = 10, ROWS = 6;
+            const COLS = 10, ROWS = 10;
             const RADIUS = 1.4; // in cells
             const kernels = [];
             for (let i = 0; i < COLS * ROWS; i++) {
@@ -1731,32 +1601,13 @@
                 dot.className = 'block';
                 cell.appendChild(dot);
                 board.appendChild(cell);
-                kernels.push({ cell, dot, x: (i % COLS + 0.5) / COLS, y: (Math.floor(i / COLS) + 0.5) / ROWS, popped: false });
+                kernels.push({ dot, x: (i % COLS + 0.5) / COLS, y: (Math.floor(i / COLS) + 0.5) / ROWS, popped: false });
             }
-
-            const games = [
-                { name: 'Pop', color: '#fece00', plays: 0 },
-                { name: 'Trivia', color: '#3dc0c8', plays: 40 + Math.floor(Math.random() * 30) },
-                { name: 'Match', color: '#f869b9', plays: 40 + Math.floor(Math.random() * 30) }
-            ].map(g => {
-                const row = document.createElement('div');
-                row.className = 'flex items-center gap-2 text-[9px] font-bold uppercase tracking-wider';
-                row.innerHTML = `
-                    <span class="w-10 text-gray-400">${g.name}</span>
-                    <span class="flex-1 h-1.5 bg-white/10 overflow-hidden"><span class="block h-full transition-[width] duration-500 ease-out" style="width:0%;background:${g.color}"></span></span>
-                    <span class="w-9 text-right text-gray-400">0</span>
-                `;
-                gamesBox.appendChild(row);
-                const [label, track, value] = row.children;
-                return { ...g, label, bar: track.firstElementChild, value };
-            });
 
             let target = { x: 0.5, y: 0.5 };
             let hovering = false;
-            let levelling = false;
+            let resetting = false;
             let popped = 0;
-            let pops = 0;
-            let level = 1;
             const t0 = performance.now();
 
             function paintKernel(k) {
@@ -1764,17 +1615,6 @@
                 k.dot.style.height = k.popped ? '90%' : '40%';
                 k.dot.style.background = k.popped ? '#fff8e1' : '#fece00';
                 k.dot.style.boxShadow = k.popped ? 'inset 0 0 0 2px #fece00' : 'none';
-            }
-
-            function paintGames() {
-                const most = Math.max(...games.map(g => g.plays), 1);
-                games.forEach(g => {
-                    g.bar.style.width = `${(g.plays / most) * 100}%`;
-                    g.value.textContent = g.plays;
-                    const leading = g.plays === most;
-                    g.label.style.color = leading ? '#ffffff' : '';
-                    g.value.style.color = leading ? '#ffffff' : '';
-                });
             }
 
             function resetBoard() {
@@ -1786,63 +1626,40 @@
                 k.popped = true;
                 paintKernel(k);
                 popped++;
-                pops++;
-                games[0].plays++;
-                scoreEl.textContent = pops;
                 if (!reduceMotion) {
                     k.dot.animate([{ transform: 'scale(0.4)' }, { transform: 'scale(1.2)' }, { transform: 'scale(1)' }], { duration: 240, easing: 'ease-out' });
                 }
                 if (popped === kernels.length) {
-                    levelling = true;
-                    levelUpEl.classList.replace('hidden', 'flex');
-                    setTimeout(() => {
-                        levelUpEl.classList.replace('flex', 'hidden');
-                        level++;
-                        levelEl.textContent = level;
-                        resetBoard();
-                        levelling = false;
-                    }, 900);
+                    resetting = true;
+                    setTimeout(() => { resetBoard(); resetting = false; }, 700);
                 }
             }
 
             viz.addEventListener('pointermove', e => {
                 const r = board.getBoundingClientRect();
                 hovering = true;
-                hintEl.textContent = 'Popping!';
                 target = { x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height };
             });
-            viz.addEventListener('pointerleave', () => {
-                hovering = false;
-                hintEl.textContent = 'Hover to pop';
-            });
+            viz.addEventListener('pointerleave', () => { hovering = false; });
 
             function popAround(now) {
                 if (!hovering) {
                     // Idle: a finger sweeps the board on a slow loop
                     const t = (now - t0) / 2600;
-                    target = { x: 0.5 + Math.sin(t * 1.3) * 0.42, y: 0.5 + Math.sin(t * 2.1) * 0.4 };
+                    target = { x: 0.5 + Math.sin(t * 1.3) * 0.42, y: 0.5 + Math.sin(t * 2.1) * 0.42 };
                 }
-                if (levelling) return;
+                if (resetting) return;
                 kernels.forEach(k => {
                     if (!k.popped && Math.hypot((k.x - target.x) * COLS, (k.y - target.y) * ROWS) < RADIUS) pop(k);
                 });
             }
 
             resetBoard();
-            paintGames();
             if (reduceMotion) return;
-
             (function loop(now) {
                 popAround(now);
                 requestAnimationFrame(loop);
             })(performance.now());
-
-            // Other players in the app keep Trivia and Match busy
-            setInterval(() => {
-                games[1].plays += Math.floor(Math.random() * 4);
-                games[2].plays += Math.floor(Math.random() * 4);
-                paintGames();
-            }, 700);
         })();
 
         // --- INIT ---
