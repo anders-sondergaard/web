@@ -59,6 +59,57 @@
             ]
         }
     </script>
+    <style>
+        /* Premium buttons: light from above, a soft drop shadow, and a light sweep on hover */
+        .btn-shine {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.08) 45%, rgba(0, 0, 0, 0.06) 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+                0 1px 2px rgba(0, 0, 0, 0.25),
+                0 8px 20px -6px rgba(0, 0, 0, 0.45);
+        }
+        .btn-shine::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+            transform: translateX(-120%);
+            transition: transform 600ms ease;
+        }
+        .btn-shine:hover {
+            transform: translateY(-1px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+                0 2px 4px rgba(0, 0, 0, 0.25),
+                0 14px 28px -8px rgba(0, 0, 0, 0.5);
+        }
+        .btn-shine:hover::after { transform: translateX(120%); }
+        .btn-shine:active { transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) {
+            .btn-shine:hover { transform: none; }
+            .btn-shine::after { display: none; }
+        }
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .animate-blink {
+            animation: cursorBlink 1s infinite;
+        }
+        /* Menu sits on the blue hero: blue bar with dark text while the hero is in view */
+        header { transition: background-color 250ms linear, color 250ms linear, border-color 250ms linear; }
+        header.on-hero { background-color: #3dc0c8 !important; border-color: rgba(10, 10, 12, 0.12) !important; color: #0a0a0c; }
+        header.on-hero .text-white,
+        header.on-hero nav > a.text-brand-cyan { color: #0a0a0c !important; }
+        header.on-hero nav > a[href$="#cms"] { border-color: rgba(10, 10, 12, 0.35); }
+        header.on-hero #mobileDrawer { color: #ffffff; }
+    </style>
     <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
     <link rel="preconnect" href="https://api.fontshare.com">
     <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
@@ -71,7 +122,7 @@
 
     <!-- HEADER / NAVIGATION -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div class="w-full px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center space-x-2 group">
                 <span class="text-2xl sm:text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white group-hover:opacity-90 transition">
                     CINEMATAZTIC
@@ -84,7 +135,7 @@
                 <a href="index.html#cms" class="px-4 py-2 uppercase tracking-widest font-bold border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition">
                     <i class="fa-solid fa-gear mr-1"></i> CMS
                 </a>
-                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="px-5 py-2.5 bg-brand-cyan text-black hover:bg-brand-yellow transition">Get in Touch</a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="btn-shine px-5 py-2.5 bg-brand-cyan text-black hover:bg-brand-yellow transition">Get in Touch</a>
             </nav>
 
             <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
@@ -104,11 +155,117 @@
     </header>
 
     <main class="flex-grow pt-20">
-        <!-- Programmatic page: content to come -->
+        <!-- HERO: big left-aligned statement + side column -->
+        <section id="hero" class="relative overflow-hidden border-b border-brand-border bg-brand-cyan">
+            <!-- Canvas Interactive Background -->
+            <canvas id="heroCanvas" class="absolute inset-0 z-0 w-full h-full"></canvas>
+            <div class="absolute -top-40 -left-40 w-[600px] h-[600px] bg-brand-cyan/10 rounded-full blur-[120px] pointer-events-none"></div>
+            <div class="relative z-10 w-full px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-28 lg:pb-32">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
+                    <div class="lg:col-span-8 space-y-8">
+                        <span class="inline-flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest text-brand-dark">
+                            <span class="w-2 h-2 rounded-full bg-brand-dark animate-ping"></span>
+                            <span>Next-Gen Cinema Advertising</span>
+                        </span>
+                        <h1 class="text-4xl sm:text-6xl lg:text-7xl 2xl:text-8xl font-black uppercase tracking-tighter !leading-none text-white">
+                            Programmatic cinema advertising
+                        </h1>
+                    </div>
+                    <div class="lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
+                        <p>
+                            Digital advertising has grown to more than 70% of the global advertising spend. Cinema's share of digital advertising is non-existing. To change that, Cinemataztic has introduced the first 'Programmatic Cinema' advertising platform - Book your programmatic campaign today
+                        </p>
+                        <div class="flex flex-wrap gap-3 pt-2">
+                            <a href="https://drf.dk.tradedesk.cinead.eu-1.cinemataztic.com/" target="_blank" rel="noopener" class="btn-shine px-6 py-3 bg-brand-cyan text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-dark hover:text-white transition">
+                                Programmatic DK
+                            </a>
+                            <a href="https://finnkino.fi.tradedesk.cinead.eu-1.cinemataztic.com/" target="_blank" rel="noopener" class="btn-shine px-6 py-3 bg-brand-cyan text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-dark hover:text-white transition">
+                                Programmatic FI
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIGITAL TRANSFORMATION: sticky sidebar + video, same look as the front page sections -->
+        <section id="transformation" class="border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Programmatic</span>
+                        <h2 class="text-4xl sm:text-5xl lg:text-[2.2vw] font-black uppercase !leading-none">Digital<br>transformation of the cinema media</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            Discover the most premium marketplace for new digital ad formats. Cinemataztic combines interactivity, targeting and measurement of digital with the scale and quality of traditional cinema advertising. We use technology, data, user engagement and premium inventory to enable buyers and sellers to transact across all cinema screens.
+                        </p>
+                    </aside>
+
+                    <div class="lg:col-span-9">
+                        <div class="relative aspect-video overflow-hidden bg-brand-card border border-brand-border">
+                            <video class="absolute inset-0 w-full h-full object-cover" src="assets/video/cinemataztic_programmatic_web.mp4" poster="assets/video/cinemataztic_programmatic_poster.jpg" controls playsinline preload="none" aria-label="Cinemataztic programmatic cinema advertising"></video>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HOW ADVERTISERS BUY: sticky sidebar + interactive 6-step ring -->
+        <section id="how-to-buy" class="border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">How it works</span>
+                        <h2 class="text-4xl sm:text-5xl lg:text-[2.2vw] font-black uppercase !leading-none">How advertisers buy programmatic cinema?</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            Once signed up to the platform advertisers and agencies book programmatic cinema in 6 easy steps.
+                        </p>
+                        <h3 class="pt-6 text-4xl sm:text-5xl lg:text-[2.2vw] font-black uppercase !leading-none">How programmatic cinema works?</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            Programmatic is an add-on to the traditional offline cinema advertising (DCP) and provides exhibitors and cinema sales houses with new incremental digital revenue. Unless the preshow is already sold out – this is a way of generating additional revenue.
+                        </p>
+                        <a href="assets/pdf/Tradedesk_GuideToProgrammatic_Cinemataztic.pdf" download class="btn-shine inline-flex items-center px-6 py-3 bg-brand-cyan text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-yellow transition">
+                            <i class="fa-solid fa-download mr-2"></i> Download guide to programmatic
+                        </a>
+                    </aside>
+
+                    <div class="lg:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                        <!-- Ring: six segments, darkest (1) to brightest (6), clockwise from the top -->
+                        <svg id="stepsRing" viewBox="0 0 320 320" class="w-full max-w-sm mx-auto select-none" role="img" aria-label="Six steps to book programmatic cinema"></svg>
+
+                        <ol id="stepsList" class="space-y-2">
+                            <li data-step="0" tabindex="0" class="step-item flex gap-4 p-4 border border-transparent cursor-default transition-colors">
+                                <span class="step-num text-2xl font-black w-6 shrink-0">1</span>
+                                <div><h3 class="text-sm font-bold uppercase">Spot details</h3><p class="text-sm text-gray-400 leading-relaxed">Choose the number of spots and spot duration</p></div>
+                            </li>
+                            <li data-step="1" tabindex="0" class="step-item flex gap-4 p-4 border border-transparent cursor-default transition-colors">
+                                <span class="step-num text-2xl font-black w-6 shrink-0">2</span>
+                                <div><h3 class="text-sm font-bold uppercase">Creatives</h3><p class="text-sm text-gray-400 leading-relaxed">Upload your spot (add a voucher if applicable)</p></div>
+                            </li>
+                            <li data-step="2" tabindex="0" class="step-item flex gap-4 p-4 border border-transparent cursor-default transition-colors">
+                                <span class="step-num text-2xl font-black w-6 shrink-0">3</span>
+                                <div><h3 class="text-sm font-bold uppercase">Day &amp; Time</h3><p class="text-sm text-gray-400 leading-relaxed">Select the campaign period and time slots</p></div>
+                            </li>
+                            <li data-step="3" tabindex="0" class="step-item flex gap-4 p-4 border border-transparent cursor-default transition-colors">
+                                <span class="step-num text-2xl font-black w-6 shrink-0">4</span>
+                                <div><h3 class="text-sm font-bold uppercase">Audience</h3><p class="text-sm text-gray-400 leading-relaxed">Define your target audience</p></div>
+                            </li>
+                            <li data-step="4" tabindex="0" class="step-item flex gap-4 p-4 border border-transparent cursor-default transition-colors">
+                                <span class="step-num text-2xl font-black w-6 shrink-0">5</span>
+                                <div><h3 class="text-sm font-bold uppercase">Distribution</h3><p class="text-sm text-gray-400 leading-relaxed">Choose cinemas based on geography</p></div>
+                            </li>
+                            <li data-step="5" tabindex="0" class="step-item flex gap-4 p-4 border border-transparent cursor-default transition-colors">
+                                <span class="step-num text-2xl font-black w-6 shrink-0">6</span>
+                                <div><h3 class="text-sm font-bold uppercase">Budget</h3><p class="text-sm text-gray-400 leading-relaxed">Enter your bid percentage (%), budget, and suggest a new base-CPM if needed</p></div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="bg-black border-t border-brand-border py-12 text-sm text-gray-500">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="w-full px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="space-y-2 text-center md:text-left">
                 <span class="text-2xl font-logo font-bold tracking-[0.05em] uppercase text-white">CINEMATAZTIC</span>
                 <p class="text-xs text-gray-400">© 2026 Cinemataztic ApS. All rights reserved.</p>
@@ -123,6 +280,223 @@
     </footer>
 
     <script>
+        // --- INTERACTIVE HERO CANVAS CONSTELLATION MESH ---
+        (function initHeroCanvas() {
+            const canvas = document.getElementById('heroCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let width, height;
+            let particles = [];
+            const particleCount = 45;
+            const maxDistance = 140;
+
+            const mouse = { x: null, y: null, radius: 180 };
+
+            function resize() {
+                width = canvas.width = canvas.parentElement.offsetWidth;
+                height = canvas.height = canvas.parentElement.offsetHeight;
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Track Mouse Position
+            const heroSection = document.getElementById('hero');
+            heroSection.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+
+            heroSection.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.8;
+                    this.vy = (Math.random() - 0.5) * 0.8;
+                    this.radius = Math.random() * 2 + 1.5;
+                    this.color = Math.random() > 0.3 ? '#fece00' : '#f869b9';
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    // Mouse Interaction
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const dx = mouse.x - this.x;
+                        const dy = mouse.y - this.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < mouse.radius) {
+                            const angle = Math.atan2(dy, dx);
+                            const force = (mouse.radius - dist) / mouse.radius;
+                            this.x -= Math.cos(angle) * force * 2;
+                            this.y -= Math.sin(angle) * force * 2;
+                        }
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = this.color;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw connecting lines between particles
+                for (let a = 0; a < particles.length; a++) {
+                    particles[a].update();
+                    particles[a].draw();
+
+                    for (let b = a + 1; b < particles.length; b++) {
+                        const dx = particles[a].x - particles[b].x;
+                        const dy = particles[a].y - particles[b].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < maxDistance) {
+                            const opacity = 1 - (dist / maxDistance);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.strokeStyle = `rgba(254, 206, 0, ${opacity * 0.25})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Draw line to mouse if close
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const mdx = particles[a].x - mouse.x;
+                        const mdy = particles[a].y - mouse.y;
+                        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                        if (mdist < mouse.radius) {
+                            const mOpacity = 1 - (mdist / mouse.radius);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.strokeStyle = `rgba(248, 105, 185, ${mOpacity * 0.4})`;
+                            ctx.lineWidth = 1.2;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // --- MENU ON THE HERO ---
+        // The menu bar turns blue while any of the (blue) hero is visible below it.
+        (function initHeroMenu() {
+            const header = document.querySelector('body > header');
+            const hero = document.getElementById('hero');
+            if (!header || !hero) return;
+            const observer = new IntersectionObserver(([entry]) => {
+                header.classList.toggle('on-hero', entry.isIntersecting);
+            }, { rootMargin: `-${header.offsetHeight}px 0px 0px 0px` });
+            observer.observe(hero);
+        })();
+
+        // --- HOW ADVERTISERS BUY: 6-STEP RING ---
+        // Six ring segments (darkest = step 1, brightest = step 6), clockwise from the top. Hovering or
+        // focusing a segment or a list item highlights both; otherwise the guide steps through on its own.
+        (function initStepsRing() {
+            const svg = document.getElementById('stepsRing');
+            const items = [...document.querySelectorAll('#stepsList .step-item')];
+            if (!svg || !items.length) return;
+            const SVG_NS = 'http://www.w3.org/2000/svg';
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const C = 160, R_OUT = 150, R_IN = 96, GAP = 2;
+
+            const polar = (r, deg) => {
+                const a = deg * Math.PI / 180;
+                return [C + r * Math.cos(a), C + r * Math.sin(a)];
+            };
+            const sector = (from, to) => {
+                const [x1, y1] = polar(R_OUT, from), [x2, y2] = polar(R_OUT, to);
+                const [x3, y3] = polar(R_IN, to), [x4, y4] = polar(R_IN, from);
+                return `M${x1},${y1} A${R_OUT},${R_OUT} 0 0 1 ${x2},${y2} L${x3},${y3} A${R_IN},${R_IN} 0 0 0 ${x4},${y4} Z`;
+            };
+
+            const segments = items.map((item, i) => {
+                const from = -120 + i * 60 + GAP / 2, to = from + 60 - GAP, mid = (from + to) / 2;
+                const g = document.createElementNS(SVG_NS, 'g');
+                g.style.cursor = 'default';
+                const path = document.createElementNS(SVG_NS, 'path');
+                path.setAttribute('d', sector(from, to));
+                path.style.transition = 'fill 300ms linear';
+                const [tx, ty] = polar((R_OUT + R_IN) / 2, mid);
+                const label = document.createElementNS(SVG_NS, 'text');
+                label.setAttribute('x', tx);
+                label.setAttribute('y', ty);
+                label.setAttribute('text-anchor', 'middle');
+                label.setAttribute('dominant-baseline', 'central');
+                label.setAttribute('font-size', '26');
+                label.setAttribute('font-weight', '700');
+                label.textContent = String(i + 1);
+                g.append(path, label);
+                svg.appendChild(g);
+                return { g, path, label, base: 0.3 + i * 0.12 };
+            });
+
+            let active = 0;
+            let paused = false;
+            function setActive(i) {
+                active = i;
+                segments.forEach((s, k) => {
+                    const on = k === i;
+                    s.path.setAttribute('fill', on ? '#3dc0c8' : `rgba(61, 192, 200, ${s.base})`);
+                    s.label.setAttribute('fill', on ? '#0a0a0c' : 'rgba(255, 255, 255, 0.85)');
+                });
+                items.forEach((item, k) => {
+                    const on = k === i;
+                    item.classList.toggle('border-brand-border', on);
+                    item.classList.toggle('bg-brand-card', on);
+                    item.classList.toggle('border-transparent', !on);
+                    item.querySelector('.step-num').style.color = on ? '#3dc0c8' : '#4b5563';
+                    item.querySelector('h3').style.color = on ? '#ffffff' : '#9ca3af';
+                });
+            }
+
+            const section = document.getElementById('how-to-buy');
+            segments.forEach((s, i) => s.g.addEventListener('pointerenter', () => setActive(i)));
+            items.forEach((item, i) => {
+                item.addEventListener('pointerenter', () => setActive(i));
+                item.addEventListener('focus', () => setActive(i));
+            });
+            section.addEventListener('pointerenter', () => { paused = true; });
+            section.addEventListener('pointerleave', () => { paused = false; });
+            section.addEventListener('focusin', () => { paused = true; });
+            section.addEventListener('focusout', () => { paused = false; });
+
+            setActive(0);
+            if (!reduceMotion) {
+                setInterval(() => { if (!paused) setActive((active + 1) % segments.length); }, 2500);
+            }
+        })();
+
         // Mobile Menu Toggle
         document.getElementById('mobileMenuBtn').addEventListener('click', () => {
             document.getElementById('mobileDrawer').classList.toggle('hidden');

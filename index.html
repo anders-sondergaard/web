@@ -59,6 +59,43 @@
             ]
         }
     </script>
+    <style>
+        /* Premium buttons: light from above, a soft drop shadow, and a light sweep on hover */
+        .btn-shine {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.08) 45%, rgba(0, 0, 0, 0.06) 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+                0 1px 2px rgba(0, 0, 0, 0.25),
+                0 8px 20px -6px rgba(0, 0, 0, 0.45);
+        }
+        .btn-shine::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+            transform: translateX(-120%);
+            transition: transform 600ms ease;
+        }
+        .btn-shine:hover {
+            transform: translateY(-1px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+                0 2px 4px rgba(0, 0, 0, 0.25),
+                0 14px 28px -8px rgba(0, 0, 0, 0.5);
+        }
+        .btn-shine:hover::after { transform: translateX(120%); }
+        .btn-shine:active { transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) {
+            .btn-shine:hover { transform: none; }
+            .btn-shine::after { display: none; }
+        }
+    </style>
     <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
     <link rel="preconnect" href="https://api.fontshare.com">
     <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
@@ -94,7 +131,7 @@
 
     <!-- HEADER / NAVIGATION -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div class="w-full px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="#hero" class="flex items-center space-x-2 group">
                 <span class="text-2xl sm:text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white group-hover:opacity-90 transition">
                     CINEMATAZTIC
@@ -107,7 +144,7 @@
                 <button onclick="switchView('admin')" class="px-4 py-2 uppercase tracking-widest font-bold border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition">
                     <i class="fa-solid fa-gear mr-1"></i> CMS
                 </button>
-                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="px-5 py-2.5 bg-brand-cyan text-black hover:bg-brand-yellow transition">Get in Touch</a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="btn-shine px-5 py-2.5 bg-brand-cyan text-black hover:bg-brand-yellow transition">Get in Touch</a>
             </nav>
 
             <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
@@ -134,14 +171,14 @@
             <!-- Canvas Interactive Background -->
             <canvas id="heroCanvas" class="absolute inset-0 z-0 w-full h-full"></canvas>
             <div class="absolute -top-40 -left-40 w-[600px] h-[600px] bg-brand-cyan/10 rounded-full blur-[120px] pointer-events-none"></div>
-            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-28 lg:pb-32">
+            <div class="relative z-10 w-full px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-28 lg:pb-32">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
                     <div class="lg:col-span-8 space-y-8">
                         <span class="inline-flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest text-brand-dark">
                             <span class="w-2 h-2 rounded-full bg-brand-dark animate-ping"></span>
                             <span>Next-Gen Cinema Advertising</span>
                         </span>
-                        <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tighter !leading-none w-fit bg-gradient-to-r from-brand-dark to-brand-pink bg-clip-text text-transparent">
+                        <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tighter !leading-none text-black">
                             We do digital cinema advertising.
                         </h1>
                     </div>
@@ -153,24 +190,25 @@
                             Interactive big-screen games, programmatic buying and lobby activations — built for the room, measured like digital.
                         </p>
                         <div class="flex flex-wrap gap-3 pt-2">
-                            <a href="#work" class="px-6 py-3 bg-brand-cyan text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-dark hover:text-white transition">
+                            <a href="#work" class="btn-shine px-6 py-3 bg-brand-cyan text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-dark hover:text-white transition">
                                 Explore Cases
                             </a>
                         </div>
                     </div>
                 </div>
-                <p class="mt-16 lg:mt-24 text-2xl sm:text-3xl font-bold text-brand-dark">
-                    Anticipate the next<span class="text-brand-cyan animate-blink">_</span>
+                <!-- Bottom-right corner of the hero, inside its bottom padding -->
+                <p class="absolute right-4 sm:right-6 lg:right-8 bottom-6 lg:bottom-10 text-right text-2xl sm:text-3xl font-bold text-black">
+                    Anticipate the next<span class="animate-blink">_</span>
                 </p>
             </div>
         </section>
 
         <!-- PRODUCT: sticky sidebar + grid, same look as Featured Cases -->
         <section id="products" class="border-b border-brand-border scroll-mt-20">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
-                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-500">What we do</span>
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">What we do</span>
                         <h2 class="text-4xl sm:text-5xl font-black !leading-none">Products</h2>
                         <div class="space-y-2">
                             <h3 class="text-xs font-bold uppercase tracking-widest text-white">Engage the cinema core audience</h3>
@@ -204,7 +242,7 @@
                                 <div class="pt-4 space-y-2">
                                     <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">Programmatic</h3>
                                     <div class="space-y-2">
-                                        <p class="text-xs text-gray-400 leading-relaxed">Automated, targetable and transparent cinema ad buying with real-time impression reporting.</p>
+                                        <p class="text-sm text-gray-400 leading-relaxed">Automated, targetable and transparent cinema ad buying with real-time impression reporting.</p>
                                         <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
                                     </div>
                                 </div>
@@ -221,7 +259,7 @@
                                 <div class="pt-4 space-y-2">
                                     <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">CineGame</h3>
                                     <div class="space-y-2">
-                                        <p class="text-xs text-gray-400 leading-relaxed">Whole auditoriums play branded games on the big screen, using their phones as controllers.</p>
+                                        <p class="text-sm text-gray-400 leading-relaxed">Whole auditoriums play branded games on the big screen, using their phones as controllers.</p>
                                         <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
                                     </div>
                                 </div>
@@ -237,7 +275,7 @@
                                 <div class="pt-4 space-y-2">
                                     <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">CineFun</h3>
                                     <div class="space-y-2">
-                                        <p class="text-xs text-gray-400 leading-relaxed">Quizzes, lobby kiosks and loyalty tie-ins that entertain moviegoers before and after the film.</p>
+                                        <p class="text-sm text-gray-400 leading-relaxed">Quizzes, lobby kiosks and loyalty tie-ins that entertain moviegoers before and after the film.</p>
                                         <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
                                     </div>
                                 </div>
@@ -250,18 +288,18 @@
 
         <!-- FEATURED CASES: sticky sidebar + grid -->
         <section id="work" class="border-b border-brand-border scroll-mt-20">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
-                        <span id="todayLabel" class="block text-[10px] font-bold uppercase tracking-widest text-gray-500"></span>
+                        <span id="todayLabel" class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow"></span>
                         <h2 class="text-4xl sm:text-5xl font-black !leading-none">Featured<br>Cases</h2>
                         <p class="text-sm text-gray-400 leading-relaxed">
-                            A handpicked selection of campaigns. See the <a href="cases.html" class="text-white underline decoration-brand-cyan underline-offset-4 hover:text-brand-cyan">work section</a> for more case studies.
+                            A handpicked selection of campaigns. See the <a href="cases.html" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">work section</a> for more case studies.
                         </p>
                         <div class="flex flex-wrap lg:flex-col lg:items-start gap-2" id="filterContainer">
                             <!-- Filter buttons populated by JS -->
                         </div>
-                        <span id="workCount" class="hidden lg:block text-6xl font-black">0</span>
+                        <span id="workCount" class="hidden lg:block text-6xl font-black text-brand-pink">0</span>
                         <a href="cases.html" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">
                             See All Cases <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
@@ -278,10 +316,10 @@
 
         <!-- PARTNERS: sticky sidebar + interactive world map, same look as Featured Cases -->
         <section id="partners" class="border-b border-brand-border scroll-mt-20">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
-                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-500">Where we are</span>
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Where we are</span>
                         <h2 class="text-4xl sm:text-5xl font-black !leading-none">Partners</h2>
                         <p class="text-sm text-gray-400 leading-relaxed">
                             Cinema partners across the Nordics and Europe bring our formats to the big screen.
@@ -290,7 +328,7 @@
                             <!-- Country buttons populated by JS -->
                         </div>
                         <div class="hidden lg:block">
-                            <span id="partnerCount" class="block text-6xl font-black">6</span>
+                            <span id="partnerCount" class="block text-6xl font-black text-brand-pink">6</span>
                             <span class="text-xs uppercase tracking-wider text-gray-400">Countries</span>
                         </div>
                     </aside>
@@ -311,16 +349,16 @@
 
         <!-- BRANDS: sticky sidebar + grey logo tiles, same look as Featured Cases (brands managed in the CMS) -->
         <section id="brands" class="border-b border-brand-border scroll-mt-20">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
-                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-500">Who we work with</span>
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Who we work with</span>
                         <h2 class="text-4xl sm:text-5xl font-black !leading-none">Brands</h2>
                         <p class="text-sm text-gray-400 leading-relaxed">
                             We work with cinemas, ambitious brands and the causes that need to be seen — on the biggest screen in town.
                         </p>
                         <div class="hidden lg:block">
-                            <span id="brandCount" class="block text-6xl font-black tabular-nums transition-opacity duration-300">1</span>
+                            <span id="brandCount" class="block text-6xl font-black text-brand-pink tabular-nums transition-opacity duration-300">1</span>
                             <span id="brandCountLabel" class="text-xs uppercase tracking-wider text-gray-400 transition-opacity duration-300">Brands</span>
                         </div>
                     </aside>
@@ -338,8 +376,8 @@
         <section id="about" class="relative overflow-hidden border-b border-brand-border scroll-mt-20">
             <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=1800&q=80" alt="Cinema theater" class="absolute inset-0 w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/85 to-brand-dark/40"></div>
-            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-                <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-10">Who we are</span>
+            <div class="relative w-full px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+                <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow mb-10">Who we are</span>
                 <div class="max-w-3xl space-y-8">
                     <h2 class="text-4xl sm:text-6xl font-black uppercase !leading-none">
                         We love <span class="text-brand-pink">cinemas!</span>
@@ -356,10 +394,10 @@
 
         <!-- FAQ: heading left, questions right -->
         <section id="faq" class="border-b border-brand-border scroll-mt-20">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <div class="lg:col-span-4 lg:sticky lg:top-28 lg:self-start space-y-4">
-                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-500">Knowledge Base</span>
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Knowledge Base</span>
                         <h2 class="text-4xl sm:text-5xl font-black !leading-none">Frequently asked questions</h2>
                     </div>
                     <div class="lg:col-span-8 divide-y divide-brand-border border-y border-brand-border">
@@ -398,7 +436,7 @@
 
     <!-- CMS ADMIN PORTAL CONTAINER -->
     <main id="adminView" class="hidden flex-grow pt-20 bg-black min-h-screen">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-10 space-y-8">
             
             <!-- Admin Top Bar -->
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-brand-border pb-6 gap-4">
@@ -555,7 +593,7 @@
 
     <!-- FOOTER -->
     <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-12 gap-10">
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-12 gap-10">
             <div class="md:col-span-5 space-y-3">
                 <span class="block text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white">CINEMATAZTIC</span>
                 <p class="text-xs text-gray-400 max-w-xs">Digital cinema advertising — interactive, programmatic and measurable.</p>
@@ -574,7 +612,7 @@
                 <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="block text-xs uppercase tracking-wider font-bold hover:text-brand-cyan">Get in touch <i class="fa-solid fa-arrow-right ml-1"></i></a>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 border-t border-brand-border text-xs text-gray-500">
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-6 border-t border-brand-border text-xs text-gray-500">
             © 2026 Cinemataztic ApS. All rights reserved.
         </div>
     </footer>
@@ -898,12 +936,12 @@
                             </div>
                         ` : ''}
                     </div>
-                    <div class="pt-4 grid grid-cols-2 gap-3">
-                        <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">${c.title}</h3>
-                        <div class="space-y-2">
-                            <span class="block w-max ml-auto text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border border-white text-white">${c.category}</span>
-                            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">${c.description}</p>
+                    <div class="pt-4 space-y-2">
+                        <div class="flex items-start justify-between gap-3">
+                            <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">${c.title}</h3>
+                            <span class="shrink-0 text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border border-white text-white">${c.category}</span>
                         </div>
+                        <p class="text-sm text-gray-400 line-clamp-2 leading-relaxed">${c.description}</p>
                     </div>
                 </article>
             `).join('');
