@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cinemataztic — Digital Cinema Advertising</title>
-    <!-- Page-to-page transitions (must load before first paint) -->
-    <script src="page-transitions.js"></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -24,19 +22,51 @@
                             border: '#1f1f26'
                         }
                     },
+                    // Typography after phloe.co: General Sans, tight tracking, 1.383 body leading
                     fontFamily: {
-                        sans: ['Klavika', 'Titillium Web', 'Inter', 'sans-serif']
+                        sans: ['"General Sans"', 'system-ui', 'sans-serif'],
+                        // Logo wordmark: Klavika Bold (installed, or Adobe Fonts kit "klavika-web"), falling back to General Sans
+                        logo: ['Klavika', '"klavika-web"', '"General Sans"', 'sans-serif']
+                    },
+                    letterSpacing: {
+                        tighter: '-0.0525em',
+                        tight: '-0.021em',
+                        wide: '-0.021em',
+                        wider: '-0.021em',
+                        widest: '-0.021em'
+                    },
+                    lineHeight: {
+                        none: '0.76',
+                        relaxed: '1.383'
                     }
                 }
-            }
+            },
+            plugins: [
+                function ({ addBase }) {
+                    addBase({
+                        // Logo wordmark font: an installed Klavika Bold, else the licensed webfont file
+                        '@font-face': {
+                            fontFamily: 'Klavika',
+                            fontWeight: '700',
+                            fontStyle: 'normal',
+                            fontDisplay: 'swap',
+                            src: "local('Klavika Bold'), local('Klavika-Bold'), url('assets/fonts/Klavika-Bold.otf') format('opentype')"
+                        },
+                        body: { lineHeight: '1.383' },
+                        '.font-black': { letterSpacing: '-0.0525em' }
+                    });
+                }
+            ]
         }
     </script>
-    <!-- Google Fonts Fallback for Klavika Geometric Style -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- TopoJSON reader for the partner world map -->
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
     <style>
         @keyframes cursorBlink {
             0%, 100% { opacity: 1; }
@@ -45,10 +75,6 @@
         .animate-blink {
             animation: cursorBlink 1s infinite;
         }
-        @keyframes marquee {
-            0% { transform: translateX(0%); }
-            100% { transform: translateX(-50%); }
-        }
         /* Brand wall: every logo becomes one flat grey, brighter on hover */
         .brand-logo {
             filter: brightness(0) invert(1);
@@ -56,19 +82,12 @@
             transition: opacity 200ms linear;
         }
         .brand-cell:hover .brand-logo { opacity: 1; }
-        .animate-marquee {
-            display: flex;
-            width: 200%;
-            animation: marquee 25s linear infinite;
-        }
-        /* Marker-style highlight behind a word, like a highlighter pen */
-        .marker {
-            background: linear-gradient(transparent 12%, var(--marker, #3dc0c8) 12%, var(--marker, #3dc0c8) 88%, transparent 88%);
-            color: #0a0a0c;
-            padding: 0 0.12em;
-            -webkit-box-decoration-break: clone;
-            box-decoration-break: clone;
-        }
+        /* Menu sits on the yellow hero: yellow bar with dark text while the hero is in view */
+        header { transition: background-color 250ms linear, color 250ms linear, border-color 250ms linear; }
+        header.on-hero { background-color: #fece00 !important; border-color: rgba(10, 10, 12, 0.12) !important; color: #0a0a0c; }
+        header.on-hero .text-white { color: #0a0a0c !important; }
+        header.on-hero nav > button { border-color: rgba(10, 10, 12, 0.35); }
+        header.on-hero #mobileDrawer { color: #ffffff; }
     </style>
 </head>
 <body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
@@ -77,7 +96,7 @@
     <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="#hero" class="flex items-center space-x-2 group">
-                <span class="text-2xl sm:text-3xl font-black tracking-wider uppercase text-white group-hover:opacity-90 transition">
+                <span class="text-2xl sm:text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white group-hover:opacity-90 transition">
                     CINEMATAZTIC
                 </span>
             </a>
@@ -88,7 +107,7 @@
                 <button onclick="switchView('admin')" class="px-4 py-2 uppercase tracking-widest font-bold border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition">
                     <i class="fa-solid fa-gear mr-1"></i> CMS
                 </button>
-                <a href="#contact" class="px-5 py-2.5 bg-brand-cyan text-black hover:bg-brand-mint transition">Get in Touch</a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="px-5 py-2.5 bg-brand-cyan text-black hover:bg-brand-yellow transition">Get in Touch</a>
             </nav>
 
             <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
@@ -99,7 +118,7 @@
         <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
             <a href="cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
             <a href="products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
-            <a href="#contact" class="block text-lg font-bold uppercase hover:text-brand-cyan">Get in Touch</a>
+            <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="block text-lg font-bold uppercase hover:text-brand-cyan">Get in Touch</a>
             <hr class="border-brand-border my-2">
             <button onclick="switchView('admin')" class="w-full text-left py-2 text-sm uppercase font-bold text-brand-cyan">
                 <i class="fa-solid fa-gear mr-2"></i> Open CMS Admin
@@ -111,50 +130,38 @@
     <main id="publicView" class="flex-grow pt-20">
 
         <!-- HERO: big left-aligned statement + side column -->
-        <section id="hero" class="relative overflow-hidden border-b border-brand-border">
+        <section id="hero" class="relative overflow-hidden border-b border-brand-border bg-brand-yellow">
             <!-- Canvas Interactive Background -->
             <canvas id="heroCanvas" class="absolute inset-0 z-0 w-full h-full"></canvas>
             <div class="absolute -top-40 -left-40 w-[600px] h-[600px] bg-brand-cyan/10 rounded-full blur-[120px] pointer-events-none"></div>
             <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-28 lg:pb-32">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
                     <div class="lg:col-span-8 space-y-8">
-                        <span class="inline-flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest text-brand-cyan">
-                            <span class="w-2 h-2 rounded-full bg-brand-cyan animate-ping"></span>
+                        <span class="inline-flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest text-brand-dark">
+                            <span class="w-2 h-2 rounded-full bg-brand-dark animate-ping"></span>
                             <span>Next-Gen Cinema Advertising</span>
                         </span>
-                        <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight leading-[0.95]">
-                            We do digital <span class="marker">cinema advertising.</span>
+                        <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tighter !leading-none w-fit bg-gradient-to-r from-brand-dark to-brand-pink bg-clip-text text-transparent">
+                            We do digital cinema advertising.
                         </h1>
                     </div>
-                    <div class="lg:col-span-4 space-y-5 text-gray-300 text-base leading-relaxed lg:pb-3">
+                    <div class="lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
                         <p>
                             We help cinema companies create enduring and lasting value through digital advertising formats.
                         </p>
-                        <p class="text-gray-400 text-sm">
+                        <p class="text-brand-dark/70 text-sm">
                             Interactive big-screen games, programmatic buying and lobby activations — built for the room, measured like digital.
                         </p>
                         <div class="flex flex-wrap gap-3 pt-2">
-                            <a href="#work" class="px-6 py-3 bg-brand-cyan text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-mint transition">
+                            <a href="#work" class="px-6 py-3 bg-brand-cyan text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-dark hover:text-white transition">
                                 Explore Cases
                             </a>
                         </div>
                     </div>
                 </div>
-                <p class="mt-16 lg:mt-24 text-2xl sm:text-3xl font-bold text-gray-500">
+                <p class="mt-16 lg:mt-24 text-2xl sm:text-3xl font-bold text-brand-dark">
                     Anticipate the next<span class="text-brand-cyan animate-blink">_</span>
                 </p>
-            </div>
-        </section>
-
-        <!-- CINEMA PARTNERS MARQUEE TICKER -->
-        <section class="py-8 bg-brand-card border-b border-brand-border overflow-hidden">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 text-left">
-                <p class="text-xs uppercase tracking-widest text-gray-400 font-bold">TRUSTED BY CINEMA PARTNERS</p>
-            </div>
-            <div class="relative w-full overflow-hidden">
-                <div class="animate-marquee flex items-center space-x-12 sm:space-x-20 text-xl sm:text-2xl font-bold uppercase tracking-wider text-gray-400 opacity-80" id="cinemaTickerContainer">
-                    <!-- Dynamic Ticker Content Populated by JS -->
-                </div>
             </div>
         </section>
 
@@ -164,7 +171,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
                         <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-500">What we do</span>
-                        <h2 class="text-4xl sm:text-5xl font-black leading-none">Products</h2>
+                        <h2 class="text-4xl sm:text-5xl font-black !leading-none">Products</h2>
                         <div class="space-y-2">
                             <h3 class="text-xs font-bold uppercase tracking-widest text-white">Engage the cinema core audience</h3>
                             <p class="text-sm text-gray-400 leading-relaxed">
@@ -206,7 +213,7 @@
                             <a href="cinegame.html" class="group block">
                                 <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
                                     <!-- CineGame: the cinema screen runs a catch game, the cursor is your phone -->
-                                    <div id="cgViz" class="absolute inset-0 bg-black select-none" role="img" aria-label="Animated illustration of a CineGame round played on the cinema screen">
+                                    <div id="cgViz" class="absolute inset-0 select-none" role="img" aria-label="Animated illustration of a CineGame round played on the cinema screen">
                                         <canvas id="cgScreen" class="absolute inset-0 w-full h-full"></canvas>
                                         <span id="cgHint" class="absolute top-3 left-4 text-[10px] font-bold uppercase tracking-wider text-white/50">Move to play</span>
                                     </div>
@@ -223,7 +230,7 @@
                             <a href="cinefun.html" class="group block">
                                 <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
                                     <!-- CineFun: a casual popcorn game, the cursor is your finger -->
-                                    <div id="cfViz" class="absolute inset-0 p-4 bg-black select-none" role="img" aria-label="Animated illustration of a casual popcorn game in the CineGame app">
+                                    <div id="cfViz" class="absolute inset-0 p-4 select-none" role="img" aria-label="Animated illustration of a casual popcorn game in the CineGame app">
                                         <div id="cfBoard" class="w-full h-full grid grid-cols-10 grid-rows-10 gap-[3px]"></div>
                                     </div>
                                 </div>
@@ -247,7 +254,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
                         <span id="todayLabel" class="block text-[10px] font-bold uppercase tracking-widest text-gray-500"></span>
-                        <h2 class="text-4xl sm:text-5xl font-black leading-none">Featured<br>Cases</h2>
+                        <h2 class="text-4xl sm:text-5xl font-black !leading-none">Featured<br>Cases</h2>
                         <p class="text-sm text-gray-400 leading-relaxed">
                             A handpicked selection of campaigns. See the <a href="cases.html" class="text-white underline decoration-brand-cyan underline-offset-4 hover:text-brand-cyan">work section</a> for more case studies.
                         </p>
@@ -269,14 +276,60 @@
             </div>
         </section>
 
-        <!-- BRAND WALL: full-width statement + grey logo grid (brands managed in the CMS) -->
-        <section id="brands" class="border-b border-brand-border">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-                <p class="text-3xl sm:text-4xl lg:text-5xl font-normal leading-tight max-w-4xl text-white">
-                    We work with cinemas, ambitious brands and the causes that need to be seen — on the biggest screen in town.
-                </p>
-                <div id="brandWall" class="mt-16 lg:mt-20 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12 items-center">
-                    <!-- Populated from the CMS -->
+        <!-- PARTNERS: sticky sidebar + interactive world map, same look as Featured Cases -->
+        <section id="partners" class="border-b border-brand-border scroll-mt-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-500">Where we are</span>
+                        <h2 class="text-4xl sm:text-5xl font-black !leading-none">Partners</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            Cinema partners across the Nordics and Europe bring our formats to the big screen.
+                        </p>
+                        <div id="partnerChips" class="flex flex-wrap gap-2 lg:grid lg:grid-cols-2">
+                            <!-- Country buttons populated by JS -->
+                        </div>
+                        <div class="hidden lg:block">
+                            <span id="partnerCount" class="block text-6xl font-black">6</span>
+                            <span class="text-xs uppercase tracking-wider text-gray-400">Countries</span>
+                        </div>
+                    </aside>
+
+                    <div class="lg:col-span-9 grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10 items-center">
+                        <div class="lg:col-span-2">
+                            <svg id="partnerMap" class="w-full h-auto select-none" role="img" aria-label="World map with Cinemataztic partner countries highlighted"></svg>
+                        </div>
+                        <div id="partnerPanel" class="space-y-3 transition-opacity duration-200" aria-live="polite">
+                            <span id="partnerCountry" class="block text-xs font-bold uppercase tracking-widest text-brand-cyan"></span>
+                            <h3 id="partnerName" class="text-3xl sm:text-4xl font-black uppercase !leading-none"></h3>
+                            <p id="partnerText" class="text-sm text-gray-400 leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BRANDS: sticky sidebar + grey logo tiles, same look as Featured Cases (brands managed in the CMS) -->
+        <section id="brands" class="border-b border-brand-border scroll-mt-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-500">Who we work with</span>
+                        <h2 class="text-4xl sm:text-5xl font-black !leading-none">Brands</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            We work with cinemas, ambitious brands and the causes that need to be seen — on the biggest screen in town.
+                        </p>
+                        <div class="hidden lg:block">
+                            <span id="brandCount" class="block text-6xl font-black tabular-nums transition-opacity duration-300">1</span>
+                            <span id="brandCountLabel" class="text-xs uppercase tracking-wider text-gray-400 transition-opacity duration-300">Brands</span>
+                        </div>
+                    </aside>
+
+                    <div class="lg:col-span-9">
+                        <div id="brandWall" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-6">
+                            <!-- Populated from the CMS -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -286,41 +339,17 @@
             <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=1800&q=80" alt="Cinema theater" class="absolute inset-0 w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/85 to-brand-dark/40"></div>
             <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-                <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-10">
-                    <span>Who we are</span>
-                    <span class="hidden sm:block">Big screen. Small screen. One room.</span>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
-                    <div class="lg:col-span-7 space-y-8">
-                        <h2 class="text-4xl sm:text-6xl font-black leading-[0.95]">
-                            Redefining the <span class="text-brand-pink">big screen experience.</span>
-                        </h2>
-                        <p class="text-lg sm:text-xl text-gray-200 leading-relaxed max-w-2xl">
-                            Cinemataztic bridges the gap between traditional silver screen advertising and interactive digital engagement. We turn passive cinema audiences into active participants using high-impact programmatic delivery, mobile connectivity, and synchronized big-screen gaming.
-                        </p>
-                    </div>
-                    <div class="lg:col-span-5 grid grid-cols-2 gap-8">
-                        <div>
-                            <span class="block text-5xl sm:text-6xl font-black text-brand-cyan">98%</span>
-                            <span class="text-xs uppercase tracking-wider text-gray-300">Recall Rate</span>
-                        </div>
-                        <div>
-                            <span class="block text-5xl sm:text-6xl font-black text-brand-mint">15M+</span>
-                            <span class="text-xs uppercase tracking-wider text-gray-300">Players Engaged</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CLIENT MARQUEE TICKER -->
-        <section class="py-8 bg-brand-card border-b border-brand-border overflow-hidden">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 text-left">
-                <p class="text-xs uppercase tracking-widest text-gray-400 font-bold">TRUSTED BY GLOBAL CLIENTS</p>
-            </div>
-            <div class="relative w-full overflow-hidden">
-                <div class="animate-marquee flex items-center space-x-12 sm:space-x-20 text-xl sm:text-2xl font-bold uppercase tracking-wider text-gray-400 opacity-80" id="tickerContainer">
-                    <!-- Dynamic Ticker Content Populated by JS -->
+                <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-10">Who we are</span>
+                <div class="max-w-3xl space-y-8">
+                    <h2 class="text-4xl sm:text-6xl font-black uppercase !leading-none">
+                        We love <span class="text-brand-pink">cinemas!</span>
+                    </h2>
+                    <p class="text-lg sm:text-xl text-gray-200 !leading-relaxed max-w-2xl">
+                        Cinemataztic is a cinema-loving, design thinking and software engineering company, developing new digital products for cinemas to both enhance the cinema experience for the audience and create new digital revenue streams for exhibitors and ad networks.
+                    </p>
+                    <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="inline-flex items-center px-6 py-3 bg-white text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-cyan transition">
+                        <i class="fa-brands fa-linkedin mr-2 text-base"></i> Follow us on LinkedIn
+                    </a>
                 </div>
             </div>
         </section>
@@ -331,7 +360,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <div class="lg:col-span-4 lg:sticky lg:top-28 lg:self-start space-y-4">
                         <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-500">Knowledge Base</span>
-                        <h2 class="text-4xl sm:text-5xl font-black leading-none">Frequently asked questions</h2>
+                        <h2 class="text-4xl sm:text-5xl font-black !leading-none">Frequently asked questions</h2>
                     </div>
                     <div class="lg:col-span-8 divide-y divide-brand-border border-y border-brand-border">
                         <div>
@@ -365,60 +394,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- CONTACT: big statement left, form right -->
-        <section id="contact" class="scroll-mt-20">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                    <div class="lg:col-span-6 space-y-6">
-                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-500">Start a Campaign</span>
-                        <h2 class="text-5xl sm:text-7xl font-black leading-[0.95]">
-                            Let's create something <span class="marker" style="--marker:#6ceec4">un-ordinary.</span>
-                        </h2>
-                        <p class="text-gray-400 text-lg leading-relaxed max-w-md">
-                            Fill in your campaign details and our cinema ad team will reach out within 24 hours.
-                        </p>
-                    </div>
-                    <form id="publicInquiryForm" onsubmit="handleInquirySubmit(event)" class="lg:col-span-6 space-y-5">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            <div>
-                                <label for="inqName" class="block text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-2">Name *</label>
-                                <input type="text" id="inqName" required class="w-full bg-transparent border-b border-brand-border px-0 py-2 text-white focus:border-brand-cyan focus:outline-none">
-                            </div>
-                            <div>
-                                <label for="inqEmail" class="block text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-2">Company Email *</label>
-                                <input type="email" id="inqEmail" required class="w-full bg-transparent border-b border-brand-border px-0 py-2 text-white focus:border-brand-cyan focus:outline-none">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            <div>
-                                <label for="inqCompany" class="block text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-2">Company / Agency *</label>
-                                <input type="text" id="inqCompany" required class="w-full bg-transparent border-b border-brand-border px-0 py-2 text-white focus:border-brand-cyan focus:outline-none">
-                            </div>
-                            <div>
-                                <label for="inqProduct" class="block text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-2">Product Interest</label>
-                                <select id="inqProduct" class="w-full bg-brand-dark border-b border-brand-border px-0 py-2 text-white focus:border-brand-cyan focus:outline-none">
-                                    <option value="CineGame">CineGame</option>
-                                    <option value="Programmatic">Programmatic Cinema</option>
-                                    <option value="CineFun">CineFun</option>
-                                    <option value="All Products">All Products</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <label for="inqBrief" class="block text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-2">Project Brief &amp; Objectives *</label>
-                            <textarea id="inqBrief" rows="4" required class="w-full bg-transparent border-b border-brand-border px-0 py-2 text-white focus:border-brand-cyan focus:outline-none" placeholder="Tell us about your target audience, launch timeline, or campaign goals..."></textarea>
-                        </div>
-                        <button type="submit" class="px-8 py-4 bg-brand-cyan text-black font-bold uppercase tracking-wider text-sm hover:bg-brand-mint transition">
-                            Submit Inquiry <i class="fa-solid fa-arrow-right ml-2"></i>
-                        </button>
-                        <p id="inquirySuccessMsg" class="hidden text-sm text-brand-mint font-bold">
-                            <i class="fa-solid fa-check mr-1"></i> Thank you! We'll be in touch within 24 hours.
-                        </p>
-                    </form>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- CMS ADMIN PORTAL CONTAINER -->
@@ -446,15 +421,8 @@
                 <button onclick="switchAdminTab('cases')" id="tabBtn-cases" class="admin-tab active px-5 py-2.5 font-bold text-xs uppercase tracking-wider bg-brand-cyan text-black transition shrink-0">
                     Manage Cases
                 </button>
-                <button onclick="switchAdminTab('ticker')" id="tabBtn-ticker" class="admin-tab px-5 py-2.5 font-bold text-xs uppercase tracking-wider bg-brand-card border border-brand-border text-gray-300 hover:text-white transition shrink-0">
-                    Client Marquee
-                </button>
                 <button onclick="switchAdminTab('brands')" id="tabBtn-brands" class="admin-tab px-5 py-2.5 font-bold text-xs uppercase tracking-wider bg-brand-card border border-brand-border text-gray-300 hover:text-white transition shrink-0">
                     Brand Wall
-                </button>
-                <button onclick="switchAdminTab('inquiries')" id="tabBtn-inquiries" class="admin-tab px-5 py-2.5 font-bold text-xs uppercase tracking-wider bg-brand-card border border-brand-border text-gray-300 hover:text-white transition shrink-0 flex items-center">
-                    <span>Inquiries Inbox</span>
-                    <span id="inquiryBadge" class="ml-2 px-2 py-0.5 rounded-full text-[10px] bg-brand-pink text-black font-black">0</span>
                 </button>
             </div>
 
@@ -486,20 +454,6 @@
                 </div>
             </div>
 
-            <!-- TAB 2: CLIENT MARQUEE -->
-            <div id="tab-ticker" class="admin-content hidden space-y-6">
-                <h3 class="text-xl font-bold uppercase">Trusted Client Brands</h3>
-                <div class="bg-brand-card border border-brand-border p-6 rounded-xl space-y-4">
-                    <div class="flex gap-4">
-                        <input type="text" id="newTickerInput" placeholder="Add brand name (e.g. Adidas)" class="flex-grow bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-brand-cyan">
-                        <button onclick="addTickerBrand()" class="px-5 py-2 bg-brand-cyan text-black font-bold text-xs uppercase hover:bg-brand-mint transition">Add</button>
-                    </div>
-                    <div id="tickerBrandsList" class="flex flex-wrap gap-2 pt-2">
-                        <!-- Dynamic brand pills -->
-                    </div>
-                </div>
-            </div>
-
             <!-- TAB: BRAND WALL -->
             <div id="tab-brands" class="admin-content hidden space-y-6">
                 <h3 class="text-xl font-bold uppercase">Brand Wall</h3>
@@ -513,27 +467,6 @@
                     <div id="adminBrandList" class="divide-y divide-brand-border border-t border-brand-border">
                         <!-- Dynamic brand rows -->
                     </div>
-                </div>
-            </div>
-
-            <!-- TAB 3: INQUIRIES INBOX -->
-            <div id="tab-inquiries" class="admin-content hidden space-y-6">
-                <h3 class="text-xl font-bold uppercase">Received Client Inquiries</h3>
-                <div class="bg-brand-card border border-brand-border rounded-xl overflow-hidden">
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-brand-dark border-b border-brand-border text-xs uppercase text-gray-400">
-                            <tr>
-                                <th class="p-4">Date</th>
-                                <th class="p-4">Client Name</th>
-                                <th class="p-4">Company</th>
-                                <th class="p-4">Product</th>
-                                <th class="p-4">Brief</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminInquiriesTable" class="divide-y divide-brand-border text-gray-300">
-                            <!-- Dynamic Table Rows -->
-                        </tbody>
-                    </table>
                 </div>
             </div>
 
@@ -624,7 +557,7 @@
     <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-12 gap-10">
             <div class="md:col-span-5 space-y-3">
-                <span class="block text-3xl font-black uppercase text-white">CINEMATAZTIC</span>
+                <span class="block text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white">CINEMATAZTIC</span>
                 <p class="text-xs text-gray-400 max-w-xs">Digital cinema advertising — interactive, programmatic and measurable.</p>
             </div>
             <div class="md:col-span-3 space-y-3">
@@ -638,7 +571,7 @@
             </div>
             <div class="md:col-span-4 space-y-3">
                 <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-400">Contact</span>
-                <a href="#contact" class="block text-xs uppercase tracking-wider font-bold hover:text-brand-cyan">Start a campaign <i class="fa-solid fa-arrow-right ml-1"></i></a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="block text-xs uppercase tracking-wider font-bold hover:text-brand-cyan">Get in touch <i class="fa-solid fa-arrow-right ml-1"></i></a>
             </div>
         </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 border-t border-brand-border text-xs text-gray-500">
@@ -793,22 +726,20 @@
                 description: "A kid-friendly picture quiz for weekend family screenings, where every correct answer added data to a shared family prize pot."
             }
         ];
-        const defaultTickerBrands = ["Coca Cola", "Sprite", "Danske Spil", "Samsung", "Tivoli", "Boozt", "Subway", "Telenor"];
-        const cinemaBrands = ["DRF", "FinnKino", "FilmStaden", "UCI", "CineDome", "Odeon"];
         const MAX_FEATURED = 9;
         // Brand wall: a logo URL is optional; brands without one show their name as a grey wordmark
         const defaultLogoBrands = [
             { name: "Coca-Cola", logo: "https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/cocacola.svg" },
             { name: "Pepsi", logo: "https://cdn.jsdelivr.net/npm/simple-icons@9.21.0/icons/pepsi.svg" },
-            { name: "Tuborg", logo: "" },
-            { name: "Tivoli", logo: "" },
+            { name: "Carlsberg", logo: "assets/logos/carlsberg.svg" },
+            { name: "Santander", logo: "https://upload.wikimedia.org/wikipedia/commons/b/b8/Banco_Santander_Logotipo.svg" },
             { name: "Red Bull", logo: "https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/redbull.svg" },
-            { name: "Danske Spil", logo: "" },
+            { name: "McDonald's", logo: "https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/mcdonalds.svg" },
             { name: "UNICEF", logo: "https://upload.wikimedia.org/wikipedia/commons/e/ed/Logo_of_UNICEF.svg" },
-            { name: "Boozt", logo: "" }
+            { name: "M&M's", logo: "assets/logos/mms.svg" }
         ];
 
-        const defaultState = { tickerBrands: defaultTickerBrands, logoBrands: defaultLogoBrands, cases: defaultCases, inquiries: [] };
+        const defaultState = { logoBrands: defaultLogoBrands, cases: defaultCases };
 
         let appData = JSON.parse(JSON.stringify(defaultState));
         try {
@@ -825,22 +756,18 @@
         }
 
         function resetDataToDefault() {
-            if (confirm("Reset all CMS cases, ticker brands, brand wall and inquiries to default demo data?")) {
+            if (confirm("Reset all CMS cases and the brand wall to default demo data?")) {
                 appData = JSON.parse(JSON.stringify(defaultState));
                 saveAppData();
             }
         }
 
         function renderAllViews() {
-            renderTickerList('cinemaTickerContainer', cinemaBrands);
-            renderTickerList('tickerContainer', appData.tickerBrands);
             renderFilters();
             renderCasesGrid();
             renderBrandWall();
             renderAdminCases();
-            renderAdminTicker();
             renderAdminBrands();
-            renderAdminInquiries();
         }
 
         // --- BRAND WALL ---
@@ -855,7 +782,7 @@
         function renderBrandWall() {
             const wall = document.getElementById('brandWall');
             wall.innerHTML = appData.logoBrands.map((b, i) => `
-                <div class="brand-cell group flex items-center justify-center h-16" title="${escapeHtml(b.name)}">
+                <div class="brand-cell group flex items-center justify-center aspect-[3/2] px-4 bg-brand-card border border-brand-border hover:border-brand-cyan transition-colors" title="${escapeHtml(b.name)}">
                     ${b.logo
                         ? `<img src="${escapeHtml(b.logo)}" alt="${escapeHtml(b.name)}" loading="lazy" class="brand-logo max-h-12 max-w-[130px] w-auto object-contain" data-brand-index="${i}">`
                         : brandWordmark(b.name)}
@@ -925,13 +852,6 @@
             const hasFlags = appData.cases.some(c => 'featured' in c);
             const list = hasFlags ? appData.cases.filter(c => c.featured) : appData.cases;
             return list.slice(0, MAX_FEATURED);
-        }
-
-        // --- TICKERS ---
-        function renderTickerList(containerId, list) {
-            const container = document.getElementById(containerId);
-            const fullList = [...list, ...list, ...list, ...list];
-            container.innerHTML = fullList.map(b => `<span class="shrink-0 flex items-center"><i class="fa-solid fa-sparkles text-xs text-brand-cyan mr-3"></i>${b}</span>`).join('');
         }
 
         // --- FEATURED WORK ---
@@ -1027,27 +947,6 @@
             icon.className = `fa-solid ${opening ? 'fa-minus' : 'fa-plus'} text-brand-cyan`;
         }
 
-        // --- INQUIRY FORM (lands in the CMS inbox) ---
-        function handleInquirySubmit(e) {
-            e.preventDefault();
-            appData.inquiries = appData.inquiries || [];
-            appData.inquiries.unshift({
-                id: 'inq_' + Date.now(),
-                date: new Date().toLocaleDateString(),
-                name: document.getElementById('inqName').value,
-                email: document.getElementById('inqEmail').value,
-                company: document.getElementById('inqCompany').value,
-                product: document.getElementById('inqProduct').value,
-                brief: document.getElementById('inqBrief').value
-            });
-            saveAppData();
-
-            document.getElementById('publicInquiryForm').reset();
-            const msg = document.getElementById('inquirySuccessMsg');
-            msg.classList.remove('hidden');
-            setTimeout(() => msg.classList.add('hidden'), 5000);
-        }
-
         // Mobile Menu Toggle
         document.getElementById('mobileMenuBtn').addEventListener('click', () => {
             document.getElementById('mobileDrawer').classList.toggle('hidden');
@@ -1099,30 +998,6 @@
             saveAppData();
         }
 
-        function renderAdminTicker() {
-            const container = document.getElementById('tickerBrandsList');
-            container.innerHTML = appData.tickerBrands.map((b, index) => `
-                <span class="px-3 py-1.5 rounded-lg bg-brand-dark border border-brand-border text-xs font-bold uppercase flex items-center space-x-2">
-                    <span>${b}</span>
-                    <button onclick="removeTickerBrand(${index})" class="text-gray-500 hover:text-red-400"><i class="fa-solid fa-xmark"></i></button>
-                </span>
-            `).join('');
-        }
-
-        function addTickerBrand() {
-            const input = document.getElementById('newTickerInput');
-            if (input.value.trim()) {
-                appData.tickerBrands.push(input.value.trim());
-                input.value = '';
-                saveAppData();
-            }
-        }
-
-        function removeTickerBrand(index) {
-            appData.tickerBrands.splice(index, 1);
-            saveAppData();
-        }
-
         // Brand Wall admin
         function renderAdminBrands() {
             const list = document.getElementById('adminBrandList');
@@ -1171,25 +1046,6 @@
                 appData.logoBrands.splice(index, 1);
                 saveAppData();
             }
-        }
-
-        function renderAdminInquiries() {
-            const badge = document.getElementById('inquiryBadge');
-            badge.innerText = appData.inquiries.length;
-            const tbody = document.getElementById('adminInquiriesTable');
-            if (appData.inquiries.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-500">No inquiries received yet.</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = appData.inquiries.map(i => `
-                <tr>
-                    <td class="p-4 text-xs text-gray-400">${i.date}</td>
-                    <td class="p-4 font-bold text-white">${i.name} (${i.email})</td>
-                    <td class="p-4">${i.company}</td>
-                    <td class="p-4"><span class="px-2 py-1 bg-brand-pink/20 text-brand-pink text-xs font-bold rounded">${i.product}</span></td>
-                    <td class="p-4 text-xs text-gray-300 max-w-xs truncate">${i.brief}</td>
-                </tr>
-            `).join('');
         }
 
         // CMS Case Create/Edit Modal
@@ -1469,8 +1325,8 @@
             const hintEl = document.getElementById('cgHint');
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            const PINK = '#f869b9';
-            const COIN_COLORS = ['#3dc0c8', '#6ceec4', '#fece00'];
+            const ACCENT = '#3dc0c8';
+            const COIN_COLORS = ['#3dc0c8'];
             const PADDLE_W = 0.24;
             const PADDLE_Y = 0.88;
 
@@ -1551,8 +1407,8 @@
                 ctx.clearRect(0, 0, W, H);
                 // Faint projector light from the top
                 const glow = ctx.createLinearGradient(0, 0, 0, H);
-                glow.addColorStop(0, 'rgba(248, 105, 185, 0.10)');
-                glow.addColorStop(1, 'rgba(248, 105, 185, 0)');
+                glow.addColorStop(0, 'rgba(61, 192, 200, 0.08)');
+                glow.addColorStop(1, 'rgba(61, 192, 200, 0)');
                 ctx.fillStyle = glow;
                 ctx.fillRect(0, 0, W, H);
 
@@ -1569,8 +1425,8 @@
                 ctx.globalAlpha = 1;
 
                 ctx.shadowBlur = 12;
-                ctx.shadowColor = PINK;
-                ctx.fillStyle = PINK;
+                ctx.shadowColor = ACCENT;
+                ctx.fillStyle = ACCENT;
                 ctx.fillRect((paddleX - PADDLE_W / 2) * W, PADDLE_Y * H, PADDLE_W * W, Math.max(4, H * 0.02));
                 ctx.shadowBlur = 0;
             }
@@ -1611,10 +1467,10 @@
             const t0 = performance.now();
 
             function paintKernel(k) {
-                k.dot.style.width = k.popped ? '90%' : '40%';
-                k.dot.style.height = k.popped ? '90%' : '40%';
-                k.dot.style.background = k.popped ? '#fff8e1' : '#fece00';
-                k.dot.style.boxShadow = k.popped ? 'inset 0 0 0 2px #fece00' : 'none';
+                k.dot.style.width = k.popped ? '100%' : '40%';
+                k.dot.style.height = k.popped ? '100%' : '40%';
+                k.dot.style.background = k.popped ? 'rgba(61, 192, 200, 0.85)' : 'rgba(61, 192, 200, 0.35)';
+                k.dot.style.boxShadow = 'none';
             }
 
             function resetBoard() {
@@ -1660,6 +1516,258 @@
                 popAround(now);
                 requestAnimationFrame(loop);
             })(performance.now());
+        })();
+
+        // --- BRANDS: COUNT-UP ---
+        // When the counter scrolls into view it counts 1 → 346 and stays there; the label below then
+        // changes to a pulsing "And counting".
+        (function initBrandCounter() {
+            const countEl = document.getElementById('brandCount');
+            const labelEl = document.getElementById('brandCountLabel');
+            if (!countEl) return;
+            const TARGET = 346, COUNT_MS = 1800, HOLD_MS = 400;
+
+            function finish() {
+                labelEl.style.opacity = '0';
+                setTimeout(() => {
+                    labelEl.textContent = 'And counting';
+                    labelEl.style.opacity = '';
+                    labelEl.classList.add('animate-pulse');
+                }, 300);
+            }
+
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                countEl.textContent = String(TARGET);
+                labelEl.textContent = 'And counting';
+                return;
+            }
+
+            const observer = new IntersectionObserver(entries => {
+                if (!entries.some(e => e.isIntersecting)) return;
+                observer.disconnect();
+                const start = performance.now();
+                (function frame(now) {
+                    const t = Math.min(1, (now - start) / COUNT_MS);
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    countEl.textContent = String(Math.max(1, Math.round(eased * TARGET)));
+                    if (t < 1) requestAnimationFrame(frame);
+                    else setTimeout(finish, HOLD_MS);
+                })(start);
+            }, { threshold: 0.6 });
+            observer.observe(countEl);
+        })();
+
+        // --- PARTNERS: INTERACTIVE WORLD MAP ---
+        // Countries come from Natural Earth (world-atlas, 110m) and are drawn with an Equal Earth
+        // projection. Hovering or focusing a partner country, its marker or its button swaps the text panel.
+        (function initPartnerMap() {
+            const svg = document.getElementById('partnerMap');
+            if (!svg || !window.topojson) return;
+            const SVG_NS = 'http://www.w3.org/2000/svg';
+
+            const partners = [
+                { id: '208', country: 'Denmark', partner: 'DRF', lonLat: [9.5, 56.1], text: 'Our formats run on cinema screens across Denmark together with DRF.' },
+                { id: '276', country: 'Germany', partner: 'Partner TBA', lonLat: [10.4, 51.1], text: 'Our formats are coming to cinema screens in Germany.' },
+                { id: '246', country: 'Finland', partner: 'Finnkino', lonLat: [26, 63.5], text: 'Finnkino audiences play, vote and win with our interactive pre-show formats.' },
+                { id: '752', country: 'Sweden', partner: 'Filmstaden', lonLat: [16, 62.5], text: 'Together with Filmstaden we bring programmatic and interactive cinema advertising to Swedish screens.' },
+                { id: '372', country: 'Ireland', partner: 'ODEON', lonLat: [-8, 53.2], text: 'ODEON cinemas in Ireland run our formats in the pre-show.' },
+                { id: '620', country: 'Portugal', partner: 'UCI', lonLat: [-8.2, 39.6], text: 'UCI audiences in Portugal take part in games and quizzes on the big screen.' }
+            ];
+            const byId = Object.fromEntries(partners.map(p => [p.id, p]));
+
+            // Equal Earth projection (Šavrič, Patterson & Jenny, 2018)
+            const A1 = 1.340264, A2 = -0.081106, A3 = 0.000893, A4 = 0.003796, M = Math.sqrt(3) / 2;
+            function project([lon, lat]) {
+                const lam = lon * Math.PI / 180, phi = lat * Math.PI / 180;
+                const theta = Math.asin(M * Math.sin(phi)), t2 = theta * theta, t6 = t2 * t2 * t2;
+                const x = lam * Math.cos(theta) / (M * (A1 + 3 * A2 * t2 + t6 * (7 * A3 + 9 * A4 * t2)));
+                const y = theta * (A1 + A2 * t2 + t6 * (A3 + A4 * t2));
+                return [x * 100, -y * 100];
+            }
+
+            function ringPath(ring) {
+                return 'M' + ring.map(pt => project(pt).map(v => v.toFixed(1)).join(',')).join('L') + 'Z';
+            }
+
+            // Rings that cross the antimeridian (Russia, Fiji) jump from +180° to -180°, which draws a
+            // line straight across the map. Unwrap them into one continuous ring, draw the part that
+            // spills over the edge once more on the other side, and clip everything to the globe outline.
+            function unwrapRing(ring) {
+                let offset = 0;
+                return ring.map(([lon, lat], i) => {
+                    if (i > 0) {
+                        const step = lon - ring[i - 1][0];
+                        if (step > 180) offset -= 360;
+                        else if (step < -180) offset += 360;
+                    }
+                    return [lon + offset, lat];
+                });
+            }
+
+            function polygonCopies(poly) {
+                const rings = poly.map(unwrapRing);
+                const lons = rings[0].map(pt => pt[0]);
+                const copies = [rings];
+                if (Math.max(...lons) > 180) copies.push(rings.map(r => r.map(([lon, lat]) => [lon - 360, lat])));
+                if (Math.min(...lons) < -180) copies.push(rings.map(r => r.map(([lon, lat]) => [lon + 360, lat])));
+                return copies;
+            }
+
+            function polygonsOf(geom) {
+                return geom.type === 'Polygon' ? [geom.coordinates] : geom.type === 'MultiPolygon' ? geom.coordinates : [];
+            }
+
+            function geometryPath(geom) {
+                return polygonsOf(geom).flatMap(polygonCopies).map(poly => poly.map(ringPath).join('')).join('');
+            }
+
+            function globeOutline() {
+                const edge = [];
+                for (let lat = -90; lat <= 90; lat += 2) edge.push([180, lat]);
+                for (let lat = 90; lat >= -90; lat -= 2) edge.push([-180, lat]);
+                return ringPath(edge);
+            }
+
+            let active = null;
+            const countryEls = {};
+            const markerEls = {};
+            const chipEls = {};
+
+            function setActive(id) {
+                if (id === active || !byId[id]) return;
+                active = id;
+                partners.forEach(p => {
+                    const on = p.id === id;
+                    countryEls[p.id]?.setAttribute('fill', on ? '#3dc0c8' : 'rgba(61, 192, 200, 0.35)');
+                    markerEls[p.id]?.setAttribute('r', on ? '7' : '4.5');
+                    if (chipEls[p.id]) {
+                        chipEls[p.id].className = `px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${on ? 'bg-brand-cyan text-black' : 'border border-brand-border text-gray-300 hover:border-brand-cyan hover:text-white'}`;
+                        chipEls[p.id].setAttribute('aria-pressed', String(on));
+                    }
+                });
+                const p = byId[id];
+                const panel = document.getElementById('partnerPanel');
+                panel.style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('partnerCountry').textContent = p.country;
+                    document.getElementById('partnerName').textContent = p.partner;
+                    document.getElementById('partnerText').textContent = p.text;
+                    panel.style.opacity = '1';
+                }, 120);
+            }
+
+            function bindHover(el, id) {
+                el.addEventListener('pointerenter', () => setActive(id));
+                el.addEventListener('focus', () => setActive(id));
+                el.addEventListener('click', () => setActive(id));
+            }
+
+            document.getElementById('partnerCount').textContent = partners.length;
+
+            // Country buttons: same switch for keyboard and touch
+            const chips = document.getElementById('partnerChips');
+            partners.forEach(p => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.textContent = p.country;
+                chips.appendChild(btn);
+                chipEls[p.id] = btn;
+                bindHover(btn, p.id);
+            });
+
+            fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json')
+                .then(res => res.json())
+                .then(world => {
+                    const features = topojson.feature(world, world.objects.countries).features
+                        .filter(f => f.properties.name !== 'Antarctica');
+
+                    // Fit the viewBox to the projected land
+                    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+                    features.forEach(f => {
+                        polygonsOf(f.geometry).forEach(poly => poly[0].forEach(([lon, lat]) => {
+                            const [x, y] = project([Math.max(-180, Math.min(180, lon)), lat]);
+                            if (x < minX) minX = x; if (x > maxX) maxX = x;
+                            if (y < minY) minY = y; if (y > maxY) maxY = y;
+                        }));
+                    });
+                    const pad = 4;
+                    svg.setAttribute('viewBox', `${(minX - pad).toFixed(1)} ${(minY - pad).toFixed(1)} ${(maxX - minX + pad * 2).toFixed(1)} ${(maxY - minY + pad * 2).toFixed(1)}`);
+
+                    const defs = document.createElementNS(SVG_NS, 'defs');
+                    const clip = document.createElementNS(SVG_NS, 'clipPath');
+                    clip.id = 'partnerMapClip';
+                    const outline = document.createElementNS(SVG_NS, 'path');
+                    outline.setAttribute('d', globeOutline());
+                    clip.appendChild(outline);
+                    defs.appendChild(clip);
+                    svg.appendChild(defs);
+
+                    const land = document.createElementNS(SVG_NS, 'g');
+                    land.setAttribute('clip-path', 'url(#partnerMapClip)');
+                    features.forEach(f => {
+                        const path = document.createElementNS(SVG_NS, 'path');
+                        path.setAttribute('d', geometryPath(f.geometry));
+                        path.setAttribute('stroke', '#0a0a0c');
+                        path.setAttribute('stroke-width', '0.4');
+                        path.style.transition = 'fill 200ms linear';
+                        if (byId[f.id]) {
+                            path.setAttribute('fill', 'rgba(61, 192, 200, 0.35)');
+                            path.style.cursor = 'pointer';
+                            countryEls[f.id] = path;
+                            bindHover(path, f.id);
+                        } else {
+                            path.setAttribute('fill', 'rgba(255, 255, 255, 0.08)');
+                        }
+                        land.appendChild(path);
+                    });
+                    svg.appendChild(land);
+
+                    // Markers make the small countries easy to hit
+                    const markers = document.createElementNS(SVG_NS, 'g');
+                    partners.forEach(p => {
+                        const [x, y] = project(p.lonLat);
+                        const g = document.createElementNS(SVG_NS, 'g');
+                        g.setAttribute('tabindex', '0');
+                        g.setAttribute('role', 'button');
+                        g.setAttribute('aria-label', `${p.country}: ${p.partner}`);
+                        g.style.cursor = 'pointer';
+                        g.style.outline = 'none';
+                        const hit = document.createElementNS(SVG_NS, 'circle');
+                        hit.setAttribute('cx', x); hit.setAttribute('cy', y); hit.setAttribute('r', '12');
+                        hit.setAttribute('fill', 'transparent');
+                        const dot = document.createElementNS(SVG_NS, 'circle');
+                        dot.setAttribute('cx', x); dot.setAttribute('cy', y); dot.setAttribute('r', '4.5');
+                        dot.setAttribute('fill', '#3dc0c8');
+                        dot.setAttribute('stroke', '#0a0a0c');
+                        dot.setAttribute('stroke-width', '1.5');
+                        dot.style.transition = 'r 200ms ease-out';
+                        g.append(hit, dot);
+                        markers.appendChild(g);
+                        markerEls[p.id] = dot;
+                        bindHover(g, p.id);
+                    });
+                    svg.appendChild(markers);
+
+                    const current = active;
+                    active = null;
+                    setActive(current || partners[0].id);
+                })
+                .catch(() => { /* map unavailable: the country buttons still switch the text */ });
+
+            setActive(partners[0].id);
+        })();
+
+        // --- MENU ON THE HERO ---
+        // The menu bar turns yellow while any of the (yellow) hero is visible below it.
+        (function initHeroMenu() {
+            const header = document.querySelector('body > header');
+            const hero = document.getElementById('hero');
+            if (!header || !hero) return;
+            const observer = new IntersectionObserver(([entry]) => {
+                const onHero = entry.isIntersecting && !document.getElementById('publicView').classList.contains('hidden');
+                header.classList.toggle('on-hero', onHero);
+            }, { rootMargin: `-${header.offsetHeight}px 0px 0px 0px` });
+            observer.observe(hero);
         })();
 
         // --- INIT ---

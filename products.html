@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products — Cinemataztic</title>
-    <!-- Page-to-page transitions (must load before first paint) -->
-    <script src="page-transitions.js"></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -24,17 +22,47 @@
                             border: '#1f1f26'
                         }
                     },
+                    // Typography after phloe.co: General Sans, tight tracking, 1.383 body leading
                     fontFamily: {
-                        sans: ['Klavika', 'Titillium Web', 'Inter', 'sans-serif']
+                        sans: ['"General Sans"', 'system-ui', 'sans-serif'],
+                        // Logo wordmark: Klavika Bold (installed, or Adobe Fonts kit "klavika-web"), falling back to General Sans
+                        logo: ['Klavika', '"klavika-web"', '"General Sans"', 'sans-serif']
+                    },
+                    letterSpacing: {
+                        tighter: '-0.0525em',
+                        tight: '-0.021em',
+                        wide: '-0.021em',
+                        wider: '-0.021em',
+                        widest: '-0.021em'
+                    },
+                    lineHeight: {
+                        none: '0.76',
+                        relaxed: '1.383'
                     }
                 }
-            }
+            },
+            plugins: [
+                function ({ addBase }) {
+                    addBase({
+                        // Logo wordmark font: an installed Klavika Bold, else the licensed webfont file
+                        '@font-face': {
+                            fontFamily: 'Klavika',
+                            fontWeight: '700',
+                            fontStyle: 'normal',
+                            fontDisplay: 'swap',
+                            src: "local('Klavika Bold'), local('Klavika-Bold'), url('assets/fonts/Klavika-Bold.otf') format('opentype')"
+                        },
+                        body: { lineHeight: '1.383' },
+                        '.font-black': { letterSpacing: '-0.0525em' }
+                    });
+                }
+            ]
         }
     </script>
-    <!-- Google Fonts Fallback for Klavika Geometric Style -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -73,7 +101,7 @@
     <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center space-x-2 group">
-                <span class="text-2xl sm:text-3xl font-black tracking-wider uppercase text-white group-hover:opacity-90 transition">
+                <span class="text-2xl sm:text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white group-hover:opacity-90 transition">
                     CINEMATAZTIC
                 </span>
             </a>
@@ -84,7 +112,7 @@
                 <a href="index.html#cms" class="px-4 py-2 uppercase tracking-widest font-bold border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition">
                     <i class="fa-solid fa-gear mr-1"></i> CMS
                 </a>
-                <a href="index.html#contact" class="px-5 py-2.5 bg-brand-cyan text-black hover:bg-brand-mint transition">Get in Touch</a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="px-5 py-2.5 bg-brand-cyan text-black hover:bg-brand-yellow transition">Get in Touch</a>
             </nav>
 
             <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
@@ -95,7 +123,7 @@
         <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
             <a href="cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
             <a href="products.html" class="block text-lg font-bold uppercase text-brand-cyan">Products</a>
-            <a href="index.html#contact" class="block text-lg font-bold uppercase hover:text-brand-cyan">Get in Touch</a>
+            <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="block text-lg font-bold uppercase hover:text-brand-cyan">Get in Touch</a>
             <hr class="border-brand-border my-2">
             <a href="index.html#cms" class="block w-full text-left py-2 text-sm uppercase font-bold text-brand-cyan">
                 <i class="fa-solid fa-gear mr-2"></i> Open CMS Admin
@@ -200,7 +228,7 @@
 
                     <!-- Text -->
                     <div class="lg:col-span-5 space-y-6">
-                        <h2 class="text-4xl sm:text-5xl font-black uppercase leading-none">The best of two worlds</h2>
+                        <h2 class="text-4xl sm:text-5xl font-black uppercase !leading-none">The best of two worlds</h2>
                         <div class="w-10 h-px bg-white/40"></div>
                         <p class="text-gray-300 leading-relaxed">
                             Cinemataztic's advertising formats are designed to both enhance the cinema preshow and create new revenue streams for the cinema industry.
@@ -219,7 +247,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
                         <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-500">What we do</span>
-                        <h1 class="text-4xl sm:text-5xl font-black leading-none">Products</h1>
+                        <h1 class="text-4xl sm:text-5xl font-black !leading-none">Products</h1>
                         <div class="space-y-2">
                             <h3 class="text-xs font-bold uppercase tracking-widest text-white">Engage the cinema core audience</h3>
                             <p class="text-sm text-gray-400 leading-relaxed">
@@ -232,7 +260,7 @@
                                 Cinemataztic has launched the new Digital Cinema Hub (DCH) – a platform for interactivity and display of digital advertising content on the cinema screen. The platform offers cinemas five new digital revenue streams.
                             </p>
                         </div>
-                        <a href="index.html#contact" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">
+                        <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">
                             Get in Touch <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </aside>
@@ -261,7 +289,7 @@
                             <a href="cinegame.html" class="group block">
                                 <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
                                     <!-- CineGame: the cinema screen runs a catch game, the cursor is your phone -->
-                                    <div id="cgViz" class="absolute inset-0 bg-black select-none" role="img" aria-label="Animated illustration of a CineGame round played on the cinema screen">
+                                    <div id="cgViz" class="absolute inset-0 select-none" role="img" aria-label="Animated illustration of a CineGame round played on the cinema screen">
                                         <canvas id="cgScreen" class="absolute inset-0 w-full h-full"></canvas>
                                         <span id="cgHint" class="absolute top-3 left-4 text-[10px] font-bold uppercase tracking-wider text-white/50">Move to play</span>
                                     </div>
@@ -278,7 +306,7 @@
                             <a href="cinefun.html" class="group block">
                                 <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
                                     <!-- CineFun: a casual popcorn game, the cursor is your finger -->
-                                    <div id="cfViz" class="absolute inset-0 p-4 bg-black select-none" role="img" aria-label="Animated illustration of a casual popcorn game in the CineGame app">
+                                    <div id="cfViz" class="absolute inset-0 p-4 select-none" role="img" aria-label="Animated illustration of a casual popcorn game in the CineGame app">
                                         <div id="cfBoard" class="w-full h-full grid grid-cols-10 grid-rows-10 gap-[3px]"></div>
                                     </div>
                                 </div>
@@ -301,14 +329,14 @@
     <footer class="bg-black border-t border-brand-border py-12 text-sm text-gray-500">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="space-y-2 text-center md:text-left">
-                <span class="text-2xl font-black uppercase text-white">CINEMATAZTIC</span>
+                <span class="text-2xl font-logo font-bold tracking-[0.05em] uppercase text-white">CINEMATAZTIC</span>
                 <p class="text-xs text-gray-400">© 2026 Cinemataztic ApS. All rights reserved.</p>
             </div>
             <div class="flex space-x-6 text-xs uppercase tracking-wider font-bold">
                 <a href="index.html#about" class="hover:text-brand-cyan">Studio</a>
                 <a href="products.html" class="hover:text-brand-cyan">Products</a>
                 <a href="cases.html" class="hover:text-brand-cyan">Cases</a>
-                <a href="index.html#contact" class="hover:text-brand-cyan">Contact</a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="hover:text-brand-cyan">Contact</a>
             </div>
         </div>
     </footer>
@@ -395,8 +423,8 @@
             const hintEl = document.getElementById('cgHint');
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            const PINK = '#f869b9';
-            const COIN_COLORS = ['#3dc0c8', '#6ceec4', '#fece00'];
+            const ACCENT = '#3dc0c8';
+            const COIN_COLORS = ['#3dc0c8'];
             const PADDLE_W = 0.24;
             const PADDLE_Y = 0.88;
 
@@ -477,8 +505,8 @@
                 ctx.clearRect(0, 0, W, H);
                 // Faint projector light from the top
                 const glow = ctx.createLinearGradient(0, 0, 0, H);
-                glow.addColorStop(0, 'rgba(248, 105, 185, 0.10)');
-                glow.addColorStop(1, 'rgba(248, 105, 185, 0)');
+                glow.addColorStop(0, 'rgba(61, 192, 200, 0.08)');
+                glow.addColorStop(1, 'rgba(61, 192, 200, 0)');
                 ctx.fillStyle = glow;
                 ctx.fillRect(0, 0, W, H);
 
@@ -495,8 +523,8 @@
                 ctx.globalAlpha = 1;
 
                 ctx.shadowBlur = 12;
-                ctx.shadowColor = PINK;
-                ctx.fillStyle = PINK;
+                ctx.shadowColor = ACCENT;
+                ctx.fillStyle = ACCENT;
                 ctx.fillRect((paddleX - PADDLE_W / 2) * W, PADDLE_Y * H, PADDLE_W * W, Math.max(4, H * 0.02));
                 ctx.shadowBlur = 0;
             }
@@ -537,10 +565,10 @@
             const t0 = performance.now();
 
             function paintKernel(k) {
-                k.dot.style.width = k.popped ? '90%' : '40%';
-                k.dot.style.height = k.popped ? '90%' : '40%';
-                k.dot.style.background = k.popped ? '#fff8e1' : '#fece00';
-                k.dot.style.boxShadow = k.popped ? 'inset 0 0 0 2px #fece00' : 'none';
+                k.dot.style.width = k.popped ? '100%' : '40%';
+                k.dot.style.height = k.popped ? '100%' : '40%';
+                k.dot.style.background = k.popped ? 'rgba(61, 192, 200, 0.85)' : 'rgba(61, 192, 200, 0.35)';
+                k.dot.style.boxShadow = 'none';
             }
 
             function resetBoard() {
