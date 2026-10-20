@@ -109,6 +109,20 @@
         header.on-hero nav > a.text-brand-cyan { color: #0a0a0c !important; }
         header.on-hero nav > a[href$="#cms"] { border-color: rgba(10, 10, 12, 0.35); }
         header.on-hero #mobileDrawer { color: #ffffff; }
+        /* Case cards: text sits on the image over a blur that fades in towards the bottom */
+        .case-blur {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 55%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0) 100%);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            -webkit-mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            pointer-events: none;
+        }
     </style>
     <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
     <link rel="preconnect" href="https://api.fontshare.com">
@@ -187,13 +201,38 @@
             </div>
         </section>
 
+        <!-- LATEST PROGRAMMATIC CASES: same look as Featured Cases on the front page -->
+        <section id="cases" class="border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Programmatic</span>
+                        <h2 class="text-4xl sm:text-5xl font-black !leading-none">Latest cases</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            The newest programmatic campaigns. See the <a href="cases.html?category=Programmatic" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">work section</a> for all programmatic cases.
+                        </p>
+                        <span id="progCaseCount" class="hidden lg:block text-6xl font-black text-brand-pink">0</span>
+                        <a href="cases.html?category=Programmatic" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">
+                            See All Cases <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </aside>
+
+                    <div class="lg:col-span-9">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6" id="progCasesGrid">
+                            <!-- Filled by JS: the 3 newest Programmatic cases -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- DIGITAL TRANSFORMATION: sticky sidebar + video, same look as the front page sections -->
         <section id="transformation" class="border-b border-brand-border scroll-mt-20">
             <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
                         <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Programmatic</span>
-                        <h2 class="text-4xl sm:text-5xl lg:text-[2.2vw] font-black uppercase !leading-none">Digital<br>transformation of the cinema media</h2>
+                        <h2 class="text-4xl sm:text-5xl font-black !leading-none">Digital<br>transformation of the cinema media</h2>
                         <p class="text-sm text-gray-400 leading-relaxed">
                             Discover the most premium marketplace for new digital ad formats. Cinemataztic combines interactivity, targeting and measurement of digital with the scale and quality of traditional cinema advertising. We use technology, data, user engagement and premium inventory to enable buyers and sellers to transact across all cinema screens.
                         </p>
@@ -214,11 +253,11 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
                         <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">How it works</span>
-                        <h2 class="text-4xl sm:text-5xl lg:text-[2.2vw] font-black uppercase !leading-none">How advertisers buy programmatic cinema?</h2>
+                        <h2 class="text-4xl sm:text-5xl font-black !leading-none">How advertisers buy programmatic cinema?</h2>
                         <p class="text-sm text-gray-400 leading-relaxed">
                             Once signed up to the platform advertisers and agencies book programmatic cinema in 6 easy steps.
                         </p>
-                        <h3 class="pt-6 text-4xl sm:text-5xl lg:text-[2.2vw] font-black uppercase !leading-none">How programmatic cinema works?</h3>
+                        <h3 class="pt-6 text-4xl sm:text-5xl font-black !leading-none">How programmatic cinema works?</h3>
                         <p class="text-sm text-gray-400 leading-relaxed">
                             Programmatic is an add-on to the traditional offline cinema advertising (DCP) and provides exhibitors and cinema sales houses with new incremental digital revenue. Unless the preshow is already sold out – this is a way of generating additional revenue.
                         </p>
@@ -290,6 +329,46 @@
         </div>
     </footer>
 
+    <script src="assets/js/cases-data.js"></script>
+    <script>
+        // --- LATEST PROGRAMMATIC CASES ---
+        // Same CMS store as the front page; newest = added last. Each card opens the case on the cases page.
+        (function initProgrammaticCases() {
+            const grid = document.getElementById('progCasesGrid');
+            if (!grid) return;
+            let cases = defaultCases;
+            try {
+                const saved = JSON.parse(localStorage.getItem('cinemataztic_cms_data_v4'));
+                if (saved && Array.isArray(saved.cases)) cases = saved.cases;
+            } catch (e) { /* storage unavailable */ }
+            const latest = cases.filter(c => c.category === 'Programmatic').slice(-3).reverse();
+            document.getElementById('progCaseCount').innerText = latest.length;
+            if (!latest.length) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-gray-500 font-bold uppercase">No programmatic cases yet.</div>`;
+                return;
+            }
+            grid.innerHTML = latest.map(c => `
+                <a href="cases.html?case=${encodeURIComponent(c.id)}" class="group block">
+                    <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-white transition-colors">
+                        <img src="${c.cover}" alt="${c.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        ${c.mediaType === 'video' ? `
+                            <div class="absolute top-3 right-3 bg-black/80 text-brand-cyan px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-brand-cyan/40">
+                                <i class="fa-solid fa-play mr-1"></i> Video
+                            </div>
+                        ` : ''}
+                        <div class="case-blur"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-5 space-y-2">
+                            <h3 class="text-xl font-black uppercase !leading-none text-white line-clamp-2">${c.title}</h3>
+                            <p class="text-sm text-white/80 line-clamp-2 leading-relaxed">${c.description}</p>
+                            <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/70">
+                                <span class="px-2 py-0.5 border border-white/70 rounded-full">${c.category}</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+        })();
+    </script>
     <script>
         // --- INTERACTIVE HERO CANVAS CONSTELLATION MESH ---
         (function initHeroCanvas() {
