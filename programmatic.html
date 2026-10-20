@@ -135,7 +135,7 @@
                 <a href="index.html#cms" class="px-4 py-2 uppercase tracking-widest font-bold border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition">
                     <i class="fa-solid fa-gear mr-1"></i> CMS
                 </a>
-                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="btn-shine px-5 py-2.5 bg-brand-cyan text-black hover:bg-brand-yellow transition">Get in Touch</a>
+                <a href="guide.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Guide to programmatic</a>
             </nav>
 
             <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
@@ -146,7 +146,7 @@
         <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
             <a href="cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
             <a href="products.html" class="block text-lg font-bold uppercase text-brand-cyan">Products</a>
-            <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="block text-lg font-bold uppercase hover:text-brand-cyan">Get in Touch</a>
+            <a href="guide.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Guide to programmatic</a>
             <hr class="border-brand-border my-2">
             <a href="index.html#cms" class="block w-full text-left py-2 text-sm uppercase font-bold text-brand-cyan">
                 <i class="fa-solid fa-gear mr-2"></i> Open CMS Admin
@@ -159,7 +159,6 @@
         <section id="hero" class="relative overflow-hidden border-b border-brand-border bg-brand-cyan">
             <!-- Canvas Interactive Background -->
             <canvas id="heroCanvas" class="absolute inset-0 z-0 w-full h-full"></canvas>
-            <div class="absolute -top-40 -left-40 w-[600px] h-[600px] bg-brand-cyan/10 rounded-full blur-[120px] pointer-events-none"></div>
             <div class="relative z-10 w-full px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-28 lg:pb-32">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
                     <div class="lg:col-span-8 space-y-8">
@@ -226,6 +225,7 @@
                         <a href="assets/pdf/Tradedesk_GuideToProgrammatic_Cinemataztic.pdf" download class="btn-shine inline-flex items-center px-6 py-3 bg-brand-cyan text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-yellow transition">
                             <i class="fa-solid fa-download mr-2"></i> Download guide to programmatic
                         </a>
+                        <a href="guide.html" class="block w-fit text-sm text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">Read the guide online <i class="fa-solid fa-arrow-right ml-1 text-xs"></i></a>
                     </aside>
 
                     <div class="lg:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
@@ -264,17 +264,28 @@
         </section>
     </main>
 
-    <footer class="bg-black border-t border-brand-border py-12 text-sm text-gray-500">
-        <div class="w-full px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="space-y-2 text-center md:text-left">
-                <span class="text-2xl font-logo font-bold tracking-[0.05em] uppercase text-white">CINEMATAZTIC</span>
-                <p class="text-xs text-gray-400">© 2026 Cinemataztic ApS. All rights reserved.</p>
+    <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
+        <!-- LET'S TALK: same sidebar layout as the page sections -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-b border-brand-border">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                <aside class="lg:col-span-3 space-y-6">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Contact</span>
+                    <h2 class="text-4xl sm:text-5xl font-black !leading-none text-white">Let’s Talk</h2>
+                    <div class="space-y-1">
+                        <a href="mailto:info@cinemataztic.com" class="block text-lg font-bold text-white hover:text-brand-cyan transition">info@cinemataztic.com</a>
+                        <a href="tel:+4553587129" class="block text-lg font-bold text-white hover:text-brand-cyan transition">+45 5358 7129</a>
+                        <span class="block text-xs text-gray-400">(Not for support related inquiries)</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">All support requests should be made <a href="http://support.cinegame.com/" target="_blank" rel="noopener" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">here</a></p>
+                </aside>
             </div>
-            <div class="flex space-x-6 text-xs uppercase tracking-wider font-bold">
-                <a href="index.html#about" class="hover:text-brand-cyan">Studio</a>
-                <a href="products.html" class="hover:text-brand-cyan">Products</a>
-                <a href="cases.html" class="hover:text-brand-cyan">Cases</a>
-                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="hover:text-brand-cyan">Contact</a>
+        </div>
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-gray-500">
+            <span>© 2026 Cinemataztic ApS. All rights reserved.</span>
+            <span class="md:text-center">Hellerupvej 46 - 2900 Hellerup - Denmark</span>
+            <div class="flex items-center md:justify-end gap-5 text-lg">
+                <a href="https://www.facebook.com/CinemaTaztic" target="_blank" rel="noopener" aria-label="Cinemataztic on Facebook" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" aria-label="Cinemataztic on LinkedIn" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-linkedin"></i></a>
             </div>
         </div>
     </footer>

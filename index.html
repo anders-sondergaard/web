@@ -166,7 +166,7 @@
                 <button onclick="switchView('admin')" class="px-4 py-2 uppercase tracking-widest font-bold border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition">
                     <i class="fa-solid fa-gear mr-1"></i> CMS
                 </button>
-                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="btn-shine px-5 py-2.5 bg-brand-cyan text-black hover:bg-brand-yellow transition">Get in Touch</a>
+                <a href="guide.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Guide to programmatic</a>
             </nav>
 
             <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
@@ -177,7 +177,7 @@
         <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
             <a href="cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
             <a href="products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
-            <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="block text-lg font-bold uppercase hover:text-brand-cyan">Get in Touch</a>
+            <a href="guide.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Guide to programmatic</a>
             <hr class="border-brand-border my-2">
             <button onclick="switchView('admin')" class="w-full text-left py-2 text-sm uppercase font-bold text-brand-cyan">
                 <i class="fa-solid fa-gear mr-2"></i> Open CMS Admin
@@ -192,7 +192,6 @@
         <section id="hero" class="relative overflow-hidden border-b border-brand-border bg-brand-yellow">
             <!-- Canvas Interactive Background -->
             <canvas id="heroCanvas" class="absolute inset-0 z-0 w-full h-full"></canvas>
-            <div class="absolute -top-40 -left-40 w-[600px] h-[600px] bg-brand-cyan/10 rounded-full blur-[120px] pointer-events-none"></div>
             <div class="relative z-10 w-full px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-28 lg:pb-32">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
                     <div class="lg:col-span-8 space-y-8">
@@ -212,14 +211,14 @@
                             Interactive big-screen games, programmatic buying and lobby activations — built for the room, measured like digital.
                         </p>
                         <div class="flex flex-wrap gap-3 pt-2">
-                            <a href="#work" class="btn-shine px-6 py-3 bg-brand-cyan text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-dark hover:text-white transition">
+                            <a href="#work" class="btn-shine px-6 py-3 bg-white text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-dark hover:text-white transition">
                                 Explore Cases
                             </a>
                         </div>
                     </div>
                 </div>
                 <!-- Bottom-right corner of the hero, inside its bottom padding -->
-                <p class="absolute right-4 sm:right-6 lg:right-8 bottom-6 lg:bottom-10 text-right text-2xl sm:text-3xl font-bold text-black">
+                <p class="absolute right-4 sm:right-6 lg:right-8 bottom-6 lg:bottom-10 text-right text-2xl sm:text-3xl font-bold text-white">
                     Anticipate the next<span class="animate-blink">_</span>
                 </p>
             </div>
@@ -379,7 +378,8 @@
                         <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Who we work with</span>
                         <h2 class="text-4xl sm:text-5xl font-black !leading-none">Brands</h2>
                         <p class="text-sm text-gray-400 leading-relaxed">
-                            We work with cinemas, ambitious brands and the causes that need to be seen — on the biggest screen in town.
+                            Major brands of the world have discovered the benefits of using the CinemaTaztic platform to create awareness and distribute samples through great cinema experiences.<br>
+                            — on the biggest screen in town.
                         </p>
                         <div class="hidden lg:block">
                             <span id="brandCount" class="block text-6xl font-black text-brand-pink tabular-nums transition-opacity duration-300">1</span>
@@ -402,16 +402,37 @@
             <div class="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/85 to-brand-dark/40"></div>
             <div class="relative w-full px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
                 <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow mb-10">Who we are</span>
-                <div class="max-w-3xl space-y-8">
-                    <h2 class="text-4xl sm:text-6xl font-black uppercase !leading-none">
-                        We love <span class="text-brand-pink">cinemas!</span>
-                    </h2>
-                    <p class="text-lg sm:text-xl text-gray-200 !leading-relaxed max-w-2xl">
-                        Cinemataztic is a cinema-loving, design thinking and software engineering company, developing new digital products for cinemas to both enhance the cinema experience for the audience and create new digital revenue streams for exhibitors and ad networks.
-                    </p>
-                    <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="inline-flex items-center px-6 py-3 bg-white text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-cyan transition">
-                        <i class="fa-brands fa-linkedin mr-2 text-base"></i> Follow us on LinkedIn
-                    </a>
+                <!-- Slides share one grid cell, so the block keeps the height of the tallest text -->
+                <div id="aboutSlides" class="grid max-w-3xl" aria-roledescription="carousel" aria-label="Who we are">
+                    <div class="about-slide [grid-area:1/1] space-y-8 transition-opacity duration-500" aria-roledescription="slide" aria-label="1 of 3">
+                        <h2 class="text-4xl sm:text-6xl font-black uppercase !leading-none">
+                            We love <span class="text-brand-pink">cinemas!</span>
+                        </h2>
+                        <p class="text-lg sm:text-xl text-gray-200 !leading-relaxed max-w-2xl">
+                            We’re Cinemataztic and we want to shape the future of the cinema experience by developing new creative and interactive formats that the audience love. Because what people love, matters…..
+                        </p>
+                    </div>
+                    <div class="about-slide [grid-area:1/1] space-y-8 transition-opacity duration-500" aria-roledescription="slide" aria-label="2 of 3">
+                        <h2 class="text-4xl sm:text-6xl font-black uppercase !leading-none">
+                            Our stack...<br><span class="text-brand-pink">it's better than yours</span>
+                        </h2>
+                        <p class="text-lg sm:text-xl text-gray-200 !leading-relaxed max-w-2xl">
+                            Cinemataztic is a cinema-loving, design thinking and software engineering company, developing new digital products for cinemas to both enhance the cinema experience for the audience and create new digital revenue streams for exhibitors and ad networks.
+                        </p>
+                    </div>
+                    <div class="about-slide [grid-area:1/1] space-y-8 transition-opacity duration-500" aria-roledescription="slide" aria-label="3 of 3">
+                        <h2 class="text-4xl sm:text-6xl font-black uppercase !leading-none">
+                            Tech &amp; <span class="text-brand-pink">creativity</span>
+                        </h2>
+                        <p class="text-lg sm:text-xl text-gray-200 !leading-relaxed max-w-2xl">
+                            The digital transformation is not about 1 and 0, but about shaping experiences to match new digital behaviors and social relations of an audience. We believe in mixing the physical analog experience with a digital interactive layer to enhance engagement and allow the audience to become part of the experience.
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-10 flex items-center gap-4">
+                    <button type="button" id="aboutPrev" aria-label="Previous text" class="w-11 h-11 flex items-center justify-center rounded-full border border-white/40 text-white hover:bg-white hover:text-black transition"><i class="fa-solid fa-arrow-left"></i></button>
+                    <button type="button" id="aboutNext" aria-label="Next text" class="w-11 h-11 flex items-center justify-center rounded-full border border-white/40 text-white hover:bg-white hover:text-black transition"><i class="fa-solid fa-arrow-right"></i></button>
+                    <span id="aboutCounter" class="text-[10px] font-bold uppercase tracking-widest text-white/70 tabular-nums" aria-live="polite">01 / 03</span>
                 </div>
             </div>
         </section>
@@ -617,27 +638,28 @@
 
     <!-- FOOTER -->
     <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
-        <div class="w-full px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-12 gap-10">
-            <div class="md:col-span-5 space-y-3">
-                <span class="block text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white">CINEMATAZTIC</span>
-                <p class="text-xs text-gray-400 max-w-xs">Digital cinema advertising — interactive, programmatic and measurable.</p>
-            </div>
-            <div class="md:col-span-3 space-y-3">
-                <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-400">Explore</span>
-                <ul class="space-y-2 text-xs uppercase tracking-wider font-bold">
-                    <li><a href="cases.html" class="hover:text-brand-cyan">All Cases</a></li>
-                    <li><a href="#about" class="hover:text-brand-cyan">Studio</a></li>
-                    <li><a href="products.html" class="hover:text-brand-cyan">Products</a></li>
-                    <li><a href="#faq" class="hover:text-brand-cyan">FAQ</a></li>
-                </ul>
-            </div>
-            <div class="md:col-span-4 space-y-3">
-                <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-400">Contact</span>
-                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="block text-xs uppercase tracking-wider font-bold hover:text-brand-cyan">Get in touch <i class="fa-solid fa-arrow-right ml-1"></i></a>
+        <!-- LET'S TALK: same sidebar layout as the page sections -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-b border-brand-border">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                <aside class="lg:col-span-3 space-y-6">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Contact</span>
+                    <h2 class="text-4xl sm:text-5xl font-black !leading-none text-white">Let’s Talk</h2>
+                    <div class="space-y-1">
+                        <a href="mailto:info@cinemataztic.com" class="block text-lg font-bold text-white hover:text-brand-cyan transition">info@cinemataztic.com</a>
+                        <a href="tel:+4553587129" class="block text-lg font-bold text-white hover:text-brand-cyan transition">+45 5358 7129</a>
+                        <span class="block text-xs text-gray-400">(Not for support related inquiries)</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">All support requests should be made <a href="http://support.cinegame.com/" target="_blank" rel="noopener" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">here</a></p>
+                </aside>
             </div>
         </div>
-        <div class="w-full px-4 sm:px-6 lg:px-8 py-6 border-t border-brand-border text-xs text-gray-500">
-            © 2026 Cinemataztic ApS. All rights reserved.
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-gray-500">
+            <span>© 2026 Cinemataztic ApS. All rights reserved.</span>
+            <span class="md:text-center">Hellerupvej 46 - 2900 Hellerup - Denmark</span>
+            <div class="flex items-center md:justify-end gap-5 text-lg">
+                <a href="https://www.facebook.com/CinemaTaztic" target="_blank" rel="noopener" aria-label="Cinemataztic on Facebook" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" aria-label="Cinemataztic on LinkedIn" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
         </div>
     </footer>
 
@@ -1467,7 +1489,7 @@
 
             grid.innerHTML = filtered.map(c => `
                 <article onclick="openCaseDetailModal('${c.id}')" class="group cursor-pointer">
-                    <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
+                    <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-white transition-colors">
                         <img src="${c.cover}" alt="${c.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         ${c.mediaType === 'video' ? `
                             <div class="absolute top-3 right-3 bg-black/80 text-brand-cyan px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-brand-cyan/40">
@@ -1476,7 +1498,7 @@
                         ` : ''}
                         <div class="case-blur"></div>
                         <div class="absolute inset-x-0 bottom-0 p-5 space-y-2">
-                            <h3 class="text-xl font-black uppercase !leading-none text-white line-clamp-2 group-hover:text-brand-cyan transition">${c.title}</h3>
+                            <h3 class="text-xl font-black uppercase !leading-none text-white line-clamp-2">${c.title}</h3>
                             <p class="text-sm text-white/80 line-clamp-2 leading-relaxed">${c.description}</p>
                             <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/70">
                                 <span class="px-2 py-0.5 border border-white/70 rounded-full">${c.category}</span>
@@ -2135,9 +2157,30 @@
             observer.observe(countEl);
         })();
 
-        // --- PARTNERS: INTERACTIVE WORLD MAP ---
-        // Countries come from Natural Earth (world-atlas, 110m) and are drawn with an Equal Earth
-        // projection. Hovering or focusing a partner country, its marker or its button swaps the text panel.
+        // --- WHO WE ARE: arrow buttons step through the texts ---
+        (function initAboutSlides() {
+            const slides = [...document.querySelectorAll('#aboutSlides .about-slide')];
+            if (slides.length < 2) return;
+            const counter = document.getElementById('aboutCounter');
+            let current = 0;
+            function show(index) {
+                current = (index + slides.length) % slides.length;
+                slides.forEach((slide, i) => {
+                    const on = i === current;
+                    slide.style.opacity = on ? '1' : '0';
+                    slide.style.pointerEvents = on ? '' : 'none';
+                    slide.setAttribute('aria-hidden', String(!on));
+                });
+                counter.textContent = `${String(current + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+            }
+            document.getElementById('aboutPrev').addEventListener('click', () => show(current - 1));
+            document.getElementById('aboutNext').addEventListener('click', () => show(current + 1));
+            show(0);
+        })();
+
+        // --- PARTNERS: INTERACTIVE EUROPE MAP ---
+        // Countries come from Natural Earth (world-atlas, 50m) and are drawn with an Equal Earth
+        // projection. Hovering or focusing a partner country or its button swaps the text panel.
         (function initPartnerMap() {
             const svg = document.getElementById('partnerMap');
             if (!svg || !window.topojson) return;

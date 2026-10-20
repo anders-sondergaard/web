@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide to Programmatic Cinema — Cinemataztic</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            cyan: '#3dc0c8',
+                            mint: '#6ceec4',
+                            pink: '#f869b9',
+                            orange: '#fea917',
+                            yellow: '#fece00',
+                            dark: '#0a0a0c',
+                            card: '#121216',
+                            border: '#1f1f26'
+                        }
+                    },
+                    // Typography after phloe.co: General Sans, tight tracking, 1.383 body leading
+                    fontFamily: {
+                        sans: ['"General Sans"', 'system-ui', 'sans-serif'],
+                        // Logo wordmark: Klavika Bold (installed, or Adobe Fonts kit "klavika-web"), falling back to General Sans
+                        logo: ['Klavika', '"klavika-web"', '"General Sans"', 'sans-serif']
+                    },
+                    letterSpacing: {
+                        tighter: '-0.0525em',
+                        tight: '-0.021em',
+                        wide: '-0.021em',
+                        wider: '-0.021em',
+                        widest: '-0.021em'
+                    },
+                    lineHeight: {
+                        none: '0.76',
+                        relaxed: '1.383'
+                    }
+                }
+            },
+            plugins: [
+                function ({ addBase }) {
+                    addBase({
+                        // Logo wordmark font: an installed Klavika Bold, else the licensed webfont file
+                        '@font-face': {
+                            fontFamily: 'Klavika',
+                            fontWeight: '700',
+                            fontStyle: 'normal',
+                            fontDisplay: 'swap',
+                            src: "local('Klavika Bold'), local('Klavika-Bold'), url('assets/fonts/Klavika-Bold.otf') format('opentype')"
+                        },
+                        body: { lineHeight: '1.383' },
+                        '.font-black': { letterSpacing: '-0.0525em' }
+                    });
+                }
+            ]
+        }
+    </script>
+    <style>
+        /* Premium buttons: light from above, a soft drop shadow, and a light sweep on hover */
+        .btn-shine {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.08) 45%, rgba(0, 0, 0, 0.06) 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+                0 1px 2px rgba(0, 0, 0, 0.25),
+                0 8px 20px -6px rgba(0, 0, 0, 0.45);
+        }
+        .btn-shine::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+            transform: translateX(-120%);
+            transition: transform 600ms ease;
+        }
+        .btn-shine:hover {
+            transform: translateY(-1px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+                0 2px 4px rgba(0, 0, 0, 0.25),
+                0 14px 28px -8px rgba(0, 0, 0, 0.5);
+        }
+        .btn-shine:hover::after { transform: translateX(120%); }
+        .btn-shine:active { transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) {
+            .btn-shine:hover { transform: none; }
+            .btn-shine::after { display: none; }
+        }
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .animate-blink {
+            animation: cursorBlink 1s infinite;
+        }
+        /* Menu sits on the blue hero: blue bar with dark text while the hero is in view */
+        header { transition: background-color 250ms linear, color 250ms linear, border-color 250ms linear; }
+        header.on-hero { background-color: #3dc0c8 !important; border-color: rgba(10, 10, 12, 0.12) !important; color: #0a0a0c; }
+        header.on-hero .text-white { color: #0a0a0c !important; }
+        header.on-hero nav > a[href$="#cms"] { border-color: rgba(10, 10, 12, 0.35); }
+        header.on-hero #mobileDrawer { color: #ffffff; }
+        /* Chapter bar: the chapter in view gets a cyan underline */
+        #guideNav a.is-active { color: #ffffff; border-color: #3dc0c8; }
+    </style>
+    <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
+        <div class="w-full px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <span class="text-2xl sm:text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white group-hover:opacity-90 transition">
+                    CINEMATAZTIC
+                </span>
+            </a>
+
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-widest uppercase">
+                <a href="cases.html" class="hover:text-brand-cyan transition">Cases</a>
+                <a href="products.html" class="hover:text-brand-cyan transition">Products</a>
+                <a href="index.html#cms" class="px-4 py-2 uppercase tracking-widest font-bold border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition">
+                    <i class="fa-solid fa-gear mr-1"></i> CMS
+                </a>
+                <a href="guide.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Guide to programmatic</a>
+            </nav>
+
+            <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
+            <a href="cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
+            <a href="products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
+            <a href="guide.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Guide to programmatic</a>
+            <hr class="border-brand-border my-2">
+            <a href="index.html#cms" class="block w-full text-left py-2 text-sm uppercase font-bold text-brand-cyan">
+                <i class="fa-solid fa-gear mr-2"></i> Open CMS Admin
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+        <!-- HERO: same blue statement hero as the programmatic page -->
+        <section id="hero" class="relative overflow-hidden border-b border-brand-border bg-brand-cyan">
+            <canvas id="heroCanvas" class="absolute inset-0 z-0 w-full h-full"></canvas>
+            <div class="relative z-10 w-full px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-28 lg:pb-32">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
+                    <div class="lg:col-span-8 space-y-8">
+                        <span class="inline-flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest text-brand-dark">
+                            <span class="w-2 h-2 rounded-full bg-brand-dark animate-ping"></span>
+                            <span>Welcome to programmatic</span>
+                        </span>
+                        <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tighter !leading-none text-white">
+                            Guide to programmatic cinema.
+                        </h1>
+                    </div>
+                    <div class="lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
+                        <p>Programmatic cinema advertising offers a streamlined, step-by-step process to book and manage your campaigns efficiently.</p>
+                        <p class="text-sm text-brand-dark/70">This guide gives you a clear overview of how to get started, optimise your campaigns and achieve maximum impact.</p>
+                        <div class="flex flex-wrap gap-3 pt-2">
+                            <a href="#account" class="btn-shine px-6 py-3 bg-white text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-dark hover:text-white transition">Get started</a>
+                            <a href="assets/pdf/Tradedesk_GuideToProgrammatic_Cinemataztic.pdf" download class="btn-shine inline-flex items-center px-6 py-3 bg-white text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-dark hover:text-white transition">
+                                <i class="fa-solid fa-download mr-2"></i> Download PDF
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHAPTERS: jump links, like the side menu in the printed guide -->
+        <nav class="sticky top-20 z-40 bg-brand-dark/90 backdrop-blur-md border-b border-brand-border" aria-label="Guide chapters">
+            <div id="guideNav" class="w-full px-4 sm:px-6 lg:px-8 flex gap-6 overflow-x-auto text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">
+                <a href="#account" class="py-4 border-b-2 border-transparent hover:text-white transition">01 Creating your account</a>
+                <a href="#how-it-works" class="py-4 border-b-2 border-transparent hover:text-white transition">02 Programmatic cinema</a>
+                <a href="#campaign" class="py-4 border-b-2 border-transparent hover:text-white transition">03 Create your campaign</a>
+                <a href="#vouchers" class="py-4 border-b-2 border-transparent hover:text-white transition">04 Digital vouchers</a>
+                <a href="#review" class="py-4 border-b-2 border-transparent hover:text-white transition">05 Review &amp; approval</a>
+                <a href="#dashboard" class="py-4 border-b-2 border-transparent hover:text-white transition">06 Dashboard</a>
+            </div>
+        </nav>
+
+        <!-- 01 CREATING YOUR ACCOUNT -->
+        <section id="account" class="guide-chapter border-b border-brand-border scroll-mt-36">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-36 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Getting started</span>
+                        <h2 class="text-4xl sm:text-5xl font-black !leading-none">Creating your account</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">To get access to the programmatic cinema platform, follow these simple steps to create your account.</p>
+                        <a href="https://drf.dk.tradedesk.cinead.eu-1.cinemataztic.com/" target="_blank" rel="noopener" class="inline-flex items-center text-sm text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">Go to the platform <i class="fa-solid fa-arrow-right ml-2 text-xs"></i></a>
+                    </aside>
+                    <div class="lg:col-span-9 space-y-8">
+                        <ol class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                            <li class="flex items-center gap-5 p-6 rounded-2xl bg-brand-card border border-brand-border">
+                                <span class="text-4xl font-black text-brand-cyan tabular-nums">1</span>
+                                <span class="text-sm font-bold uppercase text-white">Enter your email address</span>
+                            </li>
+                            <li class="flex items-center gap-5 p-6 rounded-2xl bg-brand-card border border-brand-border">
+                                <span class="text-4xl font-black text-brand-cyan tabular-nums">2</span>
+                                <span class="text-sm font-bold uppercase text-white">Confirm your email</span>
+                            </li>
+                            <li class="flex items-center gap-5 p-6 rounded-2xl bg-brand-card border border-brand-border">
+                                <span class="text-4xl font-black text-brand-cyan tabular-nums">3</span>
+                                <span class="text-sm font-bold uppercase text-white">Create a password</span>
+                            </li>
+                            <li class="flex items-center gap-5 p-6 rounded-2xl bg-brand-card border border-brand-border">
+                                <span class="text-4xl font-black text-brand-cyan tabular-nums">4</span>
+                                <span class="text-sm font-bold uppercase text-white">Set up your company account</span>
+                            </li>
+                            <li class="flex items-center gap-5 p-6 rounded-2xl bg-brand-card border border-brand-border">
+                                <span class="text-4xl font-black text-brand-cyan tabular-nums">5</span>
+                                <span class="text-sm font-bold uppercase text-white">Choose your account type <span class="block text-xs font-normal normal-case text-gray-400 mt-1">Advertiser or agency</span></span>
+                            </li>
+                            <li class="flex items-center gap-5 p-6 rounded-2xl bg-brand-card border border-brand-border">
+                                <span class="text-4xl font-black text-brand-cyan tabular-nums">6</span>
+                                <span class="text-sm font-bold uppercase text-white">Enter your company name</span>
+                            </li>
+                        </ol>
+                        <p class="text-base text-gray-300 leading-relaxed max-w-2xl">After clicking the confirmation link in your inbox, you’re ready to start booking your campaign.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 02 HOW PROGRAMMATIC CINEMA WORKS -->
+        <section id="how-it-works" class="guide-chapter border-b border-brand-border scroll-mt-36">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-36 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Programmatic cinema</span>
+                        <h2 class="text-4xl sm:text-5xl font-black !leading-none">How it works</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">Before you create your campaign, it’s important to understand the core features and mechanics of programmatic cinema advertising.</p>
+                    </aside>
+                    <div class="lg:col-span-9 space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <article class="p-8 rounded-2xl bg-brand-card border border-brand-border space-y-4">
+                                <i class="fa-solid fa-handshake text-3xl text-brand-cyan"></i>
+                                <h3 class="text-xl font-black uppercase !leading-none">Preferred deals</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">Programmatic cinema runs exclusively as preferred deals with no guaranteed delivery. <span class="text-white font-bold">You only pay for the impressions that actually get delivered.</span> That makes budgets easier to manage and lets you scale up or down as needed.</p>
+                            </article>
+                            <article class="p-8 rounded-2xl bg-brand-card border border-brand-border space-y-4">
+                                <i class="fa-solid fa-gavel text-3xl text-brand-cyan"></i>
+                                <h3 class="text-xl font-black uppercase !leading-none">First-price auction</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">Campaigns are delivered on the <span class="text-white font-bold">first-price auction principle</span>: the highest bid wins the inventory and is charged at the bid price. You can adjust your bid percentage at any time during the campaign to optimise delivery and performance.</p>
+                            </article>
+                            <article class="p-8 rounded-2xl bg-brand-card border border-brand-border space-y-4">
+                                <i class="fa-solid fa-coins text-3xl text-brand-cyan"></i>
+                                <h3 class="text-xl font-black uppercase !leading-none">Cost per mille (CPM)</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">Every campaign gets a base-CPM (cost per 1,000 impressions). It may already be pre-negotiated between you and your cinema sales house, and is then your campaign’s floor price. If the pre-set CPM doesn’t match your agreed terms, you can suggest a revised CPM during setup.</p>
+                            </article>
+                        </div>
+                        <div class="p-8 rounded-2xl border border-brand-border space-y-6">
+                            <div class="space-y-1">
+                                <h3 class="text-xs font-bold uppercase tracking-widest text-white">Adjustments to base-CPM</h3>
+                                <p class="text-sm text-gray-400">The base-CPM adjusts automatically based on your campaign specifications:</p>
+                            </div>
+                            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5 text-sm text-gray-300">
+                                <li class="flex items-start gap-4"><i class="fa-solid fa-ticket text-brand-mint text-lg w-6 pt-0.5"></i><span>Add a voucher to your campaign: <span class="font-bold text-white">+25%</span></span></li>
+                                <li class="flex items-start gap-4"><i class="fa-solid fa-table-cells text-brand-yellow text-lg w-6 pt-0.5"></i><span>Deselect cinemas: <span class="font-bold text-white">+5 EUR per cinema</span></span></li>
+                                <li class="flex items-start gap-4"><i class="fa-solid fa-people-roof text-brand-pink text-lg w-6 pt-0.5"></i><span>Select ‘Family’ as target audience: <span class="font-bold text-white">−20%</span></span></li>
+                                <li class="flex items-start gap-4"><i class="fa-solid fa-gavel text-brand-cyan text-lg w-6 pt-0.5"></i><span>Increase your bid percentage to compete for delivery</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 03 CREATE YOUR CAMPAIGN -->
+        <section id="campaign" class="guide-chapter border-b border-brand-border scroll-mt-36">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-36 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Create your campaign</span>
+                        <h2 class="text-4xl sm:text-5xl font-black !leading-none">6 easy steps</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">Follow these steps to set up your programmatic cinema campaign.</p>
+                    </aside>
+                    <div class="lg:col-span-9 space-y-10">
+                        <ol class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">01</span>
+                                <h3 class="text-xl font-black uppercase !leading-none text-brand-cyan">Spot details</h3>
+                                <p class="text-sm text-gray-300 leading-relaxed">Choose the number of spots and the spot duration.</p>
+                            </li>
+                            <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">02</span>
+                                <h3 class="text-xl font-black uppercase !leading-none text-brand-cyan">Creatives</h3>
+                                <p class="text-sm text-gray-300 leading-relaxed">Drag and drop your MP4 video onto the platform. Choose voucher yes or no: with yes, you order your voucher and get an email when it’s ready.</p>
+                            </li>
+                            <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">03</span>
+                                <h3 class="text-xl font-black uppercase !leading-none text-brand-cyan">Day &amp; time</h3>
+                                <p class="text-sm text-gray-300 leading-relaxed">Enter the campaign start and end date, and pick specific days and time slots.</p>
+                            </li>
+                            <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">04</span>
+                                <h3 class="text-xl font-black uppercase !leading-none text-brand-cyan">Audience</h3>
+                                <p class="text-sm text-gray-300 leading-relaxed">Target by demographics such as ‘Adults’ (A12+) and ‘Family’ (family movies), or refine with gender, age or movie genres.</p>
+                            </li>
+                            <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">05</span>
+                                <h3 class="text-xl font-black uppercase !leading-none text-brand-cyan">Distribution</h3>
+                                <p class="text-sm text-gray-300 leading-relaxed">Set the geographic scope of your campaign by choosing the cinemas that match your campaign goals.</p>
+                            </li>
+                            <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">06</span>
+                                <h3 class="text-xl font-black uppercase !leading-none text-brand-cyan">Budget</h3>
+                                <p class="text-sm text-gray-300 leading-relaxed">Enter your bid percentage for the first-price auction and your maximum campaign budget, and suggest a new base-CPM if needed.</p>
+                            </li>
+                        </ol>
+                        <div class="space-y-4">
+                            <h3 class="text-xs font-bold uppercase tracking-widest text-white">Upload specifications</h3>
+                            <dl class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div class="p-6 rounded-2xl border border-brand-border space-y-2">
+                                    <dt class="text-[10px] font-bold uppercase tracking-widest text-gray-400"><i class="fa-solid fa-expand mr-2 text-brand-cyan"></i>Size</dt>
+                                    <dd class="text-lg font-bold text-white">16:9 (1920×1080p)</dd>
+                                </div>
+                                <div class="p-6 rounded-2xl border border-brand-border space-y-2">
+                                    <dt class="text-[10px] font-bold uppercase tracking-widest text-gray-400"><i class="fa-solid fa-display mr-2 text-brand-cyan"></i>Format</dt>
+                                    <dd class="text-lg font-bold text-white">MP4 (H.264)</dd>
+                                </div>
+                                <div class="p-6 rounded-2xl border border-brand-border space-y-2">
+                                    <dt class="text-[10px] font-bold uppercase tracking-widest text-gray-400"><i class="fa-solid fa-film mr-2 text-brand-cyan"></i>Video</dt>
+                                    <dd class="text-lg font-bold text-white">Max 13 Mbit/s</dd>
+                                </div>
+                                <div class="p-6 rounded-2xl border border-brand-border space-y-2">
+                                    <dt class="text-[10px] font-bold uppercase tracking-widest text-gray-400"><i class="fa-solid fa-volume-high mr-2 text-brand-cyan"></i>Audio</dt>
+                                    <dd class="text-lg font-bold text-white">Stereo, −4 dB max</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 04 DIGITAL VOUCHERS -->
+        <section id="vouchers" class="guide-chapter border-b border-brand-border scroll-mt-36">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-36 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Key feature</span>
+                        <h2 class="text-4xl sm:text-5xl font-black !leading-none">Digital vouchers</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">Programmatic cinema advertising includes a unique voucher feature, designed to deliver measurable low-funnel impact.</p>
+                    </aside>
+                    <div class="lg:col-span-9 space-y-10">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="space-y-3">
+                                <h3 class="text-xs font-bold uppercase tracking-widest text-white">How it works</h3>
+                                <p class="text-base text-gray-300 leading-relaxed">When your cinema spot is played, a digital voucher can be delivered directly to people in the audience.</p>
+                            </div>
+                            <div class="space-y-3">
+                                <h3 class="text-xs font-bold uppercase tracking-widest text-white">Who receives it?</h3>
+                                <p class="text-base text-gray-300 leading-relaxed">Vouchers go to audience members who took part in the CineGame just before the preshow begins.</p>
+                            </div>
+                            <div class="space-y-3">
+                                <h3 class="text-xs font-bold uppercase tracking-widest text-white">Delivery</h3>
+                                <p class="text-base text-gray-300 leading-relaxed">Vouchers are stored in the <span class="text-white font-bold">CineGame app wallet</span>, so they’re easy to find and redeem.</p>
+                            </div>
+                        </div>
+                        <p class="text-xl sm:text-2xl font-bold text-white leading-snug max-w-3xl">This bridges cinema advertising with direct audience engagement, and opens up new conversion opportunities.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="p-8 rounded-2xl bg-brand-card border border-brand-border space-y-5">
+                                <h3 class="text-xs font-bold uppercase tracking-widest text-white">Voucher content options</h3>
+                                <ul class="space-y-3 text-sm text-gray-300">
+                                    <li class="flex gap-3"><i class="fa-solid fa-tag text-brand-cyan pt-1"></i>Discount codes (unique or generic)</li>
+                                    <li class="flex gap-3"><i class="fa-solid fa-mobile-screen text-brand-cyan pt-1"></i>Deep links to the advertiser’s app</li>
+                                    <li class="flex gap-3"><i class="fa-solid fa-envelope-open-text text-brand-cyan pt-1"></i>Links to competitions for newsletter sign-ups</li>
+                                    <li class="flex gap-3"><i class="fa-solid fa-headset text-brand-cyan pt-1"></i>Registration for call-center leads</li>
+                                </ul>
+                            </div>
+                            <div class="p-8 rounded-2xl bg-brand-card border border-brand-border space-y-5">
+                                <h3 class="text-xs font-bold uppercase tracking-widest text-white">Drives results across</h3>
+                                <div class="flex flex-wrap gap-2 text-[11px] font-bold uppercase tracking-wider">
+                                    <span class="px-3 py-1.5 rounded-full bg-brand-cyan text-black">Retail sales</span>
+                                    <span class="px-3 py-1.5 rounded-full bg-brand-mint text-black">Concession sales</span>
+                                    <span class="px-3 py-1.5 rounded-full bg-brand-orange text-black">Online sales</span>
+                                    <span class="px-3 py-1.5 rounded-full bg-brand-pink text-black">App downloads</span>
+                                    <span class="px-3 py-1.5 rounded-full bg-brand-cyan text-black">Call-center leads</span>
+                                    <span class="px-3 py-1.5 rounded-full bg-brand-yellow text-black">Newsletter sign-ups</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 05 REVIEW & APPROVAL -->
+        <section id="review" class="guide-chapter border-b border-brand-border scroll-mt-36">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-36 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Before you go live</span>
+                        <h2 class="text-4xl sm:text-5xl font-black !leading-none">Review &amp; approval</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">Before your campaign goes live, Dansk Reklame Film reviews its quality and content.</p>
+                    </aside>
+                    <div class="lg:col-span-9 space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <h3 class="text-xl font-black uppercase !leading-none">Content review</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">Spot quality and adherence to cinema advertising standards.</p>
+                            </div>
+                            <div class="p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <h3 class="text-xl font-black uppercase !leading-none">CPM approval</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">If you suggested a new base-CPM, it must also be reviewed and approved.</p>
+                            </div>
+                        </div>
+                        <h3 class="pt-4 text-xs font-bold uppercase tracking-widest text-white">Campaign status</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="p-8 rounded-2xl border border-brand-border space-y-3">
+                                <span class="inline-flex items-center gap-2 text-sm font-bold text-white"><span class="w-2.5 h-2.5 rounded-full bg-brand-mint"></span>Approved</span>
+                                <p class="text-sm text-gray-400 leading-relaxed">Once approved, your campaign status changes to ‘Approved’.</p>
+                            </div>
+                            <div class="p-8 rounded-2xl border border-brand-border space-y-3">
+                                <span class="inline-flex items-center gap-2 text-sm font-bold text-white"><span class="w-2.5 h-2.5 rounded-full bg-brand-pink"></span>Not approved</span>
+                                <p class="text-sm text-gray-400 leading-relaxed">If your campaign needs adjustments, you’ll get an email with the necessary updates.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 06 DASHBOARD -->
+        <section id="dashboard" class="guide-chapter border-b border-brand-border scroll-mt-36">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-36 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Real-time data</span>
+                        <h2 class="text-4xl sm:text-5xl font-black !leading-none">Dashboard</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">Once your campaign is approved and live, you can track its performance in real time in the campaign dashboard.</p>
+                    </aside>
+                    <div class="lg:col-span-9 space-y-10">
+                        <div class="space-y-4">
+                            <h3 class="text-xs font-bold uppercase tracking-widest text-white">Metrics tracked</h3>
+                            <ul class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                                <li class="p-6 rounded-2xl bg-brand-card border border-brand-border space-y-4"><i class="fa-solid fa-eye text-2xl text-brand-cyan"></i><span class="block text-lg font-bold text-white leading-tight">Impressions delivered</span></li>
+                                <li class="p-6 rounded-2xl bg-brand-card border border-brand-border space-y-4"><i class="fa-solid fa-ticket text-2xl text-brand-mint"></i><span class="block text-lg font-bold text-white leading-tight">Vouchers delivered</span></li>
+                                <li class="p-6 rounded-2xl bg-brand-card border border-brand-border space-y-4"><i class="fa-solid fa-percent text-2xl text-brand-yellow"></i><span class="block text-lg font-bold text-white leading-tight">CVR% impressions / voucher</span></li>
+                                <li class="p-6 rounded-2xl bg-brand-card border border-brand-border space-y-4"><i class="fa-solid fa-wallet text-2xl text-brand-pink"></i><span class="block text-lg font-bold text-white leading-tight">Budget spent</span></li>
+                            </ul>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-base text-gray-300 leading-relaxed">
+                            <p>The dashboard updates after every cinema show where your spot has been played, so your campaign insights are always accurate and up to date.</p>
+                            <p>Use the data to monitor delivery, and adjust your bid or strategy if needed to optimise performance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HELP -->
+        <section id="help" class="scroll-mt-36">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Support</span>
+                        <h2 class="text-4xl sm:text-5xl font-black !leading-none">How can we help you?</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">For further assistance, contact your sales house representative or the platform support team.</p>
+                    </aside>
+                    <div class="lg:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-6 self-start">
+                        <div class="p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-400">Sales support</span>
+                            <p class="text-lg font-bold text-white">Mikkel Hagedorn</p>
+                            <a href="mailto:mikkel@cinemataztic.com" class="block text-sm text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan w-fit">mikkel@cinemataztic.com</a>
+                            <a href="tel:+4531667341" class="block text-sm text-gray-300 hover:text-brand-cyan w-fit">+45 31 66 73 41</a>
+                        </div>
+                        <div class="p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-400">Technical support</span>
+                            <a href="mailto:support@cinemataztic.com" class="block text-sm text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan w-fit">support@cinemataztic.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
+        <!-- LET'S TALK: same sidebar layout as the page sections -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-b border-brand-border">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                <aside class="lg:col-span-3 space-y-6">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Contact</span>
+                    <h2 class="text-4xl sm:text-5xl font-black !leading-none text-white">Let’s Talk</h2>
+                    <div class="space-y-1">
+                        <a href="mailto:info@cinemataztic.com" class="block text-lg font-bold text-white hover:text-brand-cyan transition">info@cinemataztic.com</a>
+                        <a href="tel:+4553587129" class="block text-lg font-bold text-white hover:text-brand-cyan transition">+45 5358 7129</a>
+                        <span class="block text-xs text-gray-400">(Not for support related inquiries)</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">All support requests should be made <a href="http://support.cinegame.com/" target="_blank" rel="noopener" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">here</a></p>
+                </aside>
+            </div>
+        </div>
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-gray-500">
+            <span>© 2026 Cinemataztic ApS. All rights reserved.</span>
+            <span class="md:text-center">Hellerupvej 46 - 2900 Hellerup - Denmark</span>
+            <div class="flex items-center md:justify-end gap-5 text-lg">
+                <a href="https://www.facebook.com/CinemaTaztic" target="_blank" rel="noopener" aria-label="Cinemataztic on Facebook" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" aria-label="Cinemataztic on LinkedIn" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- INTERACTIVE HERO CANVAS CONSTELLATION MESH ---
+        (function initHeroCanvas() {
+            const canvas = document.getElementById('heroCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let width, height;
+            let particles = [];
+            const particleCount = 45;
+            const maxDistance = 140;
+
+            const mouse = { x: null, y: null, radius: 180 };
+
+            function resize() {
+                width = canvas.width = canvas.parentElement.offsetWidth;
+                height = canvas.height = canvas.parentElement.offsetHeight;
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Track Mouse Position
+            const heroSection = document.getElementById('hero');
+            heroSection.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+
+            heroSection.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.8;
+                    this.vy = (Math.random() - 0.5) * 0.8;
+                    this.radius = Math.random() * 2 + 1.5;
+                    this.color = Math.random() > 0.3 ? '#fece00' : '#f869b9';
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    // Mouse Interaction
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const dx = mouse.x - this.x;
+                        const dy = mouse.y - this.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < mouse.radius) {
+                            const angle = Math.atan2(dy, dx);
+                            const force = (mouse.radius - dist) / mouse.radius;
+                            this.x -= Math.cos(angle) * force * 2;
+                            this.y -= Math.sin(angle) * force * 2;
+                        }
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = this.color;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw connecting lines between particles
+                for (let a = 0; a < particles.length; a++) {
+                    particles[a].update();
+                    particles[a].draw();
+
+                    for (let b = a + 1; b < particles.length; b++) {
+                        const dx = particles[a].x - particles[b].x;
+                        const dy = particles[a].y - particles[b].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < maxDistance) {
+                            const opacity = 1 - (dist / maxDistance);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.strokeStyle = `rgba(254, 206, 0, ${opacity * 0.25})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Draw line to mouse if close
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const mdx = particles[a].x - mouse.x;
+                        const mdy = particles[a].y - mouse.y;
+                        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                        if (mdist < mouse.radius) {
+                            const mOpacity = 1 - (mdist / mouse.radius);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.strokeStyle = `rgba(248, 105, 185, ${mOpacity * 0.4})`;
+                            ctx.lineWidth = 1.2;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // --- MENU ON THE HERO ---
+        // The menu bar turns blue while any of the (blue) hero is visible below it.
+        (function initHeroMenu() {
+            const header = document.querySelector('body > header');
+            const hero = document.getElementById('hero');
+            if (!header || !hero) return;
+            const observer = new IntersectionObserver(([entry]) => {
+                header.classList.toggle('on-hero', entry.isIntersecting);
+            }, { rootMargin: `-${header.offsetHeight}px 0px 0px 0px` });
+            observer.observe(hero);
+        })();
+
+        // --- CHAPTER BAR ---
+        // Underlines the chapter whose section is in view.
+        (function initGuideNav() {
+            const links = [...document.querySelectorAll('#guideNav a')];
+            const byId = Object.fromEntries(links.map(a => [a.getAttribute('href').slice(1), a]));
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    links.forEach(a => a.classList.remove('is-active'));
+                    const link = byId[entry.target.id];
+                    link.classList.add('is-active');
+                    link.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+                });
+            }, { rootMargin: '-45% 0px -50% 0px' });
+            document.querySelectorAll('.guide-chapter').forEach(section => observer.observe(section));
+        })();
+
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileDrawer').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
