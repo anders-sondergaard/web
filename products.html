@@ -95,6 +95,20 @@
             .btn-shine:hover { transform: none; }
             .btn-shine::after { display: none; }
         }
+        /* Case cards: text sits on the image over a blur that fades in towards the bottom */
+        .case-blur {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 55%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0) 100%);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            -webkit-mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            pointer-events: none;
+        }
     </style>
     <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
     <link rel="preconnect" href="https://api.fontshare.com">
@@ -303,9 +317,9 @@
                     </aside>
 
                     <div class="lg:col-span-9">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-12">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                             <a href="programmatic.html" class="group block">
-                                <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
+                                <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
                                     <!-- Programmatic: cells are cinema screens, the cursor is the targeting -->
                                     <div id="rtbViz" class="absolute inset-0 p-4 select-none" role="img" aria-label="Animated illustration of programmatic targeting across cinema screens">
                                         <div class="relative w-full h-full">
@@ -313,45 +327,42 @@
                                             <span id="rtbTag" class="absolute pointer-events-none px-1.5 py-0.5 bg-brand-cyan text-black text-[9px] font-bold uppercase tracking-wider whitespace-nowrap transition-[left,top] duration-150 ease-out"></span>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="pt-4 space-y-2">
-                                    <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">Programmatic</h3>
-                                    <div class="space-y-2">
-                                        <p class="text-sm text-gray-400 leading-relaxed">Automated, targetable and transparent cinema ad buying with real-time impression reporting.</p>
-                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                                    <div class="case-blur"></div>
+                                    <div class="absolute inset-x-0 bottom-0 p-5 space-y-2 pointer-events-none">
+                                        <h3 class="text-xl font-black uppercase !leading-none text-white group-hover:text-brand-cyan transition">Programmatic</h3>
+                                        <p class="text-sm text-white/80 leading-relaxed">Automated, targetable and transparent cinema ad buying with real-time impression reporting.</p>
+                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-white/80 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
                                     </div>
                                 </div>
                             </a>
 
                             <a href="cinegame.html" class="group block">
-                                <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
+                                <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
                                     <!-- CineGame: the cinema screen runs a catch game, the cursor is your phone -->
                                     <div id="cgViz" class="absolute inset-0 select-none" role="img" aria-label="Animated illustration of a CineGame round played on the cinema screen">
                                         <canvas id="cgScreen" class="absolute inset-0 w-full h-full"></canvas>
                                         <span id="cgHint" class="absolute top-3 left-4 text-[10px] font-bold uppercase tracking-wider text-white/50">Move to play</span>
                                     </div>
-                                </div>
-                                <div class="pt-4 space-y-2">
-                                    <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">CineGame</h3>
-                                    <div class="space-y-2">
-                                        <p class="text-sm text-gray-400 leading-relaxed">Whole auditoriums play branded games on the big screen, using their phones as controllers.</p>
-                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                                    <div class="case-blur"></div>
+                                    <div class="absolute inset-x-0 bottom-0 p-5 space-y-2 pointer-events-none">
+                                        <h3 class="text-xl font-black uppercase !leading-none text-white group-hover:text-brand-cyan transition">CineGame</h3>
+                                        <p class="text-sm text-white/80 leading-relaxed">Whole auditoriums play branded games on the big screen, using their phones as controllers.</p>
+                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-white/80 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
                                     </div>
                                 </div>
                             </a>
 
                             <a href="cinefun.html" class="group block">
-                                <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
+                                <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
                                     <!-- CineFun: a casual popcorn game, the cursor is your finger -->
                                     <div id="cfViz" class="absolute inset-0 p-4 select-none" role="img" aria-label="Animated illustration of a casual popcorn game in the CineGame app">
                                         <div id="cfBoard" class="w-full h-full grid grid-cols-10 grid-rows-10 gap-[3px]"></div>
                                     </div>
-                                </div>
-                                <div class="pt-4 space-y-2">
-                                    <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">CineFun</h3>
-                                    <div class="space-y-2">
-                                        <p class="text-sm text-gray-400 leading-relaxed">Quizzes, lobby kiosks and loyalty tie-ins that entertain moviegoers before and after the film.</p>
-                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                                    <div class="case-blur"></div>
+                                    <div class="absolute inset-x-0 bottom-0 p-5 space-y-2 pointer-events-none">
+                                        <h3 class="text-xl font-black uppercase !leading-none text-white group-hover:text-brand-cyan transition">CineFun</h3>
+                                        <p class="text-sm text-white/80 leading-relaxed">Quizzes, lobby kiosks and loyalty tie-ins that entertain moviegoers before and after the film.</p>
+                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-white/80 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
                                     </div>
                                 </div>
                             </a>
@@ -463,7 +474,7 @@
             const ACCENT = '#3dc0c8';
             const COIN_COLORS = ['#3dc0c8'];
             const PADDLE_W = 0.24;
-            const PADDLE_Y = 0.88;
+            const PADDLE_Y = 0.48; // above the card's text overlay, which covers the lower half
 
             let W = 0, H = 0;
             function resize() {
@@ -509,7 +520,7 @@
                 // Paddle follows your phone, or the lowest coin when nobody is playing
                 let target = pointerX;
                 if (!hovering) {
-                    const next = coins.filter(c => c.y < 0.9).sort((a, b) => b.y - a.y)[0];
+                    const next = coins.filter(c => c.y < PADDLE_Y + 0.02).sort((a, b) => b.y - a.y)[0];
                     target = next ? next.x : 0.5;
                 }
                 paddleX += (target - paddleX) * Math.min(1, dt * (hovering ? 18 : 5));
@@ -523,7 +534,7 @@
                         }
                         return false;
                     }
-                    return c.y < 1.05;
+                    return c.y < PADDLE_Y + 0.12; // missed coins vanish before they reach the text
                 });
 
                 sparks = sparks.filter(p => {

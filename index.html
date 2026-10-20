@@ -95,6 +95,20 @@
             .btn-shine:hover { transform: none; }
             .btn-shine::after { display: none; }
         }
+        /* Case cards: text sits on the image over a blur that fades in towards the bottom */
+        .case-blur {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 55%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0) 100%);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            -webkit-mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            pointer-events: none;
+        }
     </style>
     <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
     <link rel="preconnect" href="https://api.fontshare.com">
@@ -119,6 +133,14 @@
             transition: opacity 200ms linear;
         }
         .brand-cell:hover .brand-logo { opacity: 1; }
+        /* Badge logos (text knocked out of a shape) would turn into a flat blob, so they go greyscale instead */
+        .brand-logo.brand-logo--badge {
+            filter: grayscale(1);
+            opacity: 0.7;
+        }
+        /* The wall shows 8 places; their logos fade out and in as they rotate through all brands */
+        .brand-cell > * { transition: opacity 400ms ease; }
+        .brand-cell.is-swapping > * { opacity: 0 !important; }
         /* Menu sits on the yellow hero: yellow bar with dark text while the hero is in view */
         header { transition: background-color 250ms linear, color 250ms linear, border-color 250ms linear; }
         header.on-hero { background-color: #fece00 !important; border-color: rgba(10, 10, 12, 0.12) !important; color: #0a0a0c; }
@@ -228,9 +250,9 @@
                     </aside>
 
                     <div class="lg:col-span-9">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-12">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                             <a href="programmatic.html" class="group block">
-                                <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
+                                <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
                                     <!-- Programmatic: cells are cinema screens, the cursor is the targeting -->
                                     <div id="rtbViz" class="absolute inset-0 p-4 select-none" role="img" aria-label="Animated illustration of programmatic targeting across cinema screens">
                                         <div class="relative w-full h-full">
@@ -238,45 +260,42 @@
                                             <span id="rtbTag" class="absolute pointer-events-none px-1.5 py-0.5 bg-brand-cyan text-black text-[9px] font-bold uppercase tracking-wider whitespace-nowrap transition-[left,top] duration-150 ease-out"></span>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="pt-4 space-y-2">
-                                    <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">Programmatic</h3>
-                                    <div class="space-y-2">
-                                        <p class="text-sm text-gray-400 leading-relaxed">Automated, targetable and transparent cinema ad buying with real-time impression reporting.</p>
-                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                                    <div class="case-blur"></div>
+                                    <div class="absolute inset-x-0 bottom-0 p-5 space-y-2 pointer-events-none">
+                                        <h3 class="text-xl font-black uppercase !leading-none text-white group-hover:text-brand-cyan transition">Programmatic</h3>
+                                        <p class="text-sm text-white/80 leading-relaxed">Automated, targetable and transparent cinema ad buying with real-time impression reporting.</p>
+                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-white/80 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
                                     </div>
                                 </div>
                             </a>
 
                             <a href="cinegame.html" class="group block">
-                                <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
+                                <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
                                     <!-- CineGame: the cinema screen runs a catch game, the cursor is your phone -->
                                     <div id="cgViz" class="absolute inset-0 select-none" role="img" aria-label="Animated illustration of a CineGame round played on the cinema screen">
                                         <canvas id="cgScreen" class="absolute inset-0 w-full h-full"></canvas>
                                         <span id="cgHint" class="absolute top-3 left-4 text-[10px] font-bold uppercase tracking-wider text-white/50">Move to play</span>
                                     </div>
-                                </div>
-                                <div class="pt-4 space-y-2">
-                                    <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">CineGame</h3>
-                                    <div class="space-y-2">
-                                        <p class="text-sm text-gray-400 leading-relaxed">Whole auditoriums play branded games on the big screen, using their phones as controllers.</p>
-                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                                    <div class="case-blur"></div>
+                                    <div class="absolute inset-x-0 bottom-0 p-5 space-y-2 pointer-events-none">
+                                        <h3 class="text-xl font-black uppercase !leading-none text-white group-hover:text-brand-cyan transition">CineGame</h3>
+                                        <p class="text-sm text-white/80 leading-relaxed">Whole auditoriums play branded games on the big screen, using their phones as controllers.</p>
+                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-white/80 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
                                     </div>
                                 </div>
                             </a>
 
                             <a href="cinefun.html" class="group block">
-                                <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
+                                <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
                                     <!-- CineFun: a casual popcorn game, the cursor is your finger -->
                                     <div id="cfViz" class="absolute inset-0 p-4 select-none" role="img" aria-label="Animated illustration of a casual popcorn game in the CineGame app">
                                         <div id="cfBoard" class="w-full h-full grid grid-cols-10 grid-rows-10 gap-[3px]"></div>
                                     </div>
-                                </div>
-                                <div class="pt-4 space-y-2">
-                                    <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">CineFun</h3>
-                                    <div class="space-y-2">
-                                        <p class="text-sm text-gray-400 leading-relaxed">Quizzes, lobby kiosks and loyalty tie-ins that entertain moviegoers before and after the film.</p>
-                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-300 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                                    <div class="case-blur"></div>
+                                    <div class="absolute inset-x-0 bottom-0 p-5 space-y-2 pointer-events-none">
+                                        <h3 class="text-xl font-black uppercase !leading-none text-white group-hover:text-brand-cyan transition">CineFun</h3>
+                                        <p class="text-sm text-white/80 leading-relaxed">Quizzes, lobby kiosks and loyalty tie-ins that entertain moviegoers before and after the film.</p>
+                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-white/80 group-hover:text-brand-cyan transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
                                     </div>
                                 </div>
                             </a>
@@ -335,12 +354,17 @@
 
                     <div class="lg:col-span-9 grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10 items-center">
                         <div class="lg:col-span-2">
-                            <svg id="partnerMap" class="w-full h-auto select-none" role="img" aria-label="World map with Cinemataztic partner countries highlighted"></svg>
+                            <svg id="partnerMap" class="w-full h-auto select-none [mask-image:radial-gradient(ellipse_at_center,#000_55%,transparent_100%)]" role="img" aria-label="Map of Europe with Cinemataztic partner countries highlighted"></svg>
                         </div>
                         <div id="partnerPanel" class="space-y-3 transition-opacity duration-200" aria-live="polite">
                             <span id="partnerCountry" class="block text-xs font-bold uppercase tracking-widest text-brand-cyan"></span>
                             <h3 id="partnerName" class="text-3xl sm:text-4xl font-black uppercase !leading-none"></h3>
-                            <p id="partnerText" class="text-sm text-gray-400 leading-relaxed"></p>
+                            <p id="partnerText" class="text-sm text-gray-400 leading-relaxed whitespace-pre-line"></p>
+                            <a id="partnerLink" href="#" target="_blank" rel="noopener" class="hidden block w-fit pt-2"><img id="partnerImage" src="" alt="" class="block w-16 h-16 rounded-2xl ring-1 ring-white/25 hover:scale-105 transition"></a>
+                            <div id="partnerCinemas" class="hidden pt-2 space-y-1">
+                                <span class="block text-xs font-bold text-white">Cinema chains:</span>
+                                <ul id="partnerCinemaList" class="text-sm text-gray-400 leading-relaxed"></ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -621,149 +645,601 @@
         // --- CMS DATA (also read by cases.html) ---
         const defaultCases = [
             {
-                id: "c1",
+                id: "subway",
                 featured: true,
-                title: "Samsung Galaxy Arena Challenge",
-                client: "Samsung",
-                category: "CineGame",
-                mediaType: "video",
-                cover: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
-                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-                description: "An arena-scale multiplayer game synchronized on the big screen, allowing moviegoers to race flagship Samsung smartphones using their own mobile phones."
-            },
-            {
-                id: "c2",
-                featured: true,
-                title: "Coca-Cola Refresh Programmatic Spot",
-                client: "Coca-Cola",
-                category: "Programmatic",
-                mediaType: "video",
-                cover: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80",
-                video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-                description: "Programmatically targeted heatwave campaign triggered across 120 cinema auditoriums as outdoor temperatures surpassed 25°C."
-            },
-            {
-                id: "c3",
-                featured: true,
-                title: "Tivoli Halloween CineFun Quiz",
-                client: "Tivoli",
-                category: "CineFun",
-                mediaType: "image",
-                cover: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80",
-                video: "",
-                description: "Interactive pre-show horror trivia challenge engaging 45,000 cinema visitors across Denmark ahead of Tivoli's seasonal opening."
-            },
-            {
-                id: "c4",
-                featured: true,
-                title: "Danske Spil Jackpot Live Draw",
-                client: "Danske Spil",
-                category: "CineGame",
-                mediaType: "image",
-                cover: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80",
-                video: "",
-                description: "A live big-screen lottery draw where every seat in the auditorium played along on their phone, with instant prize reveals before the feature started."
-            },
-            {
-                id: "c5",
-                featured: true,
-                title: "Sprite Summer Chill Countdown",
-                client: "Sprite",
-                category: "Programmatic",
-                mediaType: "image",
-                cover: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=800&q=80",
-                video: "",
-                description: "Weather-triggered pre-show spots that switched creative by local temperature and showtime, reaching 1.2M young moviegoers over the summer holidays."
-            },
-            {
-                id: "c6",
-                featured: true,
-                title: "Telenor 5G Speed Race",
-                client: "Telenor",
-                category: "CineGame",
-                mediaType: "image",
-                cover: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80",
-                video: "",
-                description: "A reaction-speed race where the audience competed row against row on their phones, showing off 5G latency in a packed auditorium."
-            },
-            {
-                id: "c7",
-                featured: true,
-                title: "Boozt Fashion Week Lookbook",
-                client: "Boozt",
-                category: "CineFun",
-                mediaType: "image",
-                cover: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80",
-                video: "",
-                description: "Interactive style poll where moviegoers voted on looks from the big screen and received a personal discount code for their favourite outfit."
-            },
-            {
-                id: "c8",
-                featured: true,
-                title: "Subway Pick Your Sub",
+                title: "Subway – Jump and stay alive",
                 client: "Subway",
-                category: "CineFun",
-                mediaType: "image",
-                cover: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=800&q=80",
-                video: "",
-                description: "A crowd-built sandwich challenge where the whole auditorium voted ingredient by ingredient, with the winning sub offered at nearby restaurants."
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/subway.png",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/SubwaySE2024-CutDown.mp4",
+                description: "A jumper game built to drive footfall: jump, stay alive and get the Footlong."
             },
             {
-                id: "c9",
+                id: "fanta-zip-and-ride",
                 featured: true,
-                title: "Samsung Galaxy Fold Premiere Takeover",
-                client: "Samsung",
-                category: "Programmatic",
-                mediaType: "image",
-                cover: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80",
-                video: "",
-                description: "A full premiere-weekend takeover booked programmatically across Nordic blockbuster screenings, synced to launch-day retail availability."
+                title: "Fanta – Ride n' Sip",
+                client: "Fanta",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/fanta-zip-and-ride.png",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/Fanta-EN2024-Cutdown60sec%20(1).mp4",
+                description: "An experience game promoting a new Fanta flavour. Sit back and enjoy the ride."
             },
             {
-                id: "c10",
-                featured: false,
-                title: "Coca-Cola Share a Seat Quiz",
-                client: "Coca-Cola",
-                category: "CineFun",
-                mediaType: "image",
-                cover: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80",
-                video: "",
-                description: "A movie trivia quiz played in pairs with the person in the next seat, rewarding the fastest duos with free drinks at the concession stand."
+                id: "mars",
+                featured: true,
+                title: "M&M's + Extra – The Jumper",
+                client: "M&M's + Extra",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/mars.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/Mars_Cutdown_EN_1.mp4",
+                description: "A jumper game on the big screen for M&M's and Extra."
             },
             {
-                id: "c11",
-                featured: false,
-                title: "Tivoli Christmas Market Sing-Along",
+                id: "politikens-publisher",
+                featured: true,
+                title: "Politikens Forlag – The children's book game",
+                client: "Politikens Forlag",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/politikens-publisher.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/Politiken_CutDown_DK_1.mp4",
+                description: "A children's book game for Politikens Forlag: follow the book."
+            },
+            {
+                id: "tivoli",
+                featured: true,
+                title: "Tivoli – The Rollercoaster Ride",
                 client: "Tivoli",
                 category: "CineGame",
-                mediaType: "image",
-                cover: "https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?auto=format&fit=crop&w=800&q=80",
-                video: "",
-                description: "A voice-powered sing-along game where the auditorium's volume lit up Tivoli's Christmas tree on screen and unlocked ticket offers."
+                mediaType: "video",
+                cover: "assets/cases/tivoli.png",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/Tivoli_2023_DKmp4.mp4",
+                description: "A 1:1 digital version of Tivoli's iconic roller coaster, built to capture a young audience and boost ticket sales for the 180-year-old Copenhagen amusement park."
             },
             {
-                id: "c12",
-                featured: false,
-                title: "Danske Spil Matchday Predictor",
-                client: "Danske Spil",
-                category: "Programmatic",
-                mediaType: "image",
-                cover: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=800&q=80",
-                video: "",
-                description: "Fixture-aware pre-show spots scheduled automatically ahead of national team matches, with live odds pulled into the creative."
+                id: "ikea",
+                featured: true,
+                title: "IKEA – It is Meatball Friday",
+                client: "IKEA",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/ikea.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/IKEA_FI2024cutdown.mp4",
+                description: "Meatball Friday comes to the big screen. Every Friday, with IKEA."
             },
             {
-                id: "c13",
-                featured: false,
-                title: "Telenor Family Movie Night",
-                client: "Telenor",
-                category: "CineFun",
+                id: "3dk2024",
+                featured: true,
+                title: "3 – No worries",
+                client: "3",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/3dk2024.png",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/3Mobil_QuizShow_Cutdown_DK.mp4",
+                description: "A quiz game that increases knowledge of 3's lightning fast 5G internet."
+            },
+            {
+                id: "fazer",
+                featured: true,
+                title: "Fazer – re-mix MINI",
+                client: "Fazer",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/fazer.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/Fazer_swipehero_10.mp4",
+                description: "A swipe game for Fazer's re-mix MINI."
+            },
+            {
+                id: "hummel",
+                featured: true,
+                title: "Hummel – New official jersey",
+                client: "Hummel",
+                category: "CineGame",
                 mediaType: "image",
-                cover: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=800&q=80",
+                cover: "assets/cases/hummel.jpg",
                 video: "",
-                description: "A kid-friendly picture quiz for weekend family screenings, where every correct answer added data to a shared family prize pot."
+                description: "Launching the new official Danish national team jersey. Made by Denmark."
+            },
+            {
+                id: "jdsports",
+                featured: false,
+                title: "JD Sports – King of the Game",
+                client: "JD Sports",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/jdsports.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/JDSports_2022_de.mp4",
+                description: "Run baby, run: a runner game for JD Sports."
+            },
+            {
+                id: "samsung",
+                featured: false,
+                title: "Samsung – Galaxy S23 Series",
+                client: "Samsung",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/samsung.png",
+                video: "",
+                description: "The runner game for the Galaxy S23 series. Every player got an extra chance to win a Samsung prize in a bonus wheel of fortune after the game."
+            },
+            {
+                id: "tv2-play",
+                featured: false,
+                title: "TV2 Play – Join the fun",
+                client: "TV2 Play",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/tv2-play.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/TV2play_2023_dk.mp4",
+                description: "A quiz game for TV2 Play."
+            },
+            {
+                id: "mcd",
+                featured: false,
+                title: "McDonald's – Rewards",
+                client: "McDonald's",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/mcd.png",
+                video: "",
+                description: "A shuffle game built to drive app downloads: play and get the reward."
+            },
+            {
+                id: "tryg",
+                featured: false,
+                title: "Tryg – Wheel of fortune",
+                client: "Tryg",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/tryg.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/Tryg_2023_dk.mp4",
+                description: "Spin the wheel with Tryg."
+            },
+            {
+                id: "podimo",
+                featured: false,
+                title: "Podimo – Home of your favourite stories",
+                client: "Podimo",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/podimo.png",
+                video: "",
+                description: "A shuffle game built to increase subscribers for Podimo."
+            },
+            {
+                id: "sportsball",
+                featured: false,
+                title: "Media Direct Norge – SportsBall",
+                client: "Media Direct Norge",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/sportsball.jpg",
+                video: "",
+                description: "Let the game begin: a ball game for Media Direct Norge."
+            },
+            {
+                id: "lego-knight",
+                featured: false,
+                title: "LEGO – Rebuild the world",
+                client: "LEGO",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/lego-knight.jpg",
+                video: "",
+                description: "A LEGO playzone game on the big screen."
+            },
+            {
+                id: "arla",
+                featured: false,
+                title: "ARLA – The Cows",
+                client: "ARLA",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/arla.jpg",
+                video: "https://cinemataztic.com/static/885c4ad0c2df757989cbe733f0981c2b/arla_findobject_web_18_skiplobby.mp4",
+                description: "Each player gets a unique cow on their phone and has to find it on the cinema screen with a magnifying lens. The game brings ARLA's AR universe for children to the cinema."
+            },
+            {
+                id: "redbull",
+                featured: false,
+                title: "Red Bull – Conquer the valley",
+                client: "Red Bull",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/redbull.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/redbull_nologo.mp4",
+                description: "Guide your plane through the mountains, collect as many points as possible and avoid crashing."
+            },
+            {
+                id: "coke-x-mas",
+                featured: false,
+                title: "Coca-Cola – Holidays are coming",
+                client: "Coca-Cola",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/coke-x-mas.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/Coke-cinemaarcade-DE-UK%20Gameplay.mp4",
+                description: "Five fun little Christmas games combined in one Coke holiday game."
+            },
+            {
+                id: "boozt",
+                featured: false,
+                title: "Boozt.com – Follow the fashion",
+                client: "Boozt.com",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/boozt.jpg",
+                video: "https://cinemataztic.com/static/2e813ee52907a8ea3f6aa19fd6e0ed1e/boozt_shuffle_en_web_7.mp4",
+                description: "The Boozt.com Shuffle Game introduces five categories, one for each card. Each card presents both brand and product."
+            },
+            {
+                id: "liiga",
+                featured: false,
+                title: "Liiga – Multiplayer ice hockey",
+                client: "Liiga",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/liiga.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/liga_nologo.mp4",
+                description: "Team vs. team: sharpen your skates, select your team and win the trophy."
+            },
+            {
+                id: "fanta-halloween",
+                featured: false,
+                title: "Fanta – Halloween",
+                client: "Fanta",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/fanta-halloween.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/Fanta_simon_dk_13.mp4",
+                description: "Follow the scary one: a Halloween game for Fanta."
+            },
+            {
+                id: "toms",
+                featured: false,
+                title: "Toms – Haunted House",
+                client: "Toms",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/toms.jpg",
+                video: "",
+                description: "Stay alive in the Haunted House and get your chocolate."
+            },
+            {
+                id: "new-can",
+                featured: false,
+                title: "Coca-Cola – Coke word game",
+                client: "Coca-Cola",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/new-can.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/cokenewcans_nologo.mp4",
+                description: "Find the words! The fastest player wins a Coke."
+            },
+            {
+                id: "pepsimax",
+                featured: false,
+                title: "Pepsi Max – Max the Music",
+                client: "Pepsi Max",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/pepsimax.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/PepsiHero_nologo.mp4",
+                description: "Hit the tones and win the prize: an ice cold Pepsi."
+            },
+            {
+                id: "cinerunner",
+                featured: false,
+                title: "Cinemataztic – CineRunner",
+                client: "Cinemataztic",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/cinerunner.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/CinemaRunner-EE.mp4",
+                description: "Get through the magical movie city."
+            },
+            {
+                id: "battery-black",
+                featured: false,
+                title: "Battery – Black Energy",
+                client: "Battery",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/battery-black.jpg",
+                video: "",
+                description: "Join us in the night and win some sweet prizes."
+            },
+            {
+                id: "ben-and-jerry",
+                featured: false,
+                title: "Ben & Jerry's – The ice cream valley game",
+                client: "Ben & Jerry's",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/ben-and-jerry.png",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/BenJerrry.mp4",
+                description: "Developed with MindShare, the game ran simultaneously in all the Nordic countries and made Ben & Jerry's part of the cinema experience."
+            },
+            {
+                id: "coke-maze-game",
+                featured: false,
+                title: "Coca-Cola – The Coke maze game",
+                client: "Coca-Cola",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/coke-maze-game.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/Cokepackman_nologo.mp4",
+                description: "Survive the maze and get the prize."
+            },
+            {
+                id: "derby25",
+                featured: false,
+                title: "Bet25 – Ganz genau",
+                client: "Bet25",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/derby25.jpg",
+                video: "",
+                description: "A horse racing derby game: Reit zu, bitte schön."
+            },
+            {
+                id: "lego-hidden-side",
+                featured: false,
+                title: "LEGO – AR ghost hunt",
+                client: "LEGO",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/lego-hidden-side.jpg",
+                video: "",
+                description: "The ghosts have escaped to the cinema. Catch them with your phone and become the hero of the day."
+            },
+            {
+                id: "nokia",
+                featured: false,
+                title: "Nokia – Experience the new Nokia",
+                client: "Nokia",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/nokia.jpg",
+                video: "",
+                description: "Complete the five Nokia missions."
+            },
+            {
+                id: "sonic",
+                featured: false,
+                title: "Sonic – Are you fast?",
+                client: "Sonic",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/sonic.jpg",
+                video: "",
+                description: "Try to keep up with Sonic and take home the prize."
+            },
+            {
+                id: "sprite",
+                featured: false,
+                title: "Sprite – Sprite the word",
+                client: "Sprite",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/sprite.jpg",
+                video: "",
+                description: "Join Sivas in the hunt for the word."
+            },
+            {
+                id: "trolls",
+                featured: false,
+                title: "Trolls World Tour – The rocking troll game",
+                client: "Trolls World Tour",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/trolls.jpg",
+                video: "",
+                description: "A rocking music game for Trolls World Tour in Australia."
+            },
+            {
+                id: "tuborg-derby",
+                featured: false,
+                title: "Tuborg – Let the race begin",
+                client: "Tuborg",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/tuborg-derby.jpg",
+                video: "",
+                description: "Welcome to the racetrack and the first Tuborg Derby."
+            },
+            {
+                id: "mentos-friends",
+                featured: false,
+                title: "Mentos – Complimentos",
+                client: "Mentos",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/mentos-friends.jpg",
+                video: "",
+                description: "Get the Mentos, win the prize and share it with one of the other players. Everyone wins."
+            },
+            {
+                id: "paula",
+                featured: false,
+                title: "Dr. Oetker – Where's Paula?",
+                client: "Dr. Oetker",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/paula.jpg",
+                video: "",
+                description: "Find Paula and her friends. They can be everywhere."
+            },
+            {
+                id: "coke-light",
+                featured: false,
+                title: "Coca-Cola – Make it light",
+                client: "Coca-Cola",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/coke-light.jpg",
+                video: "",
+                description: "Make it light, make it fun."
+            },
+            {
+                id: "hbo-vikings",
+                featured: false,
+                title: "HBO – Vikings",
+                client: "HBO",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/hbo-vikings.jpg",
+                video: "",
+                description: "Let the fight begin: test your knowledge of the greatest warriors."
+            },
+            {
+                id: "red-bull-winter-2022",
+                featured: false,
+                title: "Red Bull – Winter Edition",
+                client: "Red Bull",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/red-bull-winter-2022.jpg",
+                video: "",
+                description: "Remember the sequence of the different Red Bull varieties and win an ice cold Red Bull."
+            },
+            {
+                id: "lego90",
+                featured: false,
+                title: "LEGO – 90th birthday",
+                client: "LEGO",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/lego90.jpg",
+                video: "",
+                description: "Help decorate the LEGO birthday cake."
+            },
+            {
+                id: "dfds",
+                featured: false,
+                title: "DFDS – Win a cruise",
+                client: "DFDS",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/dfds.jpg",
+                video: "",
+                description: "Four mini games in one. The winner takes home a cruise."
+            },
+            {
+                id: "scream6",
+                featured: false,
+                title: "Scream VI – New York. New rules.",
+                client: "Scream VI",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/scream6.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/scream6_2023_dk.mp4",
+                description: "A game for the cinema release of Scream VI."
+            },
+            {
+                id: "oister",
+                featured: false,
+                title: "Oister – Follow the Oister",
+                client: "Oister",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/oister.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/Oister_2023_dk_9.mp4",
+                description: "A game for Oister on the big screen."
+            },
+            {
+                id: "trafficsafety",
+                featured: false,
+                title: "Traffic safety – The Traffic Safety Game",
+                client: "Traffic safety",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/trafficsafety.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/TrafficSafetyCutdownPromo.mp4",
+                description: "Stay safe in traffic."
+            },
+            {
+                id: "visitgermany",
+                featured: false,
+                title: "Visit Germany – Green travel",
+                client: "Visit Germany",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/visitgermany.jpg",
+                video: "",
+                description: "Drive your electric car through Germany and experience a green way to travel."
+            },
+            {
+                id: "virgin-mobile",
+                featured: false,
+                title: "Virgin Mobile – Run baby run",
+                client: "Virgin Mobile",
+                category: "CineGame",
+                mediaType: "image",
+                cover: "assets/cases/virgin-mobile.jpg",
+                video: "",
+                description: "A runner game for Virgin Mobile."
+            },
+            {
+                id: "podimo-quiz-2024",
+                featured: false,
+                title: "Podimo – The QuizShow",
+                client: "Podimo",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/podimo-quiz-2024.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/PodimoDK2024-Cutdown.mp4",
+                description: "Join the fun in Podimo's quiz show."
+            },
+            {
+                id: "matas",
+                featured: false,
+                title: "Matas – 75 years",
+                client: "Matas",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/matas.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/Matas-Shuffle-DK-Cutdown.mp4",
+                description: "A shuffle game celebrating Matas' 75th birthday."
+            },
+            {
+                id: "bundeswehr",
+                featured: false,
+                title: "Bundeswehr – Karriereberatung",
+                client: "Bundeswehr",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/bundeswehr.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/GermanMinistryOfDefence_Quiz_build6.mp4",
+                description: "A quiz game for Bundeswehr career counselling."
+            },
+            {
+                id: "specsavers",
+                featured: false,
+                title: "Specsavers – Test your vision",
+                client: "Specsavers",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/specsavers.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/Specsavers_Video_Cutdown.mp4",
+                description: "Test your vision on the big screen."
+            },
+            {
+                id: "bookbeat",
+                featured: false,
+                title: "BookBeat – Nothing beats a good book",
+                client: "BookBeat",
+                category: "CineGame",
+                mediaType: "video",
+                cover: "assets/cases/bookbeat.jpg",
+                video: "https://storage.googleapis.com/cinemataztic-public/video/BookBeat_Video_CutDown.mp4",
+                description: "A game for BookBeat."
             }
         ];
+
         const MAX_FEATURED = 9;
         // Brand wall: a logo URL is optional; brands without one show their name as a grey wordmark
         const defaultLogoBrands = [
@@ -774,21 +1250,46 @@
             { name: "Red Bull", logo: "https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/redbull.svg" },
             { name: "McDonald's", logo: "https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/mcdonalds.svg" },
             { name: "UNICEF", logo: "https://upload.wikimedia.org/wikipedia/commons/e/ed/Logo_of_UNICEF.svg" },
-            { name: "M&M's", logo: "assets/logos/mms.svg" }
+            { name: "M&M's", logo: "assets/logos/mms.svg" },
+            { name: "Subway", logo: "assets/logos/subway.svg" },
+            { name: "Fanta", logo: "assets/logos/fanta.svg", badge: true },
+            { name: "Politiken", logo: "assets/logos/politiken.svg" },
+            { name: "IKEA", logo: "assets/logos/ikea.svg", badge: true },
+            { name: "Tivoli", logo: "assets/logos/tivoli.svg" },
+            { name: "3", logo: "assets/logos/three.svg" },
+            { name: "Fazer", logo: "assets/logos/fazer.svg", badge: true },
+            { name: "JD Sports", logo: "assets/logos/jdsports.svg" },
+            { name: "Hummel", logo: "assets/logos/hummel.svg" },
+            { name: "Samsung", logo: "assets/logos/samsung.svg" },
+            { name: "Podimo", logo: "assets/logos/podimo.svg" },
+            { name: "Arla", logo: "assets/logos/arla.svg", badge: true },
+            { name: "LEGO", logo: "assets/logos/lego.svg", badge: true },
+            { name: "Boozt", logo: "assets/logos/boozt.svg" },
+            { name: "Ben & Jerry's", logo: "assets/logos/benjerry.svg", badge: true },
+            { name: "Sprite", logo: "assets/logos/sprite.svg" },
+            { name: "Mentos", logo: "assets/logos/mentos.svg", badge: true },
+            { name: "Dr. Oetker", logo: "assets/logos/droetker.svg", badge: true },
+            { name: "HBO", logo: "assets/logos/hbo.svg" },
+            { name: "DFDS", logo: "assets/logos/dfds.svg" },
+            { name: "Oister", logo: "assets/logos/oister.svg", badge: true },
+            { name: "Virgin Mobile", logo: "assets/logos/virginmobile.svg" },
+            { name: "Matas", logo: "assets/logos/matas.svg" },
+            { name: "BookBeat", logo: "assets/logos/bookbeat.svg" },
+            { name: "Specsavers", logo: "assets/logos/specsavers.svg", badge: true }
         ];
 
         const defaultState = { logoBrands: defaultLogoBrands, cases: defaultCases };
 
         let appData = JSON.parse(JSON.stringify(defaultState));
         try {
-            appData = JSON.parse(localStorage.getItem('cinemataztic_cms_data')) || appData;
+            appData = JSON.parse(localStorage.getItem('cinemataztic_cms_data_v3')) || appData;
         } catch (e) { /* storage unavailable (private mode, sandboxed preview) */ }
         // Data saved before the brand wall existed gets the default brands
         if (!Array.isArray(appData.logoBrands)) appData.logoBrands = JSON.parse(JSON.stringify(defaultLogoBrands));
 
         function saveAppData() {
             try {
-                localStorage.setItem('cinemataztic_cms_data', JSON.stringify(appData));
+                localStorage.setItem('cinemataztic_cms_data_v3', JSON.stringify(appData));
             } catch (e) { /* storage unavailable: changes last for this visit only */ }
             renderAllViews();
         }
@@ -817,20 +1318,58 @@
             return `<span class="text-lg sm:text-xl font-black uppercase tracking-wider text-white/55 group-hover:text-white transition text-center leading-tight">${escapeHtml(name)}</span>`;
         }
 
+        const BRAND_SLOTS = 8;
+        const BRAND_SWAP_MS = 2200;
+        let brandSlots = [];   // index into appData.logoBrands for each visible place
+        let brandSwapTimer = null;
+
+        function brandCellContent(i) {
+            const b = appData.logoBrands[i];
+            return b.logo
+                ? `<img src="${escapeHtml(b.logo)}" alt="${escapeHtml(b.name)}" loading="lazy" class="brand-logo${b.badge ? ' brand-logo--badge' : ''} max-h-12 max-w-[130px] w-auto object-contain" data-brand-index="${i}">`
+                : brandWordmark(b.name);
+        }
+
+        function fillBrandCell(cell, i) {
+            cell.title = appData.logoBrands[i].name;
+            cell.innerHTML = brandCellContent(i);
+            // A broken logo link falls back to the name
+            const img = cell.querySelector('img[data-brand-index]');
+            if (!img) return;
+            img.addEventListener('error', () => { img.outerHTML = brandWordmark(appData.logoBrands[i].name); }, { once: true });
+            if (!appData.logoBrands[i].badge) tightenSvgLogo(img);
+        }
+
         function renderBrandWall() {
             const wall = document.getElementById('brandWall');
-            wall.innerHTML = appData.logoBrands.map((b, i) => `
-                <div class="brand-cell group flex items-center justify-center aspect-[3/2] px-4 bg-brand-card border border-brand-border hover:border-brand-cyan transition-colors" title="${escapeHtml(b.name)}">
-                    ${b.logo
-                        ? `<img src="${escapeHtml(b.logo)}" alt="${escapeHtml(b.name)}" loading="lazy" class="brand-logo max-h-12 max-w-[130px] w-auto object-contain" data-brand-index="${i}">`
-                        : brandWordmark(b.name)}
-                </div>
+            const total = appData.logoBrands.length;
+            brandSlots = [...Array(Math.min(BRAND_SLOTS, total)).keys()];
+            wall.innerHTML = brandSlots.map(() => `
+                <div class="brand-cell group flex items-center justify-center aspect-[3/2] px-4 bg-brand-card border border-brand-border hover:border-brand-cyan transition-colors"></div>
             `).join('');
-            // A broken logo link falls back to the name
-            wall.querySelectorAll('img[data-brand-index]').forEach(img => {
-                img.addEventListener('error', () => { img.outerHTML = brandWordmark(appData.logoBrands[+img.dataset.brandIndex].name); }, { once: true });
-                tightenSvgLogo(img);
-            });
+            [...wall.children].forEach((cell, slot) => fillBrandCell(cell, brandSlots[slot]));
+
+            // With more brands than places, one place at a time swaps to a brand that isn't showing
+            clearInterval(brandSwapTimer);
+            if (total <= brandSlots.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            let lastSlot = -1;
+            brandSwapTimer = setInterval(() => {
+                if (document.hidden) return;
+                let slot;
+                do { slot = Math.floor(Math.random() * brandSlots.length); } while (slot === lastSlot && brandSlots.length > 1);
+                lastSlot = slot;
+                const hidden = [...Array(total).keys()].filter(i => !brandSlots.includes(i));
+                const next = hidden[Math.floor(Math.random() * hidden.length)];
+                const cell = wall.children[slot];
+                if (!cell || cell.matches(':hover')) return;
+                cell.classList.add('is-swapping');
+                setTimeout(() => {
+                    brandSlots[slot] = next;
+                    fillBrandCell(cell, next);
+                    void cell.offsetWidth; // start the fade-in from the hidden state
+                    cell.classList.remove('is-swapping');
+                }, 400);
+            }, BRAND_SWAP_MS);
         }
 
         // Icon sets draw logos inside a padded square, so a wide wordmark ends up tiny. For SVG logos,
@@ -928,20 +1467,21 @@
 
             grid.innerHTML = filtered.map(c => `
                 <article onclick="openCaseDetailModal('${c.id}')" class="group cursor-pointer">
-                    <div class="relative aspect-square overflow-hidden bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
+                    <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
                         <img src="${c.cover}" alt="${c.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         ${c.mediaType === 'video' ? `
                             <div class="absolute top-3 right-3 bg-black/80 text-brand-cyan px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-brand-cyan/40">
                                 <i class="fa-solid fa-play mr-1"></i> Video
                             </div>
                         ` : ''}
-                    </div>
-                    <div class="pt-4 space-y-2">
-                        <div class="flex items-start justify-between gap-3">
-                            <h3 class="text-sm font-bold uppercase leading-snug text-white group-hover:text-brand-cyan transition">${c.title}</h3>
-                            <span class="shrink-0 text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border border-white text-white">${c.category}</span>
+                        <div class="case-blur"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-5 space-y-2">
+                            <h3 class="text-xl font-black uppercase !leading-none text-white line-clamp-2 group-hover:text-brand-cyan transition">${c.title}</h3>
+                            <p class="text-sm text-white/80 line-clamp-2 leading-relaxed">${c.description}</p>
+                            <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/70">
+                                <span class="px-2 py-0.5 border border-white/70 rounded-full">${c.category}</span>
+                            </div>
                         </div>
-                        <p class="text-sm text-gray-400 line-clamp-2 leading-relaxed">${c.description}</p>
                     </div>
                 </article>
             `).join('');
@@ -1366,7 +1906,7 @@
             const ACCENT = '#3dc0c8';
             const COIN_COLORS = ['#3dc0c8'];
             const PADDLE_W = 0.24;
-            const PADDLE_Y = 0.88;
+            const PADDLE_Y = 0.48; // above the card's text overlay, which covers the lower half
 
             let W = 0, H = 0;
             function resize() {
@@ -1412,7 +1952,7 @@
                 // Paddle follows your phone, or the lowest coin when nobody is playing
                 let target = pointerX;
                 if (!hovering) {
-                    const next = coins.filter(c => c.y < 0.9).sort((a, b) => b.y - a.y)[0];
+                    const next = coins.filter(c => c.y < PADDLE_Y + 0.02).sort((a, b) => b.y - a.y)[0];
                     target = next ? next.x : 0.5;
                 }
                 paddleX += (target - paddleX) * Math.min(1, dt * (hovering ? 18 : 5));
@@ -1426,7 +1966,7 @@
                         }
                         return false;
                     }
-                    return c.y < 1.05;
+                    return c.y < PADDLE_Y + 0.12; // missed coins vanish before they reach the text
                 });
 
                 sparks = sparks.filter(p => {
@@ -1604,12 +2144,12 @@
             const SVG_NS = 'http://www.w3.org/2000/svg';
 
             const partners = [
-                { id: '208', country: 'Denmark', partner: 'DRF', lonLat: [9.5, 56.1], text: 'Our formats run on cinema screens across Denmark together with DRF.' },
-                { id: '276', country: 'Germany', partner: 'Partner TBA', lonLat: [10.4, 51.1], text: 'Our formats are coming to cinema screens in Germany.' },
-                { id: '246', country: 'Finland', partner: 'Finnkino', lonLat: [26, 63.5], text: 'Finnkino audiences play, vote and win with our interactive pre-show formats.' },
-                { id: '752', country: 'Sweden', partner: 'Filmstaden', lonLat: [16, 62.5], text: 'Together with Filmstaden we bring programmatic and interactive cinema advertising to Swedish screens.' },
-                { id: '372', country: 'Ireland', partner: 'ODEON', lonLat: [-8, 53.2], text: 'ODEON cinemas in Ireland run our formats in the pre-show.' },
-                { id: '620', country: 'Portugal', partner: 'UCI', lonLat: [-8.2, 39.6], text: 'UCI audiences in Portugal take part in games and quizzes on the big screen.' }
+                { id: '208', country: 'Denmark', partner: 'DRF', lonLat: [9.5, 56.1], text: "In Denmark, we work with <a href='https://drf.dk' target='_blank' rel='noopener' class='text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan'>DRF (Dansk Reklame Film)</a>, which provides advertisements and experiences to the country's largest cinema chains.\n\nIn Denmark, our app is called BioSpil.", image: 'assets/partners/biospil.png', link: 'http://onelink.to/rtd8gg', cinemas: ['Nordisk Film', 'Big Bio', 'Lynge Drive In'] },
+                { id: '276', country: 'Germany', partner: 'Weischer', lonLat: [10.4, 51.1], text: "In Germany, we work with <a href='https://weischer.net' target='_blank' rel='noopener' class='text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan'>Weischer</a>.\n\nIn Germany, our app is called REDyPLAY.", image: 'assets/partners/redyplay.png', link: 'http://onelink.to/8erwu8', cinemas: ['UCI', 'Cinedome', 'Lichtblick Heide'] },
+                { id: '246', country: 'Finland', partner: 'Finnkino', lonLat: [26, 63.5], text: "In Finland, we work with <a href='https://www.finnkino.fi' target='_blank' rel='noopener' class='text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan'>Finnkino</a>, the country's largest cinema chain.\n\nIn Finland, our app is called LeffaPeli.", image: 'assets/partners/leffapeli.png', link: 'http://onelink.to/47mwrk', cinemas: ['Finnkino'] },
+                { id: '752', country: 'Sweden', partner: 'Filmstaden', lonLat: [16, 62.5], text: "In Sweden, we work with <a href='https://www.filmstaden.se' target='_blank' rel='noopener' class='text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan'>Filmstaden</a>.\n\nIn Sweden, our app is called CineGame.", image: 'assets/partners/cinegame-se.png', link: 'https://onelink.to/cinegame_se', cinemas: ['Filmstaden'] },
+                { id: '372', country: 'Ireland', partner: 'Pearl & Dean', lonLat: [-8, 53.2], text: "In Ireland, we work with <a href='https://pearlanddean.ie' target='_blank' rel='noopener' class='text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan'>Pearl &amp; Dean</a>.\n\nIn Ireland, our app is called CineGame.", image: 'assets/partners/cinegame.png', link: 'https://onelink.to/4vsz9a', cinemas: ['ODEON'] },
+                { id: '620', country: 'Portugal', partner: 'AdLine', lonLat: [-8.2, 39.6], text: "In Portugal, we work with AdLine.\n\nIn Portugal, our app is called CineGame.", image: 'assets/partners/cinegame.png', link: 'https://onelink.to/cinegame_pt', cinemas: ['UCI'] }
             ];
             const byId = Object.fromEntries(partners.map(p => [p.id, p]));
 
@@ -1666,9 +2206,11 @@
                 return ringPath(edge);
             }
 
+            // Visible area in degrees
+            const EUROPE = { west: -25, east: 42, south: 34, north: 71.5 };
+
             let active = null;
             const countryEls = {};
-            const markerEls = {};
             const chipEls = {};
 
             function setActive(id) {
@@ -1677,7 +2219,6 @@
                 partners.forEach(p => {
                     const on = p.id === id;
                     countryEls[p.id]?.setAttribute('fill', on ? '#3dc0c8' : 'rgba(61, 192, 200, 0.35)');
-                    markerEls[p.id]?.setAttribute('r', on ? '7' : '4.5');
                     if (chipEls[p.id]) {
                         chipEls[p.id].className = `px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${on ? 'bg-brand-cyan text-black' : 'border border-brand-border text-gray-300 hover:border-brand-cyan hover:text-white'}`;
                         chipEls[p.id].setAttribute('aria-pressed', String(on));
@@ -1689,7 +2230,21 @@
                 setTimeout(() => {
                     document.getElementById('partnerCountry').textContent = p.country;
                     document.getElementById('partnerName').textContent = p.partner;
-                    document.getElementById('partnerText').textContent = p.text;
+                    document.getElementById('partnerText').innerHTML = p.text; // texts are our own and may contain links
+                    // Optional linked image under the text (e.g. the local app's download badge)
+                    const link = document.getElementById('partnerLink');
+                    link.classList.toggle('hidden', !p.image);
+                    if (p.image) {
+                        const img = document.getElementById('partnerImage');
+                        img.onerror = () => link.classList.add('hidden');
+                        img.src = p.image;
+                        img.alt = `Get the app`;
+                        link.href = p.link;
+                    }
+                    // Optional list of cinemas under the app icon
+                    const cinemas = document.getElementById('partnerCinemas');
+                    cinemas.classList.toggle('hidden', !p.cinemas);
+                    document.getElementById('partnerCinemaList').innerHTML = (p.cinemas || []).map(name => `<li>${name}</li>`).join('');
                     panel.style.opacity = '1';
                 }, 120);
             }
@@ -1713,23 +2268,23 @@
                 bindHover(btn, p.id);
             });
 
-            fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json')
+            // The map shows Europe only (the more detailed 50m atlas holds up at this zoom)
+            fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json')
                 .then(res => res.json())
                 .then(world => {
                     const features = topojson.feature(world, world.objects.countries).features
                         .filter(f => f.properties.name !== 'Antarctica');
 
-                    // Fit the viewBox to the projected land
+                    // Fit the viewBox to the projected outline of the Europe area
                     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-                    features.forEach(f => {
-                        polygonsOf(f.geometry).forEach(poly => poly[0].forEach(([lon, lat]) => {
-                            const [x, y] = project([Math.max(-180, Math.min(180, lon)), lat]);
+                    for (let lon = EUROPE.west; lon <= EUROPE.east; lon += 1) {
+                        for (const lat of [EUROPE.south, EUROPE.north]) {
+                            const [x, y] = project([lon, lat]);
                             if (x < minX) minX = x; if (x > maxX) maxX = x;
                             if (y < minY) minY = y; if (y > maxY) maxY = y;
-                        }));
-                    });
-                    const pad = 4;
-                    svg.setAttribute('viewBox', `${(minX - pad).toFixed(1)} ${(minY - pad).toFixed(1)} ${(maxX - minX + pad * 2).toFixed(1)} ${(maxY - minY + pad * 2).toFixed(1)}`);
+                        }
+                    }
+                    svg.setAttribute('viewBox', `${minX.toFixed(1)} ${minY.toFixed(1)} ${(maxX - minX).toFixed(1)} ${(maxY - minY).toFixed(1)}`);
 
                     const defs = document.createElementNS(SVG_NS, 'defs');
                     const clip = document.createElementNS(SVG_NS, 'clipPath');
@@ -1746,7 +2301,8 @@
                         const path = document.createElementNS(SVG_NS, 'path');
                         path.setAttribute('d', geometryPath(f.geometry));
                         path.setAttribute('stroke', '#0a0a0c');
-                        path.setAttribute('stroke-width', '0.4');
+                        path.setAttribute('stroke-width', '0.6');
+                        path.setAttribute('vector-effect', 'non-scaling-stroke');
                         path.style.transition = 'fill 200ms linear';
                         if (byId[f.id]) {
                             path.setAttribute('fill', 'rgba(61, 192, 200, 0.35)');
@@ -1759,32 +2315,6 @@
                         land.appendChild(path);
                     });
                     svg.appendChild(land);
-
-                    // Markers make the small countries easy to hit
-                    const markers = document.createElementNS(SVG_NS, 'g');
-                    partners.forEach(p => {
-                        const [x, y] = project(p.lonLat);
-                        const g = document.createElementNS(SVG_NS, 'g');
-                        g.setAttribute('tabindex', '0');
-                        g.setAttribute('role', 'button');
-                        g.setAttribute('aria-label', `${p.country}: ${p.partner}`);
-                        g.style.cursor = 'pointer';
-                        g.style.outline = 'none';
-                        const hit = document.createElementNS(SVG_NS, 'circle');
-                        hit.setAttribute('cx', x); hit.setAttribute('cy', y); hit.setAttribute('r', '12');
-                        hit.setAttribute('fill', 'transparent');
-                        const dot = document.createElementNS(SVG_NS, 'circle');
-                        dot.setAttribute('cx', x); dot.setAttribute('cy', y); dot.setAttribute('r', '4.5');
-                        dot.setAttribute('fill', '#3dc0c8');
-                        dot.setAttribute('stroke', '#0a0a0c');
-                        dot.setAttribute('stroke-width', '1.5');
-                        dot.style.transition = 'r 200ms ease-out';
-                        g.append(hit, dot);
-                        markers.appendChild(g);
-                        markerEls[p.id] = dot;
-                        bindHover(g, p.id);
-                    });
-                    svg.appendChild(markers);
 
                     const current = active;
                     active = null;
