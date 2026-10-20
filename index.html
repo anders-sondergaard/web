@@ -2389,5 +2389,29 @@
         // Sub pages link to index.html#cms to open the CMS
         if (window.location.hash === '#cms') switchView('admin');
     </script>
+    <script>
+        // --- FIT TEXT TO NARROW SCREENS ---
+        // A heading with one long word (e.g. "PROGRAMMATIC") can be wider than a phone. Such text keeps
+        // its designed size where it fits and only shrinks as much as needed to stay on screen.
+        (function initFitText() {
+            const SELECTOR = 'h1, h2, h3, dd, li > span';
+            function fit() {
+                document.querySelectorAll(SELECTOR).forEach(el => {
+                    el.style.fontSize = '';
+                    if (!el.clientWidth) return;
+                    for (let i = 0; i < 6 && el.scrollWidth > el.clientWidth + 1; i++) {
+                        const size = parseFloat(getComputedStyle(el).fontSize);
+                        el.style.fontSize = `${Math.floor(size * el.clientWidth / el.scrollWidth * 10) / 10}px`;
+                    }
+                });
+            }
+            let frame;
+            const refit = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(fit); };
+            window.addEventListener('resize', refit);
+            if (document.fonts) document.fonts.ready.then(refit);
+            window.addEventListener('load', refit);
+            refit();
+        })();
+    </script>
 </body>
 </html>
