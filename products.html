@@ -359,9 +359,6 @@
                                 Cinemataztic has launched the new Digital Cinema Hub (DCH) – a platform for interactivity and display of digital advertising content on the cinema screen. The platform offers cinemas five new digital revenue streams.
                             </p>
                         </div>
-                        <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">
-                            Get in Touch <i class="fa-solid fa-arrow-right ml-2"></i>
-                        </a>
                     </aside>
 
                     <div class="lg:col-span-9">
@@ -414,6 +411,21 @@
                                     </div>
                                 </div>
                             </a>
+                            <a href="leadsite.html" class="group block">
+                                <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-brand-orange transition-colors">
+                                    <!-- Leadsite: a wheel of fortune; it spins by itself, and again when you point at it -->
+                                    <div id="lsViz" class="absolute inset-x-0 top-0 h-[64%] flex items-center justify-center p-6 select-none" role="img" aria-label="Animated wheel of fortune spinning and landing on a prize">
+                                        <svg id="lsWheel" viewBox="-110 -118 220 228" class="h-full w-auto overflow-visible"></svg>
+                                    </div>
+                                    <div class="case-blur"></div>
+                                    <div class="absolute inset-x-0 bottom-0 p-5 space-y-2 pointer-events-none">
+                                        <h3 class="text-xl font-black uppercase !leading-none text-white group-hover:text-brand-orange transition">Leadsite</h3>
+                                        <p class="text-sm text-white/80 leading-relaxed">A branded wheel of fortune: the audience spins for a prize and signs up for the advertiser's news.</p>
+                                        <span class="block text-[10px] font-bold uppercase tracking-widest text-white/80 group-hover:text-brand-orange transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                                    </div>
+                                </div>
+                            </a>
+
                         </div>
                     </div>
                 </div>
@@ -899,6 +911,77 @@
                 i = (i + 1) % colours.length;
                 document.documentElement.style.setProperty('--hero-bg', colours[i]);
             }, 4000);
+        })();
+    </script>
+    <script>
+        // --- LEADSITE CARD: WHEEL OF FORTUNE ---
+        // An orange wheel spins, slows down and lands on a segment that lights up; then it waits and
+        // spins again. Pointing at the card starts a spin straight away.
+        (function initLeadsiteWheel() {
+            const svg = document.getElementById('lsWheel');
+            if (!svg) return;
+            const SVG_NS = 'http://www.w3.org/2000/svg';
+            const ORANGE = '#fea917';
+            const SEGMENTS = 8;
+            const R = 100;
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const el = (name, attrs) => { const e = document.createElementNS(SVG_NS, name); Object.entries(attrs).forEach(([k, v]) => e.setAttribute(k, v)); return e; };
+
+            // Glow behind the wheel, the rotating wheel itself, then the hub and the pointer on top
+            svg.append(el('circle', { r: R + 6, fill: 'none', stroke: 'rgba(254, 169, 23, 0.25)', 'stroke-width': 6 }));
+            const wheel = el('g', {});
+            const slices = [];
+            for (let i = 0; i < SEGMENTS; i++) {
+                const a0 = (i / SEGMENTS) * Math.PI * 2 - Math.PI / 2, a1 = ((i + 1) / SEGMENTS) * Math.PI * 2 - Math.PI / 2;
+                const d = `M0,0 L${R * Math.cos(a0)},${R * Math.sin(a0)} A${R},${R} 0 0 1 ${R * Math.cos(a1)},${R * Math.sin(a1)} Z`;
+                const slice = el('path', { d, fill: i % 2 ? 'rgba(254, 169, 23, 0.35)' : ORANGE, stroke: '#121216', 'stroke-width': 2 });
+                slice.style.transition = 'fill 300ms linear';
+                wheel.append(slice);
+                slices.push({ slice, base: slice.getAttribute('fill') });
+                // A small star on every other segment: the prizes
+                const mid = (a0 + a1) / 2;
+                if (i % 2 === 0) {
+                    const star = el('text', { x: 66 * Math.cos(mid), y: 66 * Math.sin(mid) + 6, 'text-anchor': 'middle', 'font-size': 18, fill: '#0a0a0c', transform: `rotate(${mid * 180 / Math.PI + 90} ${66 * Math.cos(mid)} ${66 * Math.sin(mid)})` });
+                    star.textContent = '★';
+                    wheel.append(star);
+                }
+            }
+            wheel.append(el('circle', { r: R, fill: 'none', stroke: ORANGE, 'stroke-width': 3 }));
+            svg.append(wheel);
+            svg.append(el('circle', { r: 16, fill: '#0a0a0c', stroke: ORANGE, 'stroke-width': 3 }));
+            svg.append(el('path', { d: 'M-11,-116 L11,-116 L0,-94 Z', fill: '#ffffff' }));
+
+            let angle = 0, spinning = false, waitTimer = null;
+            const draw = () => wheel.setAttribute('transform', `rotate(${angle})`);
+            const ease = t => 1 - Math.pow(1 - t, 3);
+            function highlight(index) {
+                slices.forEach((s, i) => s.slice.setAttribute('fill', i === index ? '#ffffff' : s.base));
+                setTimeout(() => slices.forEach(s => s.slice.setAttribute('fill', s.base)), 1400);
+            }
+            function spin() {
+                if (spinning) return;
+                clearTimeout(waitTimer);
+                spinning = true;
+                const target = Math.floor(Math.random() * SEGMENTS);
+                // Land with the middle of the target segment under the pointer at the top
+                const landing = 360 - (target + 0.5) * (360 / SEGMENTS);
+                const from = angle, to = from + 360 * 4 + ((landing - (from % 360)) + 360) % 360;
+                const start = performance.now(), duration = 3200;
+                (function frame(now) {
+                    const t = Math.min(1, (now - start) / duration);
+                    angle = from + (to - from) * ease(t);
+                    draw();
+                    if (t < 1) return requestAnimationFrame(frame);
+                    angle %= 360;
+                    spinning = false;
+                    highlight(target);
+                    waitTimer = setTimeout(spin, 2600);
+                })(start);
+            }
+            draw();
+            if (reduceMotion) return;
+            document.getElementById('lsViz').closest('.group').addEventListener('pointerenter', spin);
+            waitTimer = setTimeout(spin, 800);
         })();
     </script>
 </body>

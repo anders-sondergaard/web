@@ -197,10 +197,10 @@
                             Digital advertising has grown to more than 70% of the global advertising spend. Cinema's share of digital advertising is non-existing. To change that, Cinemataztic has introduced the first 'Programmatic Cinema' advertising platform - Book your programmatic campaign today
                         </p>
                         <div class="flex flex-wrap gap-3 pt-2">
-                            <a href="https://drf.dk.tradedesk.cinead.eu-1.cinemataztic.com/" target="_blank" rel="noopener" class="btn-shine px-6 py-3 bg-brand-cyan text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-dark hover:text-white transition">
+                            <a href="https://drf.dk.tradedesk.cinead.eu-1.cinemataztic.com/" target="_blank" rel="noopener" class="btn-shine px-6 py-3 bg-white text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-dark hover:text-white transition">
                                 Programmatic DK
                             </a>
-                            <a href="https://finnkino.fi.tradedesk.cinead.eu-1.cinemataztic.com/" target="_blank" rel="noopener" class="btn-shine px-6 py-3 bg-brand-cyan text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-dark hover:text-white transition">
+                            <a href="https://finnkino.fi.tradedesk.cinead.eu-1.cinemataztic.com/" target="_blank" rel="noopener" class="btn-shine px-6 py-3 bg-white text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-dark hover:text-white transition">
                                 Programmatic FI
                             </a>
                         </div>
@@ -215,7 +215,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
                         <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Programmatic</span>
-                        <h2 class="section-title font-black uppercase !leading-none">Latest cases</h2>
+                        <h2 class="section-title font-black uppercase !leading-none">Programmatic cases</h2>
                         <p class="text-sm text-gray-400 leading-relaxed">
                             The newest programmatic campaigns. See the <a href="cases.html?category=Programmatic" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">work section</a> for all programmatic cases.
                         </p>
@@ -248,7 +248,7 @@
 
                     <div class="lg:col-span-9">
                         <div class="relative aspect-video overflow-hidden bg-brand-card border border-brand-border">
-                            <video class="absolute inset-0 w-full h-full object-cover" src="assets/video/cinemataztic_programmatic_web.mp4" poster="assets/video/cinemataztic_programmatic_poster.jpg" controls playsinline preload="none" aria-label="Cinemataztic programmatic cinema advertising"></video>
+                            <video class="absolute inset-0 w-full h-full object-cover" src="assets/video/cinemataztic_programmatic_web.mp4" poster="assets/video/cinemataztic_programmatic_poster.jpg?v=3" controls playsinline preload="none" aria-label="Cinemataztic programmatic cinema advertising"></video>
                         </div>
                     </div>
                 </div>
@@ -265,14 +265,13 @@
                         <p class="text-sm text-gray-400 leading-relaxed">
                             Once signed up to the platform advertisers and agencies book programmatic cinema in 6 easy steps.
                         </p>
-                        <h3 class="pt-6 section-title font-black uppercase !leading-none">How programmatic cinema works?</h3>
-                        <p class="text-sm text-gray-400 leading-relaxed">
-                            Programmatic is an add-on to the traditional offline cinema advertising (DCP) and provides exhibitors and cinema sales houses with new incremental digital revenue. Unless the preshow is already sold out – this is a way of generating additional revenue.
-                        </p>
-                        <a href="assets/pdf/Tradedesk_GuideToProgrammatic_Cinemataztic.pdf" download class="btn-shine inline-flex items-center px-6 py-3 bg-brand-cyan text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-yellow transition">
-                            <i class="fa-solid fa-download mr-2"></i> Download guide to programmatic
+                        <button type="button" data-video-open="assets/video/Programmatic_Video_Tutorial_TwoFactor_Web.mp4" class="group flex items-center gap-3 text-sm text-white hover:text-brand-cyan transition">
+                            <span class="w-10 h-10 shrink-0 flex items-center justify-center rounded-full border border-white/40 group-hover:border-brand-cyan group-hover:bg-brand-cyan group-hover:text-black transition"><i class="fa-solid fa-play text-xs ml-0.5"></i></span>
+                            <span class="underline decoration-brand-orange underline-offset-4">Watch the video tutorial</span>
+                        </button>
+                        <a href="guide.html" class="btn-shine inline-flex items-center px-6 py-3 bg-brand-cyan text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-yellow transition">
+                            Guide to programmatic <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
-                        <a href="guide.html" class="block w-fit text-sm text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">Read the guide online <i class="fa-solid fa-arrow-right ml-1 text-xs"></i></a>
                     </aside>
 
                     <div class="lg:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
@@ -309,7 +308,29 @@
                 </div>
             </div>
         </section>
+
+        <!-- HOW PROGRAMMATIC CINEMA WORKS: one card across the full width, same look as the Technology cards -->
+        <section id="how-it-works" class="border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <article class="p-8 sm:p-12 lg:p-16 rounded-2xl bg-brand-card border border-brand-border">
+                    <div class="space-y-8">
+                        <h2 class="section-title font-black uppercase !leading-none">How programmatic cinema works?</h2>
+                        <div class="max-w-3xl space-y-5 text-lg sm:text-xl text-gray-300 !leading-relaxed">
+                            <p>Programmatic is an add-on to the traditional offline cinema advertising (DCP) and provides exhibitors and cinema sales houses with new incremental digital revenue. Unless the preshow is already sold out – this is a way of generating additional revenue.</p>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
     </main>
+
+    <!-- VIDEO OVERLAY: opened by any [data-video-open] button; closes with the X, Esc or a click outside the video -->
+    <div id="videoOverlay" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 sm:p-8 bg-black/90 backdrop-blur-md" role="dialog" aria-modal="true" aria-label="Video tutorial">
+        <div class="relative w-full max-w-5xl">
+            <button type="button" id="videoClose" aria-label="Close video" class="absolute -top-12 right-0 w-10 h-10 flex items-center justify-center rounded-full bg-white text-black hover:bg-brand-cyan transition"><i class="fa-solid fa-xmark"></i></button>
+            <video id="videoPlayer" class="w-full aspect-video rounded-2xl bg-black" controls playsinline preload="none"></video>
+        </div>
+    </div>
 
     <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
         <!-- LET'S TALK: same sidebar layout as the page sections -->
@@ -594,6 +615,36 @@
             if (!reduceMotion) {
                 setInterval(() => { if (!paused) setActive((active + 1) % segments.length); }, 2500);
             }
+        })();
+
+        // --- VIDEO OVERLAY ---
+        (function initVideoOverlay() {
+            const overlay = document.getElementById('videoOverlay');
+            const player = document.getElementById('videoPlayer');
+            if (!overlay || !player) return;
+            let opener = null;
+            function open(src, button) {
+                opener = button;
+                if (player.getAttribute('src') !== src) player.src = src;
+                overlay.classList.remove('hidden');
+                overlay.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+                player.play().catch(() => { /* autoplay blocked: the controls are there */ });
+                document.getElementById('videoClose').focus();
+            }
+            function close() {
+                player.pause();
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+                document.body.style.overflow = '';
+                if (opener) opener.focus();
+            }
+            document.querySelectorAll('[data-video-open]').forEach(button => {
+                button.addEventListener('click', () => open(button.dataset.videoOpen, button));
+            });
+            document.getElementById('videoClose').addEventListener('click', close);
+            overlay.addEventListener('click', event => { if (event.target === overlay) close(); });
+            document.addEventListener('keydown', event => { if (event.key === 'Escape' && !overlay.classList.contains('hidden')) close(); });
         })();
 
         // Mobile Menu Toggle

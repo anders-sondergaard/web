@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leadsite — Cinemataztic</title>
+    <!-- Page transition (same as the old site): loads first, so arriving pages start covered -->
+    <script src="assets/js/page-transition.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            cyan: '#3dc0c8',
+                            mint: '#6ceec4',
+                            pink: '#f869b9',
+                            orange: '#fea917',
+                            yellow: '#fece00',
+                            dark: '#0a0a0c',
+                            card: '#121216',
+                            border: '#1f1f26'
+                        }
+                    },
+                    // Typography after phloe.co: General Sans, tight tracking, 1.383 body leading
+                    fontFamily: {
+                        sans: ['"General Sans"', 'system-ui', 'sans-serif'],
+                        // Logo wordmark: Klavika Bold (installed, or Adobe Fonts kit "klavika-web"), falling back to General Sans
+                        logo: ['Klavika', '"klavika-web"', '"General Sans"', 'sans-serif']
+                    },
+                    letterSpacing: {
+                        tighter: '-0.0525em',
+                        tight: '-0.021em',
+                        wide: '-0.021em',
+                        wider: '-0.021em',
+                        widest: '-0.021em'
+                    },
+                    lineHeight: {
+                        none: '0.76',
+                        relaxed: '1.383'
+                    }
+                }
+            },
+            plugins: [
+                function ({ addBase }) {
+                    addBase({
+                        // Logo wordmark font: an installed Klavika Bold, else the licensed webfont file
+                        '@font-face': {
+                            fontFamily: 'Klavika',
+                            fontWeight: '700',
+                            fontStyle: 'normal',
+                            fontDisplay: 'swap',
+                            src: "local('Klavika Bold'), local('Klavika-Bold'), url('assets/fonts/Klavika-Bold.otf') format('opentype')"
+                        },
+                        body: { lineHeight: '1.383' },
+                        '.font-black': { letterSpacing: '-0.0525em' }
+                    });
+                }
+            ]
+        }
+    </script>
+    <style>
+        /* Premium buttons: light from above, a soft drop shadow, and a light sweep on hover */
+        .btn-shine {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.08) 45%, rgba(0, 0, 0, 0.06) 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+                0 1px 2px rgba(0, 0, 0, 0.25),
+                0 8px 20px -6px rgba(0, 0, 0, 0.45);
+        }
+        .btn-shine::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+            transform: translateX(-120%);
+            transition: transform 600ms ease;
+        }
+        .btn-shine:hover {
+            transform: translateY(-1px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+                0 2px 4px rgba(0, 0, 0, 0.25),
+                0 14px 28px -8px rgba(0, 0, 0, 0.5);
+        }
+        .btn-shine:hover::after { transform: translateX(120%); }
+        .btn-shine:active { transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) {
+            .btn-shine:hover { transform: none; }
+            .btn-shine::after { display: none; }
+        }
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .animate-blink {
+            animation: cursorBlink 1s infinite;
+        }
+        /* Menu sits on the orange hero: orange bar with dark text while the hero is in view */
+        header { transition: background-color 250ms linear, color 250ms linear, border-color 250ms linear; }
+        header.on-hero { background-color: #fea917 !important; border-color: rgba(10, 10, 12, 0.12) !important; color: #0a0a0c; }
+        header.on-hero .text-white,
+        header.on-hero nav > a.text-brand-cyan { color: #0a0a0c !important; }
+        header.on-hero nav > a[href$="#cms"] { border-color: rgba(10, 10, 12, 0.35); }
+        header.on-hero #mobileDrawer { color: #ffffff; }
+        /* Case cards: text sits on the image over a blur that fades in towards the bottom */
+        .case-blur {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 55%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0) 100%);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            -webkit-mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            pointer-events: none;
+        }
+        /* Section headings: one size everywhere, set so the longest word ("TRANSFORMATION")
+           fits the narrow sidebar column; it scales with the screen width */
+        .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
+        @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+    </style>
+    <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+</head>
+<body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
+        <div class="w-full px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <span class="text-2xl sm:text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white group-hover:opacity-90 transition">
+                    CINEMATAZTIC
+                </span>
+            </a>
+
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-widest uppercase">
+                <a href="cases.html" class="hover:text-brand-cyan transition">Cases</a>
+                <a href="products.html" class="text-brand-cyan">Products</a>
+                <a href="technology.html" class="hover:text-brand-cyan transition">Technology</a>
+                <a href="index.html#cms" class="px-4 py-2 uppercase tracking-widest font-bold border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition">
+                    <i class="fa-solid fa-gear mr-1"></i> CMS
+                </a>
+                <a href="guide.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Guide to programmatic</a>
+            </nav>
+
+            <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
+            <a href="cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
+            <a href="products.html" class="block text-lg font-bold uppercase text-brand-cyan">Products</a>
+            <a href="technology.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Technology</a>
+            <a href="guide.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Guide to programmatic</a>
+            <hr class="border-brand-border my-2">
+            <a href="index.html#cms" class="block w-full text-left py-2 text-sm uppercase font-bold text-brand-cyan">
+                <i class="fa-solid fa-gear mr-2"></i> Open CMS Admin
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+        <!-- HERO: same animated hero as the other pages, in orange -->
+        <section id="hero" class="relative overflow-hidden border-b border-brand-border bg-brand-orange">
+            <!-- Canvas Interactive Background -->
+            <canvas id="heroCanvas" class="absolute inset-0 z-0 w-full h-full"></canvas>
+            <div class="relative z-10 w-full px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-28 lg:pb-32">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
+                    <div class="lg:col-span-8 space-y-8">
+                        <span class="inline-flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest text-brand-dark">
+                            <span class="w-2 h-2 rounded-full bg-brand-dark animate-ping"></span>
+                            <span>Leadsite</span>
+                        </span>
+                        <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tighter !leading-none text-black">
+                            Spin to win.
+                        </h1>
+                    </div>
+                    <div class="lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
+                        <p>
+                            A branded wheel of fortune: the audience spins for a prize and signs up for the advertiser's news.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HOW IT WORKS: sticky sidebar + the wheel of fortune and three steps, same look as the sections on the other pages -->
+        <section id="how-it-works" class="border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">How it works</span>
+                        <h2 class="section-title font-black uppercase !leading-none">From game to lead</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            The leadsite turns the excitement of the cinema game into leads for the advertiser: an extra chance to win a prize, in return for permission to send news.
+                        </p>
+                    </aside>
+
+                    <div class="lg:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- The wheel of fortune, as on the Leadsite product card -->
+                        <div class="group relative flex flex-col items-center justify-center gap-8 p-8 sm:p-12 rounded-2xl bg-brand-card border border-brand-border hover:border-brand-orange transition-colors">
+                            <div id="lsViz" class="w-full max-w-[320px] aspect-square flex items-center justify-center select-none" role="img" aria-label="Animated wheel of fortune spinning and landing on a prize">
+                                <svg id="lsWheel" viewBox="-110 -118 220 228" class="w-full h-full overflow-visible"></svg>
+                            </div>
+                            <!-- Survey question: answering spins the wheel, as on a real leadsite -->
+                            <fieldset class="w-full max-w-[320px] space-y-3">
+                                <legend class="w-full mb-3 text-center text-sm font-bold text-white">Which streaming service do you use?</legend>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button type="button" data-ls-answer class="px-3 py-2.5 rounded-full border border-white/30 text-xs font-bold uppercase text-white hover:border-brand-orange hover:text-brand-orange transition" aria-pressed="false">Netflix</button>
+                                    <button type="button" data-ls-answer class="px-3 py-2.5 rounded-full border border-white/30 text-xs font-bold uppercase text-white hover:border-brand-orange hover:text-brand-orange transition" aria-pressed="false">HBO</button>
+                                    <button type="button" data-ls-answer class="px-3 py-2.5 rounded-full border border-white/30 text-xs font-bold uppercase text-white hover:border-brand-orange hover:text-brand-orange transition" aria-pressed="false">Prime</button>
+                                </div>
+                                <!-- Email field for the illustration only: not inside a form, so nothing is sent anywhere -->
+                                <label for="lsEmail" class="sr-only">Your email</label>
+                                <input id="lsEmail" type="email" placeholder="Your email" autocomplete="off" class="w-full mt-1 px-4 py-2.5 rounded-full bg-brand-dark border border-white/30 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-brand-orange transition">
+                                <label class="flex items-center gap-3 pt-1 text-xs text-white/80 cursor-pointer select-none">
+                                    <input id="lsTerms" type="checkbox" class="w-4 h-4 shrink-0 rounded accent-[#fea917] cursor-pointer">
+                                    <span>I accept the terms and want to receive news</span>
+                                </label>
+                                <button type="button" id="lsSubmit" class="btn-shine w-full px-6 py-3 rounded-full bg-brand-orange text-black font-bold uppercase tracking-wider text-xs hover:bg-white transition disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-brand-orange" disabled>Submit</button>
+                                <p id="lsThanks" class="hidden text-center text-xs font-bold uppercase text-brand-orange" aria-live="polite">Thanks, good luck!</p>
+                            </fieldset>
+                        </div>
+
+                        <ol class="grid grid-cols-1 gap-6">
+                            <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">01</span>
+                                <i class="fa-solid fa-film text-2xl text-brand-orange"></i>
+                                <h3 class="text-xl font-black uppercase !leading-none">See the programmatic ad</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">Cinemataztic's programmatic advertising can distribute vouchers with a link to the lead site.</p>
+                            </li>
+                            <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">02</span>
+                                <i class="fa-solid fa-ticket text-2xl text-brand-orange"></i>
+                                <h3 class="text-xl font-black uppercase !leading-none">The vouchers</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">The cinema guest now has a voucher from the advertisement in their CineGame app; the voucher can contain anything from a physical prize to a link to our lead site.</p>
+                            </li>
+                            <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">03</span>
+                                <i class="fa-solid fa-gift text-2xl text-brand-orange"></i>
+                                <h3 class="text-xl font-black uppercase !leading-none">Spin to win</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">They spin the branded wheel of fortune for an extra chance to win a prize.</p>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
+        <!-- LET'S TALK: same sidebar layout as the page sections -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-b border-brand-border">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                <aside class="lg:col-span-3 space-y-6">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Contact</span>
+                    <h2 class="section-title font-black uppercase !leading-none text-white">Let’s Talk</h2>
+                    <div class="space-y-1">
+                        <a href="mailto:info@cinemataztic.com" class="block text-lg font-bold text-white hover:text-brand-cyan transition">info@cinemataztic.com</a>
+                        <a href="tel:+4553587129" class="block text-lg font-bold text-white hover:text-brand-cyan transition">+45 5358 7129</a>
+                        <span class="block text-xs text-gray-400">(Not for support related inquiries)</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">All support requests should be made <a href="http://support.cinegame.com/" target="_blank" rel="noopener" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">here</a></p>
+                </aside>
+            </div>
+        </div>
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-gray-500">
+            <span>© 2026 Cinemataztic ApS. All rights reserved.</span>
+            <span class="md:text-center">Hellerupvej 46 - 2900 Hellerup - Denmark</span>
+            <div class="flex items-center md:justify-end gap-5 text-lg">
+                <a href="https://www.facebook.com/CinemaTaztic" target="_blank" rel="noopener" aria-label="Cinemataztic on Facebook" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" aria-label="Cinemataztic on LinkedIn" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- INTERACTIVE HERO CANVAS CONSTELLATION MESH ---
+        (function initHeroCanvas() {
+            const canvas = document.getElementById('heroCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let width, height;
+            let particles = [];
+            const particleCount = 45;
+            const maxDistance = 140;
+
+            const mouse = { x: null, y: null, radius: 180 };
+
+            function resize() {
+                width = canvas.width = canvas.parentElement.offsetWidth;
+                height = canvas.height = canvas.parentElement.offsetHeight;
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Track Mouse Position
+            const heroSection = document.getElementById('hero');
+            heroSection.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+
+            heroSection.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.8;
+                    this.vy = (Math.random() - 0.5) * 0.8;
+                    this.radius = Math.random() * 2 + 1.5;
+                    this.color = Math.random() > 0.3 ? '#3dc0c8' : '#ffffff';
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    // Mouse Interaction
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const dx = mouse.x - this.x;
+                        const dy = mouse.y - this.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < mouse.radius) {
+                            const angle = Math.atan2(dy, dx);
+                            const force = (mouse.radius - dist) / mouse.radius;
+                            this.x -= Math.cos(angle) * force * 2;
+                            this.y -= Math.sin(angle) * force * 2;
+                        }
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = this.color;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw connecting lines between particles
+                for (let a = 0; a < particles.length; a++) {
+                    particles[a].update();
+                    particles[a].draw();
+
+                    for (let b = a + 1; b < particles.length; b++) {
+                        const dx = particles[a].x - particles[b].x;
+                        const dy = particles[a].y - particles[b].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < maxDistance) {
+                            const opacity = 1 - (dist / maxDistance);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.strokeStyle = `rgba(61, 192, 200, ${opacity * 0.35})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Draw line to mouse if close
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const mdx = particles[a].x - mouse.x;
+                        const mdy = particles[a].y - mouse.y;
+                        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                        if (mdist < mouse.radius) {
+                            const mOpacity = 1 - (mdist / mouse.radius);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${mOpacity * 0.5})`;
+                            ctx.lineWidth = 1.2;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // --- MENU ON THE HERO ---
+        // The menu bar turns orange while any of the (orange) hero is visible below it.
+        (function initHeroMenu() {
+            const header = document.querySelector('body > header');
+            const hero = document.getElementById('hero');
+            if (!header || !hero) return;
+            const observer = new IntersectionObserver(([entry]) => {
+                header.classList.toggle('on-hero', entry.isIntersecting);
+            }, { rootMargin: `-${header.offsetHeight}px 0px 0px 0px` });
+            observer.observe(hero);
+        })();
+
+        // --- HOW ADVERTISERS BUY: 6-STEP RING ---
+
+
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileDrawer').classList.toggle('hidden');
+        });
+    </script>
+    <script>
+        // --- FIT TEXT TO NARROW SCREENS ---
+        // A heading with one long word (e.g. "PROGRAMMATIC") can be wider than a phone. Such text keeps
+        // its designed size where it fits and only shrinks as much as needed to stay on screen.
+        (function initFitText() {
+            const SELECTOR = 'h1, h2, h3, dd, li > span';
+            function fit() {
+                document.querySelectorAll(SELECTOR).forEach(el => {
+                    el.style.fontSize = '';
+                    if (!el.clientWidth) return;
+                    for (let i = 0; i < 6 && el.scrollWidth > el.clientWidth + 1; i++) {
+                        const size = parseFloat(getComputedStyle(el).fontSize);
+                        el.style.fontSize = `${Math.floor(size * el.clientWidth / el.scrollWidth * 10) / 10}px`;
+                    }
+                });
+            }
+            let frame;
+            const refit = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(fit); };
+            window.addEventListener('resize', refit);
+            if (document.fonts) document.fonts.ready.then(refit);
+            window.addEventListener('load', refit);
+            refit();
+        })();
+    </script>
+    <script>
+        // --- LEADSITE CARD: WHEEL OF FORTUNE ---
+        // An orange wheel spins, slows down and lands on a segment that lights up; then it waits and
+        // spins again. Pointing at the card starts a spin straight away.
+        (function initLeadsiteWheel() {
+            const svg = document.getElementById('lsWheel');
+            if (!svg) return;
+            const SVG_NS = 'http://www.w3.org/2000/svg';
+            const ORANGE = '#fea917';
+            const SEGMENTS = 8;
+            const R = 100;
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const el = (name, attrs) => { const e = document.createElementNS(SVG_NS, name); Object.entries(attrs).forEach(([k, v]) => e.setAttribute(k, v)); return e; };
+
+            // Glow behind the wheel, the rotating wheel itself, then the hub and the pointer on top
+            svg.append(el('circle', { r: R + 6, fill: 'none', stroke: 'rgba(254, 169, 23, 0.25)', 'stroke-width': 6 }));
+            const wheel = el('g', {});
+            const slices = [];
+            for (let i = 0; i < SEGMENTS; i++) {
+                const a0 = (i / SEGMENTS) * Math.PI * 2 - Math.PI / 2, a1 = ((i + 1) / SEGMENTS) * Math.PI * 2 - Math.PI / 2;
+                const d = `M0,0 L${R * Math.cos(a0)},${R * Math.sin(a0)} A${R},${R} 0 0 1 ${R * Math.cos(a1)},${R * Math.sin(a1)} Z`;
+                const slice = el('path', { d, fill: i % 2 ? 'rgba(254, 169, 23, 0.35)' : ORANGE, stroke: '#121216', 'stroke-width': 2 });
+                slice.style.transition = 'fill 300ms linear';
+                wheel.append(slice);
+                slices.push({ slice, base: slice.getAttribute('fill') });
+                // A small star on every other segment: the prizes
+                const mid = (a0 + a1) / 2;
+                if (i % 2 === 0) {
+                    const star = el('text', { x: 66 * Math.cos(mid), y: 66 * Math.sin(mid) + 6, 'text-anchor': 'middle', 'font-size': 18, fill: '#0a0a0c', transform: `rotate(${mid * 180 / Math.PI + 90} ${66 * Math.cos(mid)} ${66 * Math.sin(mid)})` });
+                    star.textContent = '★';
+                    wheel.append(star);
+                }
+            }
+            wheel.append(el('circle', { r: R, fill: 'none', stroke: ORANGE, 'stroke-width': 3 }));
+            svg.append(wheel);
+            svg.append(el('circle', { r: 16, fill: '#0a0a0c', stroke: ORANGE, 'stroke-width': 3 }));
+            svg.append(el('path', { d: 'M-11,-116 L11,-116 L0,-94 Z', fill: '#ffffff' }));
+
+            let angle = 0, spinning = false, waitTimer = null;
+            const draw = () => wheel.setAttribute('transform', `rotate(${angle})`);
+            const ease = t => 1 - Math.pow(1 - t, 3);
+            function highlight(index) {
+                slices.forEach((s, i) => s.slice.setAttribute('fill', i === index ? '#ffffff' : s.base));
+                setTimeout(() => slices.forEach(s => s.slice.setAttribute('fill', s.base)), 1400);
+            }
+            function spin() {
+                if (spinning) return;
+                clearTimeout(waitTimer);
+                spinning = true;
+                const target = Math.floor(Math.random() * SEGMENTS);
+                // Land with the middle of the target segment under the pointer at the top
+                const landing = 360 - (target + 0.5) * (360 / SEGMENTS);
+                const from = angle, to = from + 360 * 4 + ((landing - (from % 360)) + 360) % 360;
+                const start = performance.now(), duration = 3200;
+                (function frame(now) {
+                    const t = Math.min(1, (now - start) / duration);
+                    angle = from + (to - from) * ease(t);
+                    draw();
+                    if (t < 1) return requestAnimationFrame(frame);
+                    angle %= 360;
+                    spinning = false;
+                    highlight(target);
+                    waitTimer = setTimeout(spin, 2600);
+                })(start);
+            }
+            draw();
+            // Submit is ready once the terms are accepted; it spins the wheel and says thanks (nothing is sent)
+            const terms = document.getElementById('lsTerms');
+            const submit = document.getElementById('lsSubmit');
+            terms.addEventListener('change', () => { submit.disabled = !terms.checked; });
+            submit.addEventListener('click', () => {
+                document.getElementById('lsThanks').classList.remove('hidden');
+                spin();
+            });
+            // Answering the survey question marks the choice and spins the wheel
+            document.querySelectorAll('[data-ls-answer]').forEach(button => {
+                button.addEventListener('click', () => {
+                    document.querySelectorAll('[data-ls-answer]').forEach(b => {
+                        const on = b === button;
+                        b.setAttribute('aria-pressed', String(on));
+                        b.classList.toggle('bg-brand-orange', on);
+                        b.classList.toggle('border-brand-orange', on);
+                        b.classList.toggle('!text-black', on);
+                    });
+                    spin();
+                });
+            });
+            if (reduceMotion) return;
+            document.getElementById('lsViz').closest('.group').addEventListener('pointerenter', spin);
+            waitTimer = setTimeout(spin, 800);
+        })();
+    </script>
+</body>
+</html>
