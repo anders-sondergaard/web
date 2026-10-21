@@ -95,6 +95,34 @@
             .btn-shine:hover { transform: none; }
             .btn-shine::after { display: none; }
         }
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .animate-blink {
+            animation: cursorBlink 1s infinite;
+        }
+        /* Menu sits on the pink hero: pink bar with dark text while the hero is in view */
+        header { transition: background-color 250ms linear, color 250ms linear, border-color 250ms linear; }
+        header.on-hero { background-color: #f869b9 !important; border-color: rgba(10, 10, 12, 0.12) !important; color: #0a0a0c; }
+        header.on-hero .text-white,
+        header.on-hero nav > a.text-brand-cyan { color: #0a0a0c !important; }
+        header.on-hero nav > a[href$="#cms"] { border-color: rgba(10, 10, 12, 0.35); }
+        header.on-hero #mobileDrawer { color: #ffffff; }
+        /* Case cards: text sits on the image over a blur that fades in towards the bottom */
+        .case-blur {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 55%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0) 100%);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            -webkit-mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            pointer-events: none;
+        }
         /* Section headings: one size everywhere, set so the longest word ("TRANSFORMATION")
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
@@ -145,7 +173,105 @@
     </header>
 
     <main class="flex-grow pt-20">
-        <!-- CineGame page: content to come -->
+        <!-- HERO: same animated hero as the programmatic page, in pink -->
+        <section id="hero" class="relative overflow-hidden border-b border-brand-border bg-brand-pink">
+            <!-- Canvas Interactive Background -->
+            <canvas id="heroCanvas" class="absolute inset-0 z-0 w-full h-full"></canvas>
+            <div class="relative z-10 w-full px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-28 lg:pb-32">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
+                    <div class="lg:col-span-8 space-y-8">
+                        <span class="inline-flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest text-brand-dark">
+                            <span class="w-2 h-2 rounded-full bg-brand-dark animate-ping"></span>
+                            <span>CineGame</span>
+                        </span>
+                        <h1 class="text-4xl sm:text-6xl lg:text-7xl 2xl:text-8xl font-black uppercase tracking-tighter !leading-none text-black">
+                            Engage the audience
+                        </h1>
+                    </div>
+                    <div class="lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
+                        <p>
+                            The CineGame is an interactive ad format: the audience connects to the cinema screen with the CineGame app and plays a branded game sponsored by the advertiser, as part of the preshow.
+                        </p>
+                        <p class="text-sm text-brand-dark/70">
+                            10–15% of the cinema audience engage in the CineGame.
+                        </p>
+                        <div class="flex flex-wrap gap-3 pt-2">
+                            <a href="cases.html?category=CineGame" class="btn-shine px-6 py-3 bg-white text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-dark hover:text-white transition">
+                                Explore all games
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LATEST GAMES: same look as Latest cases on the programmatic page -->
+        <section id="cases" class="border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">CineGame</span>
+                        <h2 class="section-title font-black uppercase !leading-none">Latest games</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            The newest CineGame campaigns. See the <a href="cases.html?category=CineGame" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">work section</a> for all games.
+                        </p>
+                        <span id="gameCaseCount" class="hidden lg:block text-6xl font-black text-brand-pink">0</span>
+                        <a href="cases.html?category=CineGame" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">
+                            See All Cases <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </aside>
+
+                    <div class="lg:col-span-9">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6" id="gameCasesGrid">
+                            <!-- Filled by JS: the 3 newest CineGame cases -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHY CINEGAME: sticky sidebar + six cards, same look as the other sections -->
+        <section id="why" class="border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Why CineGame</span>
+                        <h2 class="section-title font-black uppercase !leading-none">Our games have become an integral part of the cinema experience</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">The CineGame is a interactive advertising format, where the audience connect to the cinema screen via the CineGame app and engage in a branded game sponsored by the advertiser.</p>
+                        <p class="text-sm text-gray-400 leading-relaxed">10-15% of the cinema audience engage in the CineGame.<br>Together with the largest brands in World, we create unforgettable branded experiences that the audience love.</p>
+                    </aside>
+
+                    <div class="lg:col-span-9 columns-1 sm:columns-2 xl:columns-3 gap-6 self-start">
+                        <article class="inline-block w-full align-top break-inside-avoid mb-6 p-8 rounded-2xl bg-brand-card border border-brand-border space-y-4">
+                            <h3 class="text-xl font-black uppercase !leading-none">Why engage the audience?</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">Cinema is losing its core audience. In the last decade admissions from the young audience have dropped more up to 35% in some markets. According to the Europa Cinemas Innovation survey, young audience development is the top priority of exhibitors, and ‘loss of youth’ is the most common factor identified as a serious threat to cinemas. Cinemataztic’s Digital Cinema Hub powers the digital cinema journey engaging the young audience before, during and after the cinema visit.</p>
+                        </article>
+                        <article class="inline-block w-full align-top break-inside-avoid mb-6 p-8 rounded-2xl bg-brand-card border border-brand-border space-y-4">
+                            <h3 class="text-xl font-black uppercase !leading-none">Why add the CineGame to the preshow?</h3>
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-white">The audience love it!</h4>
+                            <p class="text-sm text-gray-400 leading-relaxed">The younger audience rather interact than sit back and watch. They are the mobile-first generation and they are ready to engage!</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">10-15% of the cinema audience download the CineGame app and play along. This makes the CineGame the best performing digital media in the World when comparing the performance on converting a user from exposure to engagement.</p>
+                        </article>
+                        <article class="inline-block w-full align-top break-inside-avoid mb-6 p-8 rounded-2xl bg-brand-card border border-brand-border space-y-4">
+                            <h3 class="text-xl font-black uppercase !leading-none">Higher advertising effect</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">Independent studies of cinema advertising show that the CineGame is 5x more effective measured on ad-recognition compared to a normal 30 sec. spot.</p>
+                        </article>
+                        <article class="inline-block w-full align-top break-inside-avoid mb-6 p-8 rounded-2xl bg-brand-card border border-brand-border space-y-4">
+                            <h3 class="text-xl font-black uppercase !leading-none">Increase ad revenue</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">On mature markets the CineGame has delivered 8-10% top-line growth on national ad revenues and it does so without just adding to an already long preshow. In fact 78% of the audience do not even think of the CineGame as an ad, as the CineGame has become part of the cinema experience.</p>
+                        </article>
+                        <article class="inline-block w-full align-top break-inside-avoid mb-6 p-8 rounded-2xl bg-brand-card border border-brand-border space-y-4">
+                            <h3 class="text-xl font-black uppercase !leading-none">Boost concession revenue</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">All winners of a CineGame will receive a prize – sometimes the prize is collected at a distribution point outside the cinema, but most often the prize is collected in the cinema concession. The prizes are sponsored by the advertiser of the CineGame and can be a popcorn, a soda or something else. 20-25% of all prizes are redeemed which boost concession sales while also being a strong incentive for the user to return to the cinema before the prize expires.</p>
+                        </article>
+                        <article class="inline-block w-full align-top break-inside-avoid mb-6 p-8 rounded-2xl bg-brand-card border border-brand-border space-y-4">
+                            <h3 class="text-xl font-black uppercase !leading-none">CineGame in your preshow?</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">No cinemas are the same – and the Cinemataztic platform allow you to place the CineGame wherever you see fit. It can be before the regular preshow starts – as it is done in cinemas in Denmark, Finland &amp; Norway. It can be a combination of starting before the announce start-time and in the beginning of the preshow – as it is done in Germany.</p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
@@ -174,7 +300,190 @@
         </div>
     </footer>
 
+    <script src="assets/js/cases-data.js"></script>
     <script>
+        // --- LATEST GAMES ---
+        // Same CMS store as the front page; the CMS adds new cases at the top, so the newest come first.
+        // Each card opens the case on the cases page.
+        (function initLatestGames() {
+            const grid = document.getElementById('gameCasesGrid');
+            if (!grid) return;
+            let cases = defaultCases;
+            try {
+                const saved = JSON.parse(localStorage.getItem('cinemataztic_cms_data_v4'));
+                if (saved && Array.isArray(saved.cases)) cases = saved.cases;
+            } catch (e) { /* storage unavailable */ }
+            const latest = cases.filter(c => c.category === 'CineGame').slice(0, 3);
+            document.getElementById('gameCaseCount').innerText = latest.length;
+            if (!latest.length) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-gray-500 font-bold uppercase">No games yet.</div>`;
+                return;
+            }
+            grid.innerHTML = latest.map(c => `
+                <a href="cases.html?case=${encodeURIComponent(c.id)}" class="group block">
+                    <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-white transition-colors">
+                        <img src="${c.cover}" alt="${c.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        ${c.mediaType === 'video' ? `
+                            <div class="absolute top-3 right-3 bg-black/80 text-brand-cyan px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-brand-cyan/40">
+                                <i class="fa-solid fa-play mr-1"></i> Video
+                            </div>
+                        ` : ''}
+                        <div class="case-blur"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-5 space-y-2">
+                            <h3 class="text-xl font-black uppercase !leading-none text-white line-clamp-2">${c.title}</h3>
+                            <p class="text-sm text-white/80 line-clamp-2 leading-relaxed">${c.description}</p>
+                            <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/70">
+                                <span class="px-2 py-0.5 border border-white/70 rounded-full">${c.category}</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+        })();
+    </script>
+    <script>
+        // --- INTERACTIVE HERO CANVAS CONSTELLATION MESH ---
+        (function initHeroCanvas() {
+            const canvas = document.getElementById('heroCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let width, height;
+            let particles = [];
+            const particleCount = 45;
+            const maxDistance = 140;
+
+            const mouse = { x: null, y: null, radius: 180 };
+
+            function resize() {
+                width = canvas.width = canvas.parentElement.offsetWidth;
+                height = canvas.height = canvas.parentElement.offsetHeight;
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Track Mouse Position
+            const heroSection = document.getElementById('hero');
+            heroSection.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+
+            heroSection.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.8;
+                    this.vy = (Math.random() - 0.5) * 0.8;
+                    this.radius = Math.random() * 2 + 1.5;
+                    this.color = Math.random() > 0.3 ? '#3dc0c8' : '#fece00';
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    // Mouse Interaction
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const dx = mouse.x - this.x;
+                        const dy = mouse.y - this.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < mouse.radius) {
+                            const angle = Math.atan2(dy, dx);
+                            const force = (mouse.radius - dist) / mouse.radius;
+                            this.x -= Math.cos(angle) * force * 2;
+                            this.y -= Math.sin(angle) * force * 2;
+                        }
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = this.color;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw connecting lines between particles
+                for (let a = 0; a < particles.length; a++) {
+                    particles[a].update();
+                    particles[a].draw();
+
+                    for (let b = a + 1; b < particles.length; b++) {
+                        const dx = particles[a].x - particles[b].x;
+                        const dy = particles[a].y - particles[b].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < maxDistance) {
+                            const opacity = 1 - (dist / maxDistance);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.strokeStyle = `rgba(61, 192, 200, ${opacity * 0.35})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Draw line to mouse if close
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const mdx = particles[a].x - mouse.x;
+                        const mdy = particles[a].y - mouse.y;
+                        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                        if (mdist < mouse.radius) {
+                            const mOpacity = 1 - (mdist / mouse.radius);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${mOpacity * 0.5})`;
+                            ctx.lineWidth = 1.2;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // --- MENU ON THE HERO ---
+        // The menu bar turns pink while any of the (pink) hero is visible below it.
+        (function initHeroMenu() {
+            const header = document.querySelector('body > header');
+            const hero = document.getElementById('hero');
+            if (!header || !hero) return;
+            const observer = new IntersectionObserver(([entry]) => {
+                header.classList.toggle('on-hero', entry.isIntersecting);
+            }, { rootMargin: `-${header.offsetHeight}px 0px 0px 0px` });
+            observer.observe(hero);
+        })();
+
+        // --- HOW ADVERTISERS BUY: 6-STEP RING ---
+
+
         // Mobile Menu Toggle
         document.getElementById('mobileMenuBtn').addEventListener('click', () => {
             document.getElementById('mobileDrawer').classList.toggle('hidden');

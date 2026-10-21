@@ -336,7 +336,8 @@
     <script src="assets/js/cases-data.js"></script>
     <script>
         // --- LATEST PROGRAMMATIC CASES ---
-        // Same CMS store as the front page; newest = added last. Each card opens the case on the cases page.
+        // Same CMS store as the front page; the CMS adds new cases at the top, so the newest come first.
+        // Each card opens the case on the cases page.
         (function initProgrammaticCases() {
             const grid = document.getElementById('progCasesGrid');
             if (!grid) return;
@@ -345,7 +346,7 @@
                 const saved = JSON.parse(localStorage.getItem('cinemataztic_cms_data_v4'));
                 if (saved && Array.isArray(saved.cases)) cases = saved.cases;
             } catch (e) { /* storage unavailable */ }
-            const latest = cases.filter(c => c.category === 'Programmatic').slice(-3).reverse();
+            const latest = cases.filter(c => c.category === 'Programmatic').slice(0, 3);
             document.getElementById('progCaseCount').innerText = latest.length;
             if (!latest.length) {
                 grid.innerHTML = `<div class="col-span-full py-12 text-gray-500 font-bold uppercase">No programmatic cases yet.</div>`;

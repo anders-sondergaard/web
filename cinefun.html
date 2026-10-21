@@ -95,10 +95,67 @@
             .btn-shine:hover { transform: none; }
             .btn-shine::after { display: none; }
         }
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .animate-blink {
+            animation: cursorBlink 1s infinite;
+        }
+        /* Menu sits on the green hero: green bar with dark text while the hero is in view */
+        header { transition: background-color 250ms linear, color 250ms linear, border-color 250ms linear; }
+        header.on-hero { background-color: #6ceec4 !important; border-color: rgba(10, 10, 12, 0.12) !important; color: #0a0a0c; }
+        header.on-hero .text-white,
+        header.on-hero nav > a.text-brand-cyan { color: #0a0a0c !important; }
+        header.on-hero nav > a[href$="#cms"] { border-color: rgba(10, 10, 12, 0.35); }
+        header.on-hero #mobileDrawer { color: #ffffff; }
+        /* Case cards: text sits on the image over a blur that fades in towards the bottom */
+        .case-blur {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 55%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0) 100%);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            -webkit-mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            pointer-events: none;
+        }
         /* Section headings: one size everywhere, set so the longest word ("TRANSFORMATION")
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* CineGame+ phones: same frame as the TrailerQuiz illustration (dark body, thin edge, rounded screen, island) */
+        .game-phone {
+            position: relative;
+            width: 31%;
+            max-width: 200px;
+            padding: 7px;
+            background: #0a0a0c;
+            border: 1px solid #1f1f26;
+            border-radius: 22px;
+            box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.7);
+        }
+        .game-phone img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 9 / 16;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+        .game-phone::after {
+            content: '';
+            position: absolute;
+            top: 13px;
+            left: 50%;
+            width: 26%;
+            height: 9px;
+            transform: translateX(-50%);
+            border-radius: 999px;
+            background: #0a0a0c;
+        }
     </style>
     <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
     <link rel="preconnect" href="https://api.fontshare.com">
@@ -145,7 +202,179 @@
     </header>
 
     <main class="flex-grow pt-20">
-        <!-- CineFun page: content to come -->
+        <!-- HERO: same animated hero as the CineGame page, in green -->
+        <section id="hero" class="relative overflow-hidden border-b border-brand-border bg-brand-mint">
+            <!-- Canvas Interactive Background -->
+            <canvas id="heroCanvas" class="absolute inset-0 z-0 w-full h-full"></canvas>
+            <div class="relative z-10 w-full px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-28 lg:pb-32">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
+                    <div class="lg:col-span-8 space-y-8">
+                        <span class="inline-flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest text-brand-dark">
+                            <span class="w-2 h-2 rounded-full bg-brand-dark animate-ping"></span>
+                            <span>CineFun</span>
+                        </span>
+                        <h1 class="text-4xl sm:text-6xl lg:text-7xl 2xl:text-8xl font-black uppercase tracking-tighter !leading-none text-black">
+                            Casual fun
+                        </h1>
+                    </div>
+                    <div class="lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
+                        <p>
+                            In-app casual games, trailer quizzes and much more to be played wherever and whenever.
+                        </p>
+                        <p class="text-sm text-brand-dark/70">
+                            Users win prizes to redeem in the cinema concession, which increases footfall and cinema loyalty.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CINEGAME+: in-app games; the arrows switch the game image and its text together -->
+        <section id="cinegame-plus" class="relative overflow-hidden border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+                    <!-- Game screens (right on wide screens): stacked in one grid cell, only the current one is visible -->
+                    <div id="plusImages" class="lg:col-span-7 lg:order-2 grid" aria-hidden="true">
+                        <div class="plus-slide [grid-area:1/1] flex items-center justify-center p-6 sm:p-10 transition-opacity duration-500" style="background: radial-gradient(ellipse at center, rgba(108, 238, 196, 0.35) 0%, rgba(108, 238, 196, 0) 70%)">
+                            <div class="flex w-full justify-center gap-3 sm:gap-5">
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/sprite-word-game-1.jpg" alt="Sprite Sprite Word Game: start screen" loading="lazy"></div>
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/sprite-word-game-2.jpg" alt="Sprite Sprite Word Game: gameplay" loading="lazy"></div>
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/sprite-word-game-3.jpg" alt="Sprite Sprite Word Game: score screen" loading="lazy"></div>
+                            </div>
+                        </div>
+                        <div class="plus-slide [grid-area:1/1] flex items-center justify-center p-6 sm:p-10 transition-opacity duration-500" style="background: radial-gradient(ellipse at center, rgba(248, 105, 185, 0.35) 0%, rgba(248, 105, 185, 0) 70%); opacity: 0" aria-hidden="true">
+                            <div class="flex w-full justify-center gap-3 sm:gap-5">
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/coke-bubble-light-up-1.jpg" alt="Coca-Cola Bubble Light Up: start screen" loading="lazy"></div>
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/coke-bubble-light-up-2.jpg" alt="Coca-Cola Bubble Light Up: gameplay" loading="lazy"></div>
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/coke-bubble-light-up-3.jpg" alt="Coca-Cola Bubble Light Up: score screen" loading="lazy"></div>
+                            </div>
+                        </div>
+                        <div class="plus-slide [grid-area:1/1] flex items-center justify-center p-6 sm:p-10 transition-opacity duration-500" style="background: radial-gradient(ellipse at center, rgba(254, 169, 23, 0.35) 0%, rgba(254, 169, 23, 0) 70%); opacity: 0" aria-hidden="true">
+                            <div class="flex w-full justify-center gap-3 sm:gap-5">
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/fanta-what-the-fanta-1.jpg" alt="Fanta What The Fanta: start screen" loading="lazy"></div>
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/fanta-what-the-fanta-2.jpg" alt="Fanta What The Fanta: gameplay" loading="lazy"></div>
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/fanta-what-the-fanta-3.jpg" alt="Fanta What The Fanta: score screen" loading="lazy"></div>
+                            </div>
+                        </div>
+                        <div class="plus-slide [grid-area:1/1] flex items-center justify-center p-6 sm:p-10 transition-opacity duration-500" style="background: radial-gradient(ellipse at center, rgba(108, 238, 196, 0.35) 0%, rgba(108, 238, 196, 0) 70%); opacity: 0" aria-hidden="true">
+                            <div class="flex w-full justify-center gap-3 sm:gap-5">
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/elgiganten-hexagon-blaster-1.jpg" alt="Elgiganten Hexagon Blaster: start screen" loading="lazy"></div>
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/elgiganten-hexagon-blaster-2.jpg" alt="Elgiganten Hexagon Blaster: gameplay" loading="lazy"></div>
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/elgiganten-hexagon-blaster-3.jpg" alt="Elgiganten Hexagon Blaster: score screen" loading="lazy"></div>
+                            </div>
+                        </div>
+                        <div class="plus-slide [grid-area:1/1] flex items-center justify-center p-6 sm:p-10 transition-opacity duration-500" style="background: radial-gradient(ellipse at center, rgba(61, 192, 200, 0.35) 0%, rgba(61, 192, 200, 0) 70%); opacity: 0" aria-hidden="true">
+                            <div class="flex w-full justify-center gap-3 sm:gap-5">
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/dfds-minicruise-captain-1.jpg" alt="DFDS MiniCruise Captain: start screen" loading="lazy"></div>
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/dfds-minicruise-captain-2.jpg" alt="DFDS MiniCruise Captain: gameplay" loading="lazy"></div>
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/dfds-minicruise-captain-3.jpg" alt="DFDS MiniCruise Captain: score screen" loading="lazy"></div>
+                            </div>
+                        </div>
+                        <div class="plus-slide [grid-area:1/1] flex items-center justify-center p-6 sm:p-10 transition-opacity duration-500" style="background: radial-gradient(ellipse at center, rgba(248, 105, 185, 0.35) 0%, rgba(248, 105, 185, 0) 70%); opacity: 0" aria-hidden="true">
+                            <div class="flex w-full justify-center gap-3 sm:gap-5">
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/malaco-crazy-face-1.jpg" alt="Malaco Crazy Face Hot Ride: start screen" loading="lazy"></div>
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/malaco-crazy-face-2.jpg" alt="Malaco Crazy Face Hot Ride: gameplay" loading="lazy"></div>
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/malaco-crazy-face-3.jpg" alt="Malaco Crazy Face Hot Ride: score screen" loading="lazy"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 lg:order-1">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow mb-10">In-app gaming</span>
+                        <div class="space-y-8">
+                            <h2 class="text-4xl sm:text-6xl font-black uppercase !leading-none">
+                                CineGame<span class="text-brand-mint">+</span>
+                            </h2>
+                            <p class="text-lg sm:text-xl text-gray-200 !leading-relaxed">
+                                CineGame+ is a range of casual games in the CineGame app, sponsored by an advertiser. The audience can play whenever they want, before and after the cinema visit, and win prizes from the advertiser.
+                            </p>
+                            <p class="text-base text-gray-300 !leading-relaxed">
+                                Users get a notification when a new game arrives in their Game Center. Up to 35% of them try the game, and they spend an average of 12 minutes on it.
+                            </p>
+                            <div id="plusSlides" class="grid pt-2" aria-roledescription="carousel" aria-label="CineGame+ games">
+                                <div class="plus-slide [grid-area:1/1] space-y-3 transition-opacity duration-500" aria-roledescription="slide" aria-label="1 of 6">
+                                    <h3 class="text-2xl font-black uppercase !leading-none">Sprite <span class="text-brand-mint">Sprite Word Game</span></h3>
+                                    <p class="text-base text-gray-300 !leading-relaxed">Find the right words in the letter grid and win a Sprite.</p>
+                                </div>
+                                <div class="plus-slide [grid-area:1/1] space-y-3 transition-opacity duration-500" style="opacity: 0" aria-hidden="true" aria-roledescription="slide" aria-label="2 of 6">
+                                    <h3 class="text-2xl font-black uppercase !leading-none">Coca-Cola <span class="text-brand-mint">Bubble Light Up</span></h3>
+                                    <p class="text-base text-gray-300 !leading-relaxed">Steer the bubble up past the stars and collect points for Coca-Cola light taste.</p>
+                                </div>
+                                <div class="plus-slide [grid-area:1/1] space-y-3 transition-opacity duration-500" style="opacity: 0" aria-hidden="true" aria-roledescription="slide" aria-label="3 of 6">
+                                    <h3 class="text-2xl font-black uppercase !leading-none">Fanta <span class="text-brand-mint">What The Fanta</span></h3>
+                                    <p class="text-base text-gray-300 !leading-relaxed">A Finnish campaign for the limited-edition #WhatTheFanta: dodge the blocks, collect points and guess the flavour.</p>
+                                </div>
+                                <div class="plus-slide [grid-area:1/1] space-y-3 transition-opacity duration-500" style="opacity: 0" aria-hidden="true" aria-roledescription="slide" aria-label="4 of 6">
+                                    <h3 class="text-2xl font-black uppercase !leading-none">Elgiganten <span class="text-brand-mint">Hexagon Blaster</span></h3>
+                                    <p class="text-base text-gray-300 !leading-relaxed">Race down the neon tunnel, avoid the blocks and get close enough to the target score to win the prize.</p>
+                                </div>
+                                <div class="plus-slide [grid-area:1/1] space-y-3 transition-opacity duration-500" style="opacity: 0" aria-hidden="true" aria-roledescription="slide" aria-label="5 of 6">
+                                    <h3 class="text-2xl font-black uppercase !leading-none">DFDS <span class="text-brand-mint">MiniCruise Captain</span></h3>
+                                    <p class="text-base text-gray-300 !leading-relaxed">Captain a DFDS ship, steer clear of the buoys and play for a chance to win a MiniCruise.</p>
+                                </div>
+                                <div class="plus-slide [grid-area:1/1] space-y-3 transition-opacity duration-500" style="opacity: 0" aria-hidden="true" aria-roledescription="slide" aria-label="6 of 6">
+                                    <h3 class="text-2xl font-black uppercase !leading-none">Malaco <span class="text-brand-mint">Crazy Face Hot Ride</span></h3>
+                                    <p class="text-base text-gray-300 !leading-relaxed">Roll the Crazy Face candy along the hot track and collect points for Malaco.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-10 flex items-center gap-4">
+                            <button type="button" id="plusPrev" aria-label="Previous game" class="w-11 h-11 flex items-center justify-center rounded-full border border-white/40 text-white hover:bg-white hover:text-black transition"><i class="fa-solid fa-arrow-left"></i></button>
+                            <button type="button" id="plusNext" aria-label="Next game" class="w-11 h-11 flex items-center justify-center rounded-full border border-white/40 text-white hover:bg-white hover:text-black transition"><i class="fa-solid fa-arrow-right"></i></button>
+                            <span id="plusCounter" class="text-[10px] font-bold uppercase tracking-widest text-white/70 tabular-nums" aria-live="polite">01 / 06</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TRAILERQUIZ: full-width image section, same look as Who we are on the front page -->
+        <section id="trailerquiz" class="relative overflow-hidden border-b border-brand-border scroll-mt-20">
+            <img src="assets/cinefun/trailerquiz.svg" alt="The TrailerQuiz in the CineGame app: the movie scene in the background plays as the trailer on the phone, above a quiz question" class="absolute inset-0 w-full h-full object-cover object-left">
+            <!-- The phone sits on the left of the image, so the text and the dark fade go on the right -->
+            <div class="absolute inset-0 bg-gradient-to-l from-brand-dark via-brand-dark/85 to-brand-dark/20"></div>
+            <div class="relative w-full px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+                <div class="max-w-2xl ml-auto">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow mb-10">In-app gaming</span>
+                    <!-- Slides share one grid cell, so the block keeps the height of the tallest text -->
+                    <div id="quizSlides" class="grid" aria-roledescription="carousel" aria-label="TrailerQuiz">
+                        <div class="quiz-slide [grid-area:1/1] space-y-8 transition-opacity duration-500" aria-roledescription="slide" aria-label="1 of 3">
+                            <h2 class="text-4xl sm:text-6xl font-black uppercase !leading-none">
+                                Trailer<span class="text-brand-mint">quiz</span>
+                            </h2>
+                            <p class="text-lg sm:text-xl text-gray-200 !leading-relaxed">
+                                The TrailerQuiz promotes upcoming movies by turning the movie trailer into a short multiple-choice trivia quiz. It is often done as a co-lab with a distributor and sponsored by an advertiser.
+                            </p>
+                            <p class="text-base text-gray-300 !leading-relaxed">
+                                Users earn gold coins by watching trailers and answering quiz questions about them, and exchange the coins for products in the concession. That creates traffic for your movie theater.
+                            </p>
+                        </div>
+                        <div class="quiz-slide [grid-area:1/1] space-y-8 transition-opacity duration-500" style="opacity: 0" aria-hidden="true" aria-roledescription="slide" aria-label="2 of 3">
+                            <h2 class="text-4xl sm:text-6xl font-black uppercase !leading-none">
+                                Promote your <span class="text-brand-mint">long-format content</span>
+                            </h2>
+                            <p class="text-lg sm:text-xl text-gray-200 !leading-relaxed">
+                                If you have long-form content that’s too costly to advertise through traditional channels, TrailerQuiz has you covered. Users watch your video, answer three quiz questions, and in return, they receive a prize like a discount code or lottery ticket. It’s a fun, engaging way to get your content noticed.
+                            </p>
+                        </div>
+                        <div class="quiz-slide [grid-area:1/1] space-y-8 transition-opacity duration-500" style="opacity: 0" aria-hidden="true" aria-roledescription="slide" aria-label="3 of 3">
+                            <h2 class="text-4xl sm:text-6xl font-black uppercase !leading-none">
+                                Brands &amp; <span class="text-brand-mint">movies</span>
+                            </h2>
+                            <p class="text-lg sm:text-xl text-gray-200 !leading-relaxed">
+                                If your brand is linked to a movie through product placement or other partnerships, TrailerQuiz can help you promote both. Users who complete the quiz can enter a lottery for a chance to win movie tickets, boosting engagement with both the brand and the movie.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="mt-10 flex items-center gap-4">
+                        <button type="button" id="quizPrev" aria-label="Previous text" class="w-11 h-11 flex items-center justify-center rounded-full border border-white/40 text-white hover:bg-white hover:text-black transition"><i class="fa-solid fa-arrow-left"></i></button>
+                        <button type="button" id="quizNext" aria-label="Next text" class="w-11 h-11 flex items-center justify-center rounded-full border border-white/40 text-white hover:bg-white hover:text-black transition"><i class="fa-solid fa-arrow-right"></i></button>
+                        <span id="quizCounter" class="text-[10px] font-bold uppercase tracking-widest text-white/70 tabular-nums" aria-live="polite">01 / 03</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
@@ -175,6 +404,191 @@
     </footer>
 
     <script>
+        // --- INTERACTIVE HERO CANVAS CONSTELLATION MESH ---
+        (function initHeroCanvas() {
+            const canvas = document.getElementById('heroCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let width, height;
+            let particles = [];
+            const particleCount = 45;
+            const maxDistance = 140;
+
+            const mouse = { x: null, y: null, radius: 180 };
+
+            function resize() {
+                width = canvas.width = canvas.parentElement.offsetWidth;
+                height = canvas.height = canvas.parentElement.offsetHeight;
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Track Mouse Position
+            const heroSection = document.getElementById('hero');
+            heroSection.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+
+            heroSection.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.8;
+                    this.vy = (Math.random() - 0.5) * 0.8;
+                    this.radius = Math.random() * 2 + 1.5;
+                    this.color = Math.random() > 0.3 ? '#f869b9' : '#0a0a0c';
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    // Mouse Interaction
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const dx = mouse.x - this.x;
+                        const dy = mouse.y - this.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < mouse.radius) {
+                            const angle = Math.atan2(dy, dx);
+                            const force = (mouse.radius - dist) / mouse.radius;
+                            this.x -= Math.cos(angle) * force * 2;
+                            this.y -= Math.sin(angle) * force * 2;
+                        }
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = this.color;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw connecting lines between particles
+                for (let a = 0; a < particles.length; a++) {
+                    particles[a].update();
+                    particles[a].draw();
+
+                    for (let b = a + 1; b < particles.length; b++) {
+                        const dx = particles[a].x - particles[b].x;
+                        const dy = particles[a].y - particles[b].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < maxDistance) {
+                            const opacity = 1 - (dist / maxDistance);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.strokeStyle = `rgba(248, 105, 185, ${opacity * 0.45})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Draw line to mouse if close
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const mdx = particles[a].x - mouse.x;
+                        const mdy = particles[a].y - mouse.y;
+                        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                        if (mdist < mouse.radius) {
+                            const mOpacity = 1 - (mdist / mouse.radius);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.strokeStyle = `rgba(10, 10, 12, ${mOpacity * 0.35})`;
+                            ctx.lineWidth = 1.2;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // --- MENU ON THE HERO ---
+        // The menu bar turns green while any of the (green) hero is visible below it.
+        (function initHeroMenu() {
+            const header = document.querySelector('body > header');
+            const hero = document.getElementById('hero');
+            if (!header || !hero) return;
+            const observer = new IntersectionObserver(([entry]) => {
+                header.classList.toggle('on-hero', entry.isIntersecting);
+            }, { rootMargin: `-${header.offsetHeight}px 0px 0px 0px` });
+            observer.observe(hero);
+        })();
+
+        // --- HOW ADVERTISERS BUY: 6-STEP RING ---
+
+
+        // --- TRAILERQUIZ: arrow buttons step through the texts (same as Who we are on the front page) ---
+        (function initQuizSlides() {
+            const slides = [...document.querySelectorAll('#quizSlides .quiz-slide')];
+            if (slides.length < 2) return;
+            const counter = document.getElementById('quizCounter');
+            let current = 0;
+            function show(index) {
+                current = (index + slides.length) % slides.length;
+                slides.forEach((slide, i) => {
+                    const on = i === current;
+                    slide.style.opacity = on ? '1' : '0';
+                    slide.style.pointerEvents = on ? '' : 'none';
+                    slide.setAttribute('aria-hidden', String(!on));
+                });
+                counter.textContent = `${String(current + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+            }
+            document.getElementById('quizPrev').addEventListener('click', () => show(current - 1));
+            document.getElementById('quizNext').addEventListener('click', () => show(current + 1));
+            show(0);
+        })();
+
+        // --- CINEGAME+: the arrows switch the game image and its text together ---
+        (function initPlusSlides() {
+            const texts = [...document.querySelectorAll('#plusSlides .plus-slide')];
+            const images = [...document.querySelectorAll('#plusImages .plus-slide')];
+            if (texts.length < 2) return;
+            const counter = document.getElementById('plusCounter');
+            let current = 0;
+            function show(index) {
+                current = (index + texts.length) % texts.length;
+                [texts, images].forEach(list => list.forEach((slide, i) => {
+                    const on = i === current;
+                    slide.style.opacity = on ? '1' : '0';
+                    slide.style.pointerEvents = on ? '' : 'none';
+                    if (list === texts) slide.setAttribute('aria-hidden', String(!on));
+                }));
+                counter.textContent = `${String(current + 1).padStart(2, '0')} / ${String(texts.length).padStart(2, '0')}`;
+            }
+            document.getElementById('plusPrev').addEventListener('click', () => show(current - 1));
+            document.getElementById('plusNext').addEventListener('click', () => show(current + 1));
+            show(0);
+        })();
+
         // Mobile Menu Toggle
         document.getElementById('mobileMenuBtn').addEventListener('click', () => {
             document.getElementById('mobileDrawer').classList.toggle('hidden');
