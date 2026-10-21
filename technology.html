@@ -174,6 +174,20 @@
             .tech-branch .tech-link::after { left: -3px; top: 0; animation-name: tech-flow-v; }
         }
         @media (prefers-reduced-motion: reduce) { .tech-link::after { animation: none; opacity: 0; } }
+        /* Preshow timeline: where the Cinemataztic Show sits in the preshow. Blocks are placed in % of the
+           timeline; on narrow screens the timeline keeps its width and scrolls sideways. */
+        .preshow-scroll { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+        .preshow { position: relative; min-width: 760px; padding-top: 2.25rem; padding-bottom: 12px; }
+        .preshow-row { position: relative; height: 112px; margin-top: 2.5rem; }
+        .preshow-row + .preshow-row { margin-top: 4.5rem; }
+        .preshow-row-label { position: absolute; left: 0; top: -1.6rem; font-size: 10px; font-weight: 700; text-transform: uppercase; color: #9ca3af; white-space: nowrap; }
+        .preshow-block { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; padding: 0 0.5rem; border-radius: 10px; color: #0a0a0c; font-size: 12px; font-weight: 700; text-align: center; line-height: 1.2; }
+        .preshow-show { position: absolute; top: -8px; bottom: -8px; display: flex; flex-direction: column; gap: 6px; padding: 7px; border: 2px solid rgba(255, 255, 255, 0.85); border-radius: 16px; background: #121216; }
+        .preshow-show-parts { flex: 1; display: flex; gap: 4px; }
+        .preshow-show-parts span { flex: 1; display: flex; align-items: center; justify-content: center; border-radius: 9px; color: #0a0a0c; font-size: 12px; font-weight: 700; writing-mode: vertical-rl; transform: rotate(180deg); }
+        .preshow-show figcaption { align-self: center; padding: 0 4px; background: #121216; font-size: 10px; font-weight: 700; text-transform: uppercase; color: #ffffff; text-align: center; white-space: nowrap; line-height: 1; }
+        .preshow-start { position: absolute; top: 1.4rem; bottom: 0; width: 0; border-left: 2px dashed #ffffff; opacity: 0.8; }
+        .preshow-start span { position: absolute; bottom: calc(100% + 0.4rem); left: -1px; transform: translateX(-50%); font-size: 10px; font-weight: 700; text-transform: uppercase; color: #ffffff; white-space: nowrap; }
     </style>
     <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
     <link rel="preconnect" href="https://api.fontshare.com">
@@ -324,6 +338,52 @@
                                 </div>
                                 <figcaption><b>Audience</b>Plays along in the seats</figcaption>
                             </figure>
+                        </div>
+                    </div>
+                </article>
+                <article class="mt-6 p-8 sm:p-12 lg:p-16 rounded-2xl bg-brand-card border border-brand-border">
+                    <div class="space-y-8">
+                        <h2 class="section-title font-black uppercase !leading-none">CineGame in your preshow?</h2>
+                        <div class="max-w-3xl space-y-5 text-lg sm:text-xl text-gray-300 !leading-relaxed">
+                            <p>No cinemas are the same – and the Cinemataztic platform allow you to place the CineGame wherever you see fit. It can be before the regular preshow starts – as it is done in cinemas in Denmark &amp; Finland. It can be a combination of starting before the announce start-time and in the beginning of the preshow – as it is done in Germany.</p>
+                        </div>
+                        <!-- Preshow timeline: the Cinemataztic Show before the preshow (DK/FI) or across the announced start time (DE) -->
+                        <p class="md:hidden pt-4 -mb-2 text-[10px] font-bold uppercase text-gray-400">Swipe to see the whole preshow <i class="fa-solid fa-arrow-right ml-1"></i></p>
+                        <div class="preshow-scroll pt-6" role="img" aria-label="Timeline of the cinema preshow. In Denmark and Finland the Cinemataztic Show with CineGame and CineAd runs before the announced start time, followed by local ads, the ad-reel, premium placement, trailers, the golden spot and the feature. In Germany the Cinemataztic Show starts before the announced start time and continues into the beginning of the preshow, followed by the ad-reel, premium placement, trailers, the golden spot and the feature.">
+                            <div class="preshow" aria-hidden="true">
+                                <span class="preshow-start" style="left: 14.8%"><span>Announced start time</span></span>
+                                <div class="preshow-row">
+                                    <span class="preshow-row-label">Denmark &amp; Finland</span>
+                                    <figure class="preshow-show" style="left: 0; width: 13.8%;">
+                                        <div class="preshow-show-parts">
+                                            <span style="background: #fea917">CineGame</span>
+                                        <span style="background: #6ceec4">CineAd</span>
+                                        </div>
+                                        <figcaption>Cinemataztic Show</figcaption>
+                                    </figure>
+                                    <span class="preshow-block" style="left: 15.75%; width: 9.83%; background: #6ceec4">Local ads</span>
+                                    <span class="preshow-block" style="left: 26.8%; width: 28.6%; background: #fece00">Ad-reel</span>
+                                    <span class="preshow-block" style="left: 56.6%; width: 9.5%; background: #fece00">Premium placement</span>
+                                    <span class="preshow-block" style="left: 67.2%; width: 11.6%; background: #3dc0c8">Trailers</span>
+                                    <span class="preshow-block" style="left: 79.9%; width: 9.5%; background: #fea917">Golden Spot</span>
+                                    <span class="preshow-block" style="left: 90.5%; width: 9.5%; background: #f869b9">Feature</span>
+                                </div>
+                                <div class="preshow-row">
+                                    <span class="preshow-row-label">Germany</span>
+                                    <figure class="preshow-show" style="left: 11.1%; width: 13.8%;">
+                                        <div class="preshow-show-parts">
+                                            <span style="background: #fea917">CineGame</span>
+                                        <span style="background: #6ceec4">CineAd</span>
+                                        </div>
+                                        <figcaption>Cinemataztic Show</figcaption>
+                                    </figure>
+                                    <span class="preshow-block" style="left: 26.8%; width: 28.6%; background: #fece00">Ad-reel</span>
+                                    <span class="preshow-block" style="left: 56.6%; width: 9.5%; background: #fece00">Premium placement</span>
+                                    <span class="preshow-block" style="left: 67.2%; width: 11.6%; background: #3dc0c8">Trailers</span>
+                                    <span class="preshow-block" style="left: 79.9%; width: 9.5%; background: #fea917">Golden Spot</span>
+                                    <span class="preshow-block" style="left: 90.5%; width: 9.5%; background: #f869b9">Feature</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </article>
