@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technology — Cinemataztic</title>
+    <!-- Page transition (same as the old site): loads first, so arriving pages start covered -->
+    <script src="assets/js/page-transition.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            cyan: '#3dc0c8',
+                            mint: '#6ceec4',
+                            pink: '#f869b9',
+                            orange: '#fea917',
+                            yellow: '#fece00',
+                            dark: '#0a0a0c',
+                            card: '#121216',
+                            border: '#1f1f26'
+                        }
+                    },
+                    // Typography after phloe.co: General Sans, tight tracking, 1.383 body leading
+                    fontFamily: {
+                        sans: ['"General Sans"', 'system-ui', 'sans-serif'],
+                        // Logo wordmark: Klavika Bold (installed, or Adobe Fonts kit "klavika-web"), falling back to General Sans
+                        logo: ['Klavika', '"klavika-web"', '"General Sans"', 'sans-serif']
+                    },
+                    letterSpacing: {
+                        tighter: '-0.0525em',
+                        tight: '-0.021em',
+                        wide: '-0.021em',
+                        wider: '-0.021em',
+                        widest: '-0.021em'
+                    },
+                    lineHeight: {
+                        none: '0.76',
+                        relaxed: '1.383'
+                    }
+                }
+            },
+            plugins: [
+                function ({ addBase }) {
+                    addBase({
+                        // Logo wordmark font: an installed Klavika Bold, else the licensed webfont file
+                        '@font-face': {
+                            fontFamily: 'Klavika',
+                            fontWeight: '700',
+                            fontStyle: 'normal',
+                            fontDisplay: 'swap',
+                            src: "local('Klavika Bold'), local('Klavika-Bold'), url('assets/fonts/Klavika-Bold.otf') format('opentype')"
+                        },
+                        body: { lineHeight: '1.383' },
+                        '.font-black': { letterSpacing: '-0.0525em' }
+                    });
+                }
+            ]
+        }
+    </script>
+    <style>
+        /* Premium buttons: light from above, a soft drop shadow, and a light sweep on hover */
+        .btn-shine {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.08) 45%, rgba(0, 0, 0, 0.06) 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+                0 1px 2px rgba(0, 0, 0, 0.25),
+                0 8px 20px -6px rgba(0, 0, 0, 0.45);
+        }
+        .btn-shine::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+            transform: translateX(-120%);
+            transition: transform 600ms ease;
+        }
+        .btn-shine:hover {
+            transform: translateY(-1px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+                0 2px 4px rgba(0, 0, 0, 0.25),
+                0 14px 28px -8px rgba(0, 0, 0, 0.5);
+        }
+        .btn-shine:hover::after { transform: translateX(120%); }
+        .btn-shine:active { transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) {
+            .btn-shine:hover { transform: none; }
+            .btn-shine::after { display: none; }
+        }
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .animate-blink {
+            animation: cursorBlink 1s infinite;
+        }
+        /* Menu sits on the orange hero: orange bar with dark text while the hero is in view */
+        header { transition: background-color 250ms linear, color 250ms linear, border-color 250ms linear; }
+        header.on-hero { background-color: #fea917 !important; border-color: rgba(10, 10, 12, 0.12) !important; color: #0a0a0c; }
+        header.on-hero .text-white,
+        header.on-hero nav > a.text-brand-cyan { color: #0a0a0c !important; }
+        header.on-hero nav > a[href$="#cms"] { border-color: rgba(10, 10, 12, 0.35); }
+        header.on-hero #mobileDrawer { color: #ffffff; }
+        /* Case cards: text sits on the image over a blur that fades in towards the bottom */
+        .case-blur {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 55%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0) 100%);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            -webkit-mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            pointer-events: none;
+        }
+        /* Section headings: one size everywhere, set so the longest word ("TRANSFORMATION")
+           fits the narrow sidebar column; it scales with the screen width */
+        .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
+        @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* Platform diagram: app ⇄ cloud server ⇄ DCH | screen-server ⇄ screen ⇄ audience, with the TMS under
+           the screen-server feeding it. Left to right from 1280px (top to bottom below that); a dot runs along
+           each link to show the data moving. The yellow line splits the new platform from the existing setup. */
+        .tech-diagram { display: flex; flex-direction: column; align-items: center; }
+        .tech-node { position: relative; display: flex; flex-direction: column; align-items: center; gap: 0.9rem; text-align: center; }
+        .tech-node figcaption { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: -0.021em; color: #9ca3af; line-height: 1.3; }
+        .tech-node figcaption b { display: block; color: #ffffff; font-size: 12px; }
+        .tech-icon { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 22px; background: #0a0a0c; border: 1px solid #1f1f26; }
+        .tech-wall span { position: absolute; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 700; text-transform: uppercase; color: #fece00; white-space: nowrap; }
+        .tech-wall .tech-wall-new { bottom: calc(0.6rem + 2px); }
+        .tech-wall .tech-wall-old { top: 0.6rem; }
+        .tech-link { position: relative; flex: none; width: 1px; height: 44px; margin: 0.75rem 0; background: linear-gradient(to bottom, rgba(61, 192, 200, 0.15), rgba(61, 192, 200, 0.6), rgba(61, 192, 200, 0.15)); }
+        .tech-link::after { content: ''; position: absolute; left: -3px; top: 0; width: 7px; height: 7px; border-radius: 999px; background: #3dc0c8; box-shadow: 0 0 10px #3dc0c8; animation: tech-flow-v 2.4s linear infinite; }
+        .tech-link.is-pink { background: linear-gradient(to bottom, rgba(248, 105, 185, 0.15), rgba(248, 105, 185, 0.6), rgba(248, 105, 185, 0.15)); }
+        .tech-link.is-pink::after { background: #f869b9; box-shadow: 0 0 10px #f869b9; animation-delay: -1.2s; }
+        .tech-wall { position: relative; flex: none; width: 100%; height: 0; margin: 1.5rem 0; border-top: 2px dashed #fece00; }
+        /* Screen-server with the TMS feeding it: beside it (to the right) on small screens, under it on wide ones */
+        .tech-stack { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: start; width: 100%; }
+        .tech-stack > .tech-node { grid-column: 2; }
+        .tech-branch { grid-column: 3; display: flex; align-items: flex-start; padding-top: calc(13px + 0.9rem); }
+        .tech-branch .tech-node { max-width: 96px; margin-top: 8px; }
+        .tech-branch .tech-icon { width: 64px; height: 64px; border-radius: 18px; }
+        .tech-branch .tech-link { width: 20px; height: 1px; margin: 40px 0.25rem 0; background: linear-gradient(to right, rgba(254, 206, 0, 0.15), rgba(254, 206, 0, 0.6), rgba(254, 206, 0, 0.15)); }
+        .tech-branch .tech-link::after { left: 0; top: -3px; background: #fece00; box-shadow: 0 0 10px #fece00; animation-name: tech-flow-h; animation-direction: reverse; }
+        @keyframes tech-flow-v { from { top: 0; opacity: 0; } 15%, 85% { opacity: 1; } to { top: 100%; opacity: 0; } }
+        @keyframes tech-flow-h { from { left: 0; opacity: 0; } 15%, 85% { opacity: 1; } to { left: 100%; opacity: 0; } }
+        @media (min-width: 1280px) {
+            .tech-diagram { flex-direction: row; align-items: flex-start; padding-top: 3rem; }
+            .tech-node { flex: none; width: 96px; }
+            .tech-icon { width: 72px; height: 72px; border-radius: 18px; }
+            .tech-wall span { top: 0.8rem; bottom: auto; transform: none; }
+            .tech-wall .tech-wall-new { top: 0.8rem; bottom: auto; left: auto; right: calc(1rem + 2px); }
+            .tech-wall .tech-wall-old { top: 0.8rem; bottom: auto; left: 1rem; }
+            .tech-link { flex: 1; width: auto; height: 1px; margin: 36px 0.35rem 0; background: linear-gradient(to right, rgba(61, 192, 200, 0.15), rgba(61, 192, 200, 0.6), rgba(61, 192, 200, 0.15)); }
+            .tech-link.is-pink { background: linear-gradient(to right, rgba(248, 105, 185, 0.15), rgba(248, 105, 185, 0.6), rgba(248, 105, 185, 0.15)); }
+            .tech-link::after { left: 0; top: -3px; animation-name: tech-flow-h; }
+            .tech-wall { width: 0; height: 200px; margin: -2.5rem 1.25rem 0; border-top: 0; border-left: 2px dashed #fece00; }
+            .tech-stack { display: flex; flex: none; width: auto; flex-direction: column; align-items: center; }
+            .tech-branch { display: flex; flex-direction: column; align-items: center; padding-top: 0; }
+            .tech-branch .tech-node { max-width: none; margin-top: 0; }
+            .tech-branch .tech-icon { width: 72px; height: 72px; }
+            .tech-branch .tech-link { flex: none; width: 1px; height: 36px; margin: 0.75rem 0; background: linear-gradient(to bottom, rgba(254, 206, 0, 0.15), rgba(254, 206, 0, 0.6), rgba(254, 206, 0, 0.15)); }
+            .tech-branch .tech-link::after { left: -3px; top: 0; animation-name: tech-flow-v; }
+        }
+        @media (prefers-reduced-motion: reduce) { .tech-link::after { animation: none; opacity: 0; } }
+    </style>
+    <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+</head>
+<body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
+        <div class="w-full px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <span class="text-2xl sm:text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white group-hover:opacity-90 transition">
+                    CINEMATAZTIC
+                </span>
+            </a>
+
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-widest uppercase">
+                <a href="cases.html" class="hover:text-brand-cyan transition">Cases</a>
+                <a href="products.html" class="hover:text-brand-cyan transition">Products</a>
+                <a href="technology.html" class="text-brand-cyan">Technology</a>
+                <a href="index.html#cms" class="px-4 py-2 uppercase tracking-widest font-bold border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition">
+                    <i class="fa-solid fa-gear mr-1"></i> CMS
+                </a>
+                <a href="guide.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Guide to programmatic</a>
+            </nav>
+
+            <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
+            <a href="cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
+            <a href="products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
+            <a href="technology.html" class="block text-lg font-bold uppercase text-brand-cyan">Technology</a>
+            <a href="guide.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Guide to programmatic</a>
+            <hr class="border-brand-border my-2">
+            <a href="index.html#cms" class="block w-full text-left py-2 text-sm uppercase font-bold text-brand-cyan">
+                <i class="fa-solid fa-gear mr-2"></i> Open CMS Admin
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+        <!-- HERO: same animated hero as the front page, in orange -->
+        <section id="hero" class="relative overflow-hidden border-b border-brand-border bg-brand-orange">
+            <!-- Canvas Interactive Background -->
+            <canvas id="heroCanvas" class="absolute inset-0 z-0 w-full h-full"></canvas>
+            <div class="relative z-10 w-full px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-28 lg:pb-32">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
+                    <div class="lg:col-span-8 space-y-8">
+                        <span class="inline-flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest text-brand-dark">
+                            <span class="w-2 h-2 rounded-full bg-brand-dark animate-ping"></span>
+                            <span>Technology</span>
+                        </span>
+                        <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tighter !leading-none text-black">
+                            What’s next?
+                        </h1>
+                    </div>
+                    <div class="lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
+                        <p>
+                            The future success of the cinema media depends on a successful digital transformation of the cinema experience and the creation of new digital revenue streams.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PLATFORM: full-width cards, one per topic -->
+        <section id="connecting" class="border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <article class="p-8 sm:p-12 lg:p-16 rounded-2xl bg-brand-card border border-brand-border">
+                    <div class="space-y-8">
+                        <h2 class="section-title font-black uppercase !leading-none">Connecting the audience</h2>
+                        <div class="max-w-3xl space-y-5 text-lg sm:text-xl text-gray-300 !leading-relaxed">
+                            <p>All Cinemataztic products are powered by the Digital Cinema Hub, the CineGame App and the Cinemataztic Cloud.</p>
+                            <p>With the Cinemataztic platform the cinema journey is digitized and the cinema screen is transformed to an interactive space.</p>
+                        </div>
+                    </div>
+                </article>
+                <article class="mt-6 p-8 sm:p-12 lg:p-16 rounded-2xl bg-brand-card border border-brand-border">
+                    <div class="space-y-8">
+                        <h2 class="section-title font-black uppercase !leading-none">The digital transformation</h2>
+                        <div class="max-w-3xl space-y-5 text-lg sm:text-xl text-gray-300 !leading-relaxed">
+                            <p>The Cinemataztic platform is a plug &amp; play solution delivering a digital infrastructure from where all user interactions and digital content are processed.</p>
+                            <p>The Digital Cinema Hub is a hardware unit integrated with the cinema screen-server providing content to the cinema screen. The CineGame app is gateway of user interactions, data collection and content.</p>
+                            <p>The hub and the app are connected by a unique 4-digit code displayed on each cinema screen.</p>
+                            <p>Cinemataztic deliver a white-label app – to be tailored for each market. The app is the corner stone for interactivity and audience profiling.</p>
+                        </div>
+                        <!-- Platform diagram: the new Cinemataztic platform (left of the yellow line) plugs into the cinema's existing setup (right) -->
+                        <div class="tech-diagram pt-10" role="img" aria-label="Diagram. New platform: the CineGame app on the audience's phones, the cloud server and the Cinemataztic Digital Cinema Hub. Existing setup: the cinema's screen-server, fed by its TMS (Theatre Management System), the cinema screen showing the game and a 4-digit code, and the audience.">
+                            <figure class="tech-node">
+                                <div class="tech-icon gap-2">
+                                    <svg width="20" height="34" viewBox="0 0 22 36" fill="none" stroke="#3dc0c8" stroke-width="3"><rect x="1.5" y="1.5" width="19" height="33" rx="4"/><path d="M8 29h6" stroke-linecap="round"/></svg>
+                                    <svg width="20" height="34" viewBox="0 0 22 36" fill="none" stroke="#f869b9" stroke-width="3"><rect x="1.5" y="1.5" width="19" height="33" rx="4"/><path d="M8 29h6" stroke-linecap="round"/></svg>
+                                </div>
+                                <figcaption><b>CineGame app</b>On the audience's phones</figcaption>
+                            </figure>
+                            <span class="tech-link" aria-hidden="true"></span>
+                            <figure class="tech-node">
+                                <div class="tech-icon">
+                                    <svg width="46" height="32" viewBox="0 0 46 32" fill="none" stroke="#3dc0c8" stroke-width="3" stroke-linejoin="round"><path d="M12 29h23a9 9 0 0 0 1.5-17.9A13 13 0 0 0 11.3 9.5 9.8 9.8 0 0 0 12 29z"/></svg>
+                                </div>
+                                <figcaption><b>Cloud server</b>Content, data &amp; prizes</figcaption>
+                            </figure>
+                            <span class="tech-link is-pink" aria-hidden="true"></span>
+                            <figure class="tech-node">
+                                <div class="tech-icon">
+                                    <img src="assets/logos/cinemataztic-mark-white.svg" alt="" width="44" height="44">
+                                </div>
+                                <figcaption><b>Cinemataztic DCH</b>Digital Cinema Hub</figcaption>
+                            </figure>
+                            <span class="tech-link" aria-hidden="true"></span>
+                            <span class="tech-wall" aria-hidden="true"><span class="tech-wall-new">New platform</span><span class="tech-wall-old">Existing setup</span></span>
+                            <span class="tech-link is-pink" aria-hidden="true"></span>
+                            <div class="tech-stack">
+                                <figure class="tech-node">
+                                    <div class="tech-icon">
+                                        <svg width="44" height="40" viewBox="0 0 44 40" fill="none" stroke="#6ceec4" stroke-width="3" stroke-linejoin="round"><rect x="2" y="2" width="40" height="15" rx="4"/><rect x="2" y="23" width="40" height="15" rx="4"/><path d="M9 9.5h12M9 30.5h12" stroke-linecap="round"/><circle cx="34" cy="9.5" r="2.5" fill="#6ceec4" stroke="none"/><circle cx="34" cy="30.5" r="2.5" fill="#6ceec4" stroke="none"/></svg>
+                                    </div>
+                                    <figcaption><b>Screen-server</b>The cinema's own</figcaption>
+                                </figure>
+                                <div class="tech-branch">
+                                    <span class="tech-link" aria-hidden="true"></span>
+                                    <figure class="tech-node">
+                                        <div class="tech-icon">
+                                            <svg width="42" height="40" viewBox="0 0 42 40" fill="none" stroke="#fece00" stroke-width="3" stroke-linejoin="round"><rect x="2" y="5" width="38" height="33" rx="5"/><path d="M2 15h38M12 2v6M30 2v6" stroke-linecap="round"/><path d="M10 23h8M10 30h14M24 23h8" stroke-linecap="round"/></svg>
+                                        </div>
+                                        <figcaption><b>TMS</b>Theatre Management System</figcaption>
+                                    </figure>
+                                </div>
+                            </div>
+                            <span class="tech-link" aria-hidden="true"></span>
+                            <figure class="tech-node">
+                                <div class="tech-icon">
+                                    <svg width="56" height="38" viewBox="0 0 60 40" fill="none"><path d="M3 6c18-5 36-5 54 0v26c-18-5-36-5-54 0z" stroke="#fea917" stroke-width="3" stroke-linejoin="round"/><text x="30" y="24" fill="#ffffff" font-family="'General Sans', system-ui, sans-serif" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="2">4 7 1 9</text></svg>
+                                </div>
+                                <figcaption><b>Cinema screen</b>Shows the game &amp; 4-digit code</figcaption>
+                            </figure>
+                            <span class="tech-link is-pink" aria-hidden="true"></span>
+                            <figure class="tech-node">
+                                <div class="tech-icon">
+                                    <svg width="50" height="34" viewBox="0 0 52 36"><circle cx="15" cy="12" r="7" fill="#3dc0c8"/><circle cx="37" cy="12" r="7" fill="#f869b9"/><path d="M3 34a12 12 0 0 1 24 0zM25 34a12 12 0 0 1 24 0z" fill="#1f1f26"/><path d="M3 34a12 12 0 0 1 24 0" fill="none" stroke="#3dc0c8" stroke-width="2.5"/><path d="M25 34a12 12 0 0 1 24 0" fill="none" stroke="#f869b9" stroke-width="2.5"/></svg>
+                                </div>
+                                <figcaption><b>Audience</b>Plays along in the seats</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
+        <!-- LET'S TALK: same sidebar layout as the page sections -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-b border-brand-border">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                <aside class="lg:col-span-3 space-y-6">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Contact</span>
+                    <h2 class="section-title font-black uppercase !leading-none text-white">Let’s Talk</h2>
+                    <div class="space-y-1">
+                        <a href="mailto:info@cinemataztic.com" class="block text-lg font-bold text-white hover:text-brand-cyan transition">info@cinemataztic.com</a>
+                        <a href="tel:+4553587129" class="block text-lg font-bold text-white hover:text-brand-cyan transition">+45 5358 7129</a>
+                        <span class="block text-xs text-gray-400">(Not for support related inquiries)</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">All support requests should be made <a href="http://support.cinegame.com/" target="_blank" rel="noopener" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">here</a></p>
+                </aside>
+            </div>
+        </div>
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-gray-500">
+            <span>© 2026 Cinemataztic ApS. All rights reserved.</span>
+            <span class="md:text-center">Hellerupvej 46 - 2900 Hellerup - Denmark</span>
+            <div class="flex items-center md:justify-end gap-5 text-lg">
+                <a href="https://www.facebook.com/CinemaTaztic" target="_blank" rel="noopener" aria-label="Cinemataztic on Facebook" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" aria-label="Cinemataztic on LinkedIn" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- INTERACTIVE HERO CANVAS CONSTELLATION MESH ---
+        (function initHeroCanvas() {
+            const canvas = document.getElementById('heroCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let width, height;
+            let particles = [];
+            const particleCount = 45;
+            const maxDistance = 140;
+
+            const mouse = { x: null, y: null, radius: 180 };
+
+            function resize() {
+                width = canvas.width = canvas.parentElement.offsetWidth;
+                height = canvas.height = canvas.parentElement.offsetHeight;
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Track Mouse Position
+            const heroSection = document.getElementById('hero');
+            heroSection.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+
+            heroSection.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.8;
+                    this.vy = (Math.random() - 0.5) * 0.8;
+                    this.radius = Math.random() * 2 + 1.5;
+                    this.color = Math.random() > 0.3 ? '#3dc0c8' : '#ffffff';
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    // Mouse Interaction
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const dx = mouse.x - this.x;
+                        const dy = mouse.y - this.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < mouse.radius) {
+                            const angle = Math.atan2(dy, dx);
+                            const force = (mouse.radius - dist) / mouse.radius;
+                            this.x -= Math.cos(angle) * force * 2;
+                            this.y -= Math.sin(angle) * force * 2;
+                        }
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = this.color;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw connecting lines between particles
+                for (let a = 0; a < particles.length; a++) {
+                    particles[a].update();
+                    particles[a].draw();
+
+                    for (let b = a + 1; b < particles.length; b++) {
+                        const dx = particles[a].x - particles[b].x;
+                        const dy = particles[a].y - particles[b].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < maxDistance) {
+                            const opacity = 1 - (dist / maxDistance);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.strokeStyle = `rgba(61, 192, 200, ${opacity * 0.35})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Draw line to mouse if close
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const mdx = particles[a].x - mouse.x;
+                        const mdy = particles[a].y - mouse.y;
+                        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                        if (mdist < mouse.radius) {
+                            const mOpacity = 1 - (mdist / mouse.radius);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${mOpacity * 0.5})`;
+                            ctx.lineWidth = 1.2;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // --- MENU ON THE HERO ---
+        // The menu bar turns orange while any of the (orange) hero is visible below it.
+        (function initHeroMenu() {
+            const header = document.querySelector('body > header');
+            const hero = document.getElementById('hero');
+            if (!header || !hero) return;
+            const observer = new IntersectionObserver(([entry]) => {
+                header.classList.toggle('on-hero', entry.isIntersecting);
+            }, { rootMargin: `-${header.offsetHeight}px 0px 0px 0px` });
+            observer.observe(hero);
+        })();
+
+        // --- HOW ADVERTISERS BUY: 6-STEP RING ---
+
+
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileDrawer').classList.toggle('hidden');
+        });
+    </script>
+    <script>
+        // --- FIT TEXT TO NARROW SCREENS ---
+        // A heading with one long word (e.g. "PROGRAMMATIC") can be wider than a phone. Such text keeps
+        // its designed size where it fits and only shrinks as much as needed to stay on screen.
+        (function initFitText() {
+            const SELECTOR = 'h1, h2, h3, dd, li > span';
+            function fit() {
+                document.querySelectorAll(SELECTOR).forEach(el => {
+                    el.style.fontSize = '';
+                    if (!el.clientWidth) return;
+                    for (let i = 0; i < 6 && el.scrollWidth > el.clientWidth + 1; i++) {
+                        const size = parseFloat(getComputedStyle(el).fontSize);
+                        el.style.fontSize = `${Math.floor(size * el.clientWidth / el.scrollWidth * 10) / 10}px`;
+                    }
+                });
+            }
+            let frame;
+            const refit = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(fit); };
+            window.addEventListener('resize', refit);
+            if (document.fonts) document.fonts.ready.then(refit);
+            window.addEventListener('load', refit);
+            refit();
+        })();
+    </script>
+</body>
+</html>

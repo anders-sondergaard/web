@@ -115,6 +115,15 @@
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* Hero colour cycles blue → pink → green; the menu bar takes the same colour while the hero is in view */
+        :root { --hero-bg: #3dc0c8; }
+        #hero { background-color: var(--hero-bg); transition: background-color 1200ms ease-in-out; }
+        header { transition: background-color 1200ms ease-in-out, color 250ms linear, border-color 250ms linear; }
+        header.on-hero { background-color: var(--hero-bg) !important; border-color: rgba(10, 10, 12, 0.12) !important; color: #0a0a0c; }
+        header.on-hero .text-white,
+        header.on-hero nav > a.text-brand-cyan { color: #0a0a0c !important; }
+        header.on-hero nav > a[href$="#cms"] { border-color: rgba(10, 10, 12, 0.35); }
+        header.on-hero #mobileDrawer { color: #ffffff; }
     </style>
     <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
     <link rel="preconnect" href="https://api.fontshare.com">
@@ -166,6 +175,7 @@
             <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-widest uppercase">
                 <a href="cases.html" class="hover:text-brand-cyan transition">Cases</a>
                 <a href="products.html" class="text-brand-cyan">Products</a>
+                <a href="technology.html" class="hover:text-brand-cyan transition">Technology</a>
                 <a href="index.html#cms" class="px-4 py-2 uppercase tracking-widest font-bold border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition">
                     <i class="fa-solid fa-gear mr-1"></i> CMS
                 </a>
@@ -180,6 +190,7 @@
         <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
             <a href="cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
             <a href="products.html" class="block text-lg font-bold uppercase text-brand-cyan">Products</a>
+            <a href="technology.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Technology</a>
             <a href="guide.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Guide to programmatic</a>
             <hr class="border-brand-border my-2">
             <a href="index.html#cms" class="block w-full text-left py-2 text-sm uppercase font-bold text-brand-cyan">
@@ -189,13 +200,56 @@
     </header>
 
     <main class="flex-grow pt-20">
-        <!-- AUDIENCE: age distribution chart + "best of two worlds" -->
+        <!-- HERO: same animated hero as the front page; the background cycles blue, pink and green -->
+        <section id="hero" class="relative overflow-hidden border-b border-brand-border">
+            <!-- Canvas Interactive Background -->
+            <canvas id="heroCanvas" class="absolute inset-0 z-0 w-full h-full"></canvas>
+            <div class="relative z-10 w-full px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-28 lg:pb-32">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
+                    <div class="lg:col-span-8 space-y-8">
+                        <span class="inline-flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest text-brand-dark">
+                            <span class="w-2 h-2 rounded-full bg-brand-dark animate-ping"></span>
+                            <span>Products</span>
+                        </span>
+                        <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tighter !leading-none text-black">
+                            Engage the cinema core audience
+                        </h1>
+                    </div>
+                    <div class="lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
+                        <p>
+                            Bringing interactivity to the cinema preshow with a range of engaging advertising formats for the cinema core audience.
+                        </p>
+                        <p class="text-brand-dark/70 text-sm">
+                            Programmatic, CineGame and CineFun: three ways to put a brand on the big screen and in the audience's hands.
+                        </p>
+                        <div class="flex flex-wrap gap-3 pt-2">
+                            <a href="#products" class="btn-shine px-6 py-3 bg-white text-black font-bold uppercase tracking-wider text-xs hover:bg-brand-dark hover:text-white transition">
+                                See the products
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AUDIENCE: sticky sidebar + age distribution chart, same look as the other sections -->
         <section id="audience" class="border-b border-brand-border scroll-mt-20">
             <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Audience</span>
+                        <h2 class="section-title font-black uppercase !leading-none">The best of two worlds</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            Cinemataztic's advertising formats are designed to both enhance the cinema preshow and create new revenue streams for the cinema industry.
+                        </p>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            10–15% of the cinema audience engage with one or more Cinemataztic products on their cinema journey, and the user profile is primarily between the age of 13 and 45.
+                        </p>
+                    </aside>
 
                     <!-- Chart: share of engaged audience by age group -->
-                    <figure class="lg:col-span-7">
+                    <!-- As wide as two of the product cards below (three per row on wide screens, gap 1.5rem) -->
+                    <figure class="lg:col-span-9 self-center xl:w-[calc(66.667%-0.5rem)]">
                         <!-- Generation legend, placed over the age groups it covers (14 half-columns = 7 bars) -->
                         <div class="audience-legend ml-10 flex flex-wrap gap-x-5 gap-y-2 sm:grid mb-6 text-[11px] font-bold uppercase tracking-widest text-gray-200">
                             <span class="flex items-center justify-center gap-2" style="grid-column: 1 / span 4;"><span class="w-2.5 h-2.5 shrink-0" style="background:#f869b9"></span>Gen Z</span>
@@ -282,18 +336,6 @@
                             </tbody>
                         </table>
                     </figure>
-
-                    <!-- Text -->
-                    <div class="lg:col-span-5 space-y-6">
-                        <h2 class="section-title font-black uppercase !leading-none">The best of two worlds</h2>
-                        <div class="w-10 h-px bg-white/40"></div>
-                        <p class="text-gray-300 leading-relaxed">
-                            Cinemataztic's advertising formats are designed to both enhance the cinema preshow and create new revenue streams for the cinema industry.
-                        </p>
-                        <p class="text-gray-300 leading-relaxed">
-                            10–15% of the cinema audience engage with one or more Cinemataztic products on their cinema journey, and the user profile is primarily between the age of 13 and 45.
-                        </p>
-                    </div>
                 </div>
             </div>
         </section>
@@ -704,6 +746,159 @@
             if (document.fonts) document.fonts.ready.then(refit);
             window.addEventListener('load', refit);
             refit();
+        })();
+    </script>
+    <script>
+        // --- INTERACTIVE HERO CANVAS CONSTELLATION MESH ---
+        (function initHeroCanvas() {
+            const canvas = document.getElementById('heroCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let width, height;
+            let particles = [];
+            const particleCount = 45;
+            const maxDistance = 140;
+
+            const mouse = { x: null, y: null, radius: 180 };
+
+            function resize() {
+                width = canvas.width = canvas.parentElement.offsetWidth;
+                height = canvas.height = canvas.parentElement.offsetHeight;
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Track Mouse Position
+            const heroSection = document.getElementById('hero');
+            heroSection.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+
+            heroSection.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.8;
+                    this.vy = (Math.random() - 0.5) * 0.8;
+                    this.radius = Math.random() * 2 + 1.5;
+                    this.color = Math.random() > 0.3 ? '#0a0a0c' : '#ffffff';
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    // Mouse Interaction
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const dx = mouse.x - this.x;
+                        const dy = mouse.y - this.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < mouse.radius) {
+                            const angle = Math.atan2(dy, dx);
+                            const force = (mouse.radius - dist) / mouse.radius;
+                            this.x -= Math.cos(angle) * force * 2;
+                            this.y -= Math.sin(angle) * force * 2;
+                        }
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = this.color;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw connecting lines between particles
+                for (let a = 0; a < particles.length; a++) {
+                    particles[a].update();
+                    particles[a].draw();
+
+                    for (let b = a + 1; b < particles.length; b++) {
+                        const dx = particles[a].x - particles[b].x;
+                        const dy = particles[a].y - particles[b].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < maxDistance) {
+                            const opacity = 1 - (dist / maxDistance);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.strokeStyle = `rgba(10, 10, 12, ${opacity * 0.3})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Draw line to mouse if close
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const mdx = particles[a].x - mouse.x;
+                        const mdy = particles[a].y - mouse.y;
+                        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                        if (mdist < mouse.radius) {
+                            const mOpacity = 1 - (mdist / mouse.radius);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${mOpacity * 0.5})`;
+                            ctx.lineWidth = 1.2;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // --- MENU ON THE HERO ---
+        // The menu bar takes the hero colour while any of the hero is visible below it.
+        (function initHeroMenu() {
+            const header = document.querySelector('body > header');
+            const hero = document.getElementById('hero');
+            if (!header || !hero) return;
+            const observer = new IntersectionObserver(([entry]) => {
+                header.classList.toggle('on-hero', entry.isIntersecting);
+            }, { rootMargin: `-${header.offsetHeight}px 0px 0px 0px` });
+            observer.observe(hero);
+        })();
+
+        // --- HERO COLOUR CYCLE ---
+        // Blue → pink → green, one step every 4 seconds; the hero and the menu bar fade between them.
+        (function initHeroColours() {
+            const colours = ['#3dc0c8', '#f869b9', '#6ceec4'];
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            let i = 0;
+            setInterval(() => {
+                if (document.hidden) return;
+                i = (i + 1) % colours.length;
+                document.documentElement.style.setProperty('--hero-bg', colours[i]);
+            }, 4000);
         })();
     </script>
 </body>
