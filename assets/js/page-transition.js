@@ -15,29 +15,32 @@
 
     const style = document.createElement('style');
     style.textContent = `
-        /* Taller than the screen and reaching past both edges: on phones (iPhone Safari) the visible
-           height changes with the toolbar, and a panel of exactly one screen left a strip uncovered */
+        /* The panel sits in the page at the current scroll position (absolute, not fixed): iPhone Safari
+           draws the page under its bottom toolbar but not fixed elements, so a fixed panel left that
+           strip uncovered. Taller than the screen and only shown during a transition, so it never
+           makes the page longer. */
         html::after {
             content: '';
-            position: fixed;
+            display: none;
+            position: absolute;
             left: 0;
             right: 0;
-            top: -25vh;
+            top: calc(var(--pt-top, 0px) - 25vh);
             height: 150vh;
             z-index: 10000;
             background: ${COLOR};
             transform: translateY(100%);
-            visibility: hidden;
             pointer-events: none;
         }
-        html.pt-covered::after { visibility: visible; transform: translateY(0); }
+        html.pt-covered::after, html.pt-in::after, html.pt-out::after { display: block; }
+        html.pt-covered::after { transform: translateY(0); }
         /* While fully covered, the page itself is hidden on the panel's colour: iPhone Safari does not
            draw the fixed panel under its bottom toolbar on a freshly loaded page, so the page showed
            through there */
         html.pt-covered { background: ${COLOR} !important; }
         html.pt-covered body { visibility: hidden; }
-        html.pt-in::after { visibility: visible; animation: pt-in ${MOVE}s cubic-bezier(0.45, 0, 0.55, 1) forwards; }
-        html.pt-out::after { visibility: visible; animation: pt-out ${MOVE}s cubic-bezier(0.55, 0, 1, 0.45) forwards; }
+        html.pt-in::after { animation: pt-in ${MOVE}s cubic-bezier(0.45, 0, 0.55, 1) forwards; }
+        html.pt-out::after { animation: pt-out ${MOVE}s cubic-bezier(0.55, 0, 1, 0.45) forwards; }
         @keyframes pt-in { from { transform: translateY(100%); } to { transform: translateY(0); } }
         @keyframes pt-out { from { transform: translateY(0); } to { transform: translateY(-100%); } }
     `;
@@ -75,6 +78,7 @@
         if (!isPageLink(a, event)) return;
         event.preventDefault();
         try { sessionStorage.setItem(KEY, '1'); } catch (e) { /* storage unavailable */ }
+        root.style.setProperty('--pt-top', `${window.scrollY}px`); // cover what is on screen now
         root.classList.add('pt-in');
         setTimeout(() => root.classList.add('pt-covered'), MOVE * 1000); // panel is up: hide the page behind it too
         setTimeout(() => { location.href = a.href; }, (MOVE + HOLD) * 1000);

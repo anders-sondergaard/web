@@ -1,0 +1,7 @@
+# Ask browsers to check for a newer version of pages, scripts and styles on every visit
+# (a quick 304 when nothing changed), so phones never keep running an old copy after an update
+<IfModule mod_headers.c>
+    <FilesMatch "\.(html|js|css)$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
+</IfModule>

@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Technology — Cinemataztic</title>
     <!-- Page transition (same as the old site): loads first, so arriving pages start covered -->
-    <script src="assets/js/page-transition.js"></script>
+    <script src="assets/js/page-transition.js?v=3"></script>
     <!-- Menu logo turns into the round mark when scrolling -->
-    <script src="assets/js/site-header.js" defer></script>
+    <script src="assets/js/site-header.js?v=2" defer></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -157,7 +157,8 @@
         .tech-branch .tech-link::after { left: 0; top: -3px; background: #fece00; box-shadow: 0 0 10px #fece00; animation-name: tech-flow-h; animation-direction: reverse; }
         /* The trading desk link is cyan and flows out of the cloud server */
         .tech-branch .tech-link.is-cyan { background: linear-gradient(to right, rgba(61, 192, 200, 0.15), rgba(61, 192, 200, 0.6), rgba(61, 192, 200, 0.15)); }
-        .tech-branch .tech-link.is-cyan::after { background: #3dc0c8; box-shadow: 0 0 10px #3dc0c8; animation-direction: normal; }
+        /* Data goes both ways between the cloud server and the trading desk: the dot runs back and forth */
+        .tech-branch .tech-link.is-cyan::after { background: #3dc0c8; box-shadow: 0 0 10px #3dc0c8; animation-direction: alternate; }
         @keyframes tech-flow-v { from { top: 0; opacity: 0; } 15%, 85% { opacity: 1; } to { top: 100%; opacity: 0; } }
         @keyframes tech-flow-h { from { left: 0; opacity: 0; } 15%, 85% { opacity: 1; } to { left: 100%; opacity: 0; } }
         @media (min-width: 1024px) {
@@ -179,8 +180,7 @@
             .tech-branch .tech-icon { width: 64px; height: 64px; }
             .tech-branch .tech-link { flex: none; width: 1px; height: 36px; margin: 0.75rem 0; background: linear-gradient(to bottom, rgba(254, 206, 0, 0.15), rgba(254, 206, 0, 0.6), rgba(254, 206, 0, 0.15)); }
             .tech-branch .tech-link::after { left: -3px; top: 0; animation-name: tech-flow-v; }
-            .tech-branch .tech-link.is-cyan { background: linear-gradient(to bottom, rgba(61, 192, 200, 0.15), rgba(61, 192, 200, 0.6), rgba(61, 192, 200, 0.15)); }
-        }
+            .tech-branch .tech-link.is-cyan { background: linear-gradient(to bottom, rgba(61, 192, 200, 0.15), rgba(61, 192, 200, 0.6), rgba(61, 192, 200, 0.15)); }        }
         /* Full size once there is room */
         @media (min-width: 1280px) {
             .tech-node { width: 96px; }
@@ -189,7 +189,17 @@
             .tech-icon, .tech-branch .tech-icon { width: 72px; height: 72px; border-radius: 18px; }
             .tech-link { margin: 36px 0.35rem 0; }
         }
+        /* Loop arrow from the audience back to the CineGame app: under the diagram from 1024px, down its
+           left side below that. The path is measured and drawn by initTechLoop. */
+        .tech-diagram { position: relative; }
+        .tech-loop { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+        .tech-loop-path { fill: none; stroke: rgba(61, 192, 200, 0.55); stroke-width: 1.5; stroke-dasharray: 4 5; }
+        .tech-loop-dot { position: absolute; left: 0; top: 0; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 999px; background: #3dc0c8; box-shadow: 0 0 10px #3dc0c8; offset-rotate: 0deg; animation: tech-loop 3.2s linear infinite; pointer-events: none; }
+        @keyframes tech-loop { from { offset-distance: 0%; opacity: 0; } 8%, 92% { opacity: 1; } to { offset-distance: 100%; opacity: 0; } }
+        @media (min-width: 1024px) { .tech-diagram { padding-bottom: 3.5rem; } }
+        @media (max-width: 1023px) { .tech-diagram { padding-left: 28px; } }
         @media (prefers-reduced-motion: reduce) { .tech-link::after { animation: none; opacity: 0; } }
+        @media (prefers-reduced-motion: reduce) { .tech-loop-dot { display: none; } }
         /* Preshow timeline: where the Cinemataztic Show sits in the preshow. Blocks are placed in % of the
            timeline; on narrow screens the timeline keeps its width and scrolls sideways. */
         .preshow-scroll { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
@@ -298,8 +308,8 @@
                             <p>Cinemataztic deliver a white-label app – to be tailored for each market. The app is the corner stone for interactivity and audience profiling.</p>
                         </div>
                         <!-- Platform diagram: the new Cinemataztic platform (left of the yellow line) plugs into the cinema's existing setup (right) -->
-                        <div class="tech-diagram pt-10" role="img" aria-label="Diagram. New platform: the CineGame app on the audience's phones, the cloud server, with the trading desk (DSP, SSP and cleanroom) connected to it, and the Cinemataztic Digital Cinema Hub. Existing setup: the cinema's screen-server, fed by its TMS (Theatre Management System), the cinema screen showing the game and a 4-digit code, and the audience.">
-                            <figure class="tech-node">
+                        <div class="tech-diagram pt-10" role="img" aria-label="Diagram. New platform: the CineGame app on the audience's phones, the cloud server, with the trading desk (DSP, SSP and cleanroom) connected to it, and the Cinemataztic Digital Cinema Hub. Existing setup: the cinema's screen-server, fed by its TMS (Theatre Management System), the cinema screen showing the game and a 4-digit code, and the audience. The audience's engagement flows back to the CineGame app.">
+                            <figure class="tech-node" data-loop="to">
                                 <div class="tech-icon gap-2">
                                     <svg width="20" height="34" viewBox="0 0 22 36" fill="none" stroke="#3dc0c8" stroke-width="3"><rect x="1.5" y="1.5" width="19" height="33" rx="4"/><path d="M8 29h6" stroke-linecap="round"/></svg>
                                     <svg width="20" height="34" viewBox="0 0 22 36" fill="none" stroke="#f869b9" stroke-width="3"><rect x="1.5" y="1.5" width="19" height="33" rx="4"/><path d="M8 29h6" stroke-linecap="round"/></svg>
@@ -359,12 +369,15 @@
                                 <figcaption><b>Cinema screen</b>Shows the game &amp; 4-digit code</figcaption>
                             </figure>
                             <span class="tech-link is-pink" aria-hidden="true"></span>
-                            <figure class="tech-node">
+                            <figure class="tech-node" data-loop="from">
                                 <div class="tech-icon">
                                     <svg width="50" height="34" viewBox="0 0 52 36"><circle cx="15" cy="12" r="7" fill="#3dc0c8"/><circle cx="37" cy="12" r="7" fill="#f869b9"/><path d="M3 34a12 12 0 0 1 24 0zM25 34a12 12 0 0 1 24 0z" fill="#1f1f26"/><path d="M3 34a12 12 0 0 1 24 0" fill="none" stroke="#3dc0c8" stroke-width="2.5"/><path d="M25 34a12 12 0 0 1 24 0" fill="none" stroke="#f869b9" stroke-width="2.5"/></svg>
                                 </div>
-                                <figcaption><b>Audience</b>Plays along in the seats</figcaption>
+                                <figcaption><b>Audience</b>Engagement</figcaption>
                             </figure>
+                            <!-- Engagement flows back from the audience to the CineGame app (drawn by initTechLoop) -->
+                            <svg class="tech-loop" aria-hidden="true"><defs><marker id="techLoopHead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#3dc0c8"/></marker></defs><path class="tech-loop-path" marker-end="url(#techLoopHead)"/></svg>
+                            <span class="tech-loop-dot" aria-hidden="true"></span>
                         </div>
                     </div>
                 </article>
@@ -594,6 +607,57 @@
         });
     </script>
     <script>
+        // --- TECHNOLOGY DIAGRAM: ENGAGEMENT LOOP ---
+        // An arrow from the audience back to the CineGame app, with a dot running along it. Measured from the
+        // nodes, so it follows the diagram: under it when it runs left to right, down its left side when it
+        // runs top to bottom.
+        (function initTechLoop() {
+            const diagram = document.querySelector('.tech-diagram');
+            if (!diagram) return;
+            const from = diagram.querySelector('[data-loop="from"]');
+            const to = diagram.querySelector('[data-loop="to"]');
+            const path = diagram.querySelector('.tech-loop-path');
+            const dot = diagram.querySelector('.tech-loop-dot');
+            const R = 12; // corner radius
+
+            // Orthogonal polyline with rounded corners
+            const rounded = pts => pts.map((p, i) => {
+                if (i === 0) return `M${p[0]},${p[1]}`;
+                if (i === pts.length - 1) return `L${p[0]},${p[1]}`;
+                const [a, b] = [pts[i - 1], pts[i + 1]];
+                const r = Math.min(R, Math.hypot(p[0] - a[0], p[1] - a[1]) / 2, Math.hypot(b[0] - p[0], b[1] - p[1]) / 2);
+                const inX = p[0] - Math.sign(p[0] - a[0]) * r, inY = p[1] - Math.sign(p[1] - a[1]) * r;
+                const outX = p[0] + Math.sign(b[0] - p[0]) * r, outY = p[1] + Math.sign(b[1] - p[1]) * r;
+                return `L${inX},${inY} Q${p[0]},${p[1]} ${outX},${outY}`;
+            }).join(' ');
+
+            function draw() {
+                const box = diagram.getBoundingClientRect();
+                const rel = el => { const r = el.getBoundingClientRect(); return { l: r.left - box.left, r: r.right - box.left, t: r.top - box.top, b: r.bottom - box.top }; };
+                const f = rel(from), t = rel(to);
+                const fi = rel(from.querySelector('.tech-icon')), ti = rel(to.querySelector('.tech-icon'));
+                let pts;
+                if (getComputedStyle(diagram).flexDirection === 'row') {
+                    // Under everything (the branches hang below the row), then up into the app's caption
+                    const bottom = Math.max(...[...diagram.querySelectorAll('.tech-node')].map(n => rel(n).b));
+                    const y = bottom + 28;
+                    const fx = (f.l + f.r) / 2, tx = (t.l + t.r) / 2;
+                    pts = [[fx, f.b + 8], [fx, y], [tx, y], [tx, t.b + 10]];
+                } else {
+                    // Down the left side: out of the audience icon, up past every node, into the app icon
+                    const x = 6;
+                    const fy = (fi.t + fi.b) / 2, ty = (ti.t + ti.b) / 2;
+                    pts = [[fi.l - 8, fy], [x, fy], [x, ty], [ti.l - 10, ty]];
+                }
+                const d = rounded(pts);
+                path.setAttribute('d', d);
+                dot.style.offsetPath = `path('${d}')`;
+            }
+            new ResizeObserver(draw).observe(diagram);
+            window.addEventListener('load', draw);
+            draw();
+        })();
+
         // --- FIT TEXT TO NARROW SCREENS ---
         // A heading with one long word (e.g. "PROGRAMMATIC") can be wider than a phone. Such text keeps
         // its designed size where it fits and only shrinks as much as needed to stay on screen.
