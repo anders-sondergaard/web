@@ -15,10 +15,15 @@
 
     const style = document.createElement('style');
     style.textContent = `
+        /* Taller than the screen and reaching past both edges: on phones (iPhone Safari) the visible
+           height changes with the toolbar, and a panel of exactly one screen left a strip uncovered */
         html::after {
             content: '';
             position: fixed;
-            inset: 0;
+            left: 0;
+            right: 0;
+            top: -25vh;
+            height: 150vh;
             z-index: 10000;
             background: ${COLOR};
             transform: translateY(100%);
