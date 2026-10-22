@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Shared placeholder for programmatic case galleries: replace with the campaign's own pictures -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <rect width="1920" height="1080" fill="#121216"/>
+  <rect x="160" y="140" width="1600" height="800" rx="40" fill="none" stroke="#3dc0c8" stroke-opacity="0.45" stroke-width="4" stroke-dasharray="18 16"/>
+  <g transform="translate(960 470)" fill="none" stroke="#3dc0c8" stroke-width="10" stroke-linejoin="round">
+    <rect x="-110" y="-80" width="220" height="160" rx="18"/>
+    <circle cx="-45" cy="-25" r="20"/>
+    <path d="M-110 60 L-30 -10 L30 45 L65 15 L110 55"/>
+  </g>
+  <text x="960" y="660" fill="#ffffff" font-size="44" font-weight="900" letter-spacing="8" text-anchor="middle">PICTURES COMING SOON</text>
+</svg>

@@ -7,7 +7,7 @@
     <!-- Page transition (same as the old site): loads first, so arriving pages start covered -->
     <script src="assets/js/page-transition.js?v=3"></script>
     <!-- Menu logo turns into the round mark when scrolling -->
-    <script src="assets/js/site-header.js?v=2" defer></script>
+    <script src="assets/js/site-header.js?v=3" defer></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -235,6 +235,31 @@
             </div>
         </section>
 
+        <!-- LATEST GAMES: the newest CineFun cases, same section as on the CineGame page -->
+        <section id="cases" class="border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">CineFun</span>
+                        <h2 class="section-title font-black uppercase !leading-none">Latest games</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            The newest CineFun campaigns. See the <a href="cases.html?category=CineFun" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">work section</a> for all games.
+                        </p>
+                        <span id="gameCaseCount" class="hidden lg:block text-6xl font-black text-brand-mint">0</span>
+                        <a href="cases.html?category=CineFun" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">
+                            See All Cases <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </aside>
+
+                    <div class="lg:col-span-9">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6" id="gameCasesGrid">
+                            <!-- Filled by JS: the 3 newest CineFun cases -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- CINEGAME+: in-app games; the arrows switch the game image and its text together -->
         <section id="cinegame-plus" class="relative overflow-hidden border-b border-brand-border scroll-mt-20">
             <div class="w-full px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
@@ -409,6 +434,55 @@
         </div>
     </footer>
 
+    <script src="assets/js/cases-data.js?v=26"></script>
+    <script>
+        // --- LATEST GAMES ---
+        // Same CMS store as the front page; the CMS adds new cases at the top, so the newest come first.
+        // Each card opens the case on the cases page.
+        (function initLatestGames() {
+            const grid = document.getElementById('gameCasesGrid');
+            if (!grid) return;
+            let cases = defaultCases;
+            try {
+                const saved = JSON.parse(localStorage.getItem('cinemataztic_cms_data_v4'));
+                if (saved && Array.isArray(saved.cases)) cases = addNewDefaultCases(saved).cases;
+            } catch (e) { /* storage unavailable */ }
+            const latest = cases.filter(c => c.category === 'CineFun').slice(0, 3);
+            document.getElementById('gameCaseCount').innerText = latest.length;
+            if (!latest.length) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-gray-500 font-bold uppercase">No games yet.</div>`;
+                return;
+            }
+            grid.innerHTML = latest.map(c => `
+                <a href="cases.html?case=${encodeURIComponent(c.id)}" class="group block">
+                    <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-white transition-colors">
+                        ${caseCover(c)}
+                        ${c.category === 'Programmatic' ? `
+                            <div class="absolute top-3 right-3 bg-black/80 text-white px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/40">
+                                <i class="fa-solid fa-chart-column mr-1"></i> Results
+                            </div>
+                        ` : c.images && c.images.length ? `
+                            <div class="absolute top-3 right-3 bg-black/80 text-white px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/40">
+                                <i class="fa-solid fa-images mr-1"></i> Gallery
+                            </div>
+                        ` : c.mediaType === 'video' ? `
+                            <div class="absolute top-3 right-3 bg-black/80 text-white px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/40">
+                                <i class="fa-solid fa-play mr-1"></i> Video
+                            </div>
+                        ` : ''}
+                        <div class="case-blur"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-5 space-y-2">
+                            <h3 class="text-xl font-black uppercase !leading-none text-white line-clamp-2">${c.title}</h3>
+                            <p class="text-sm text-white/80 line-clamp-2 leading-relaxed">${c.description}</p>
+                            <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/70">
+                                <span class="px-2 py-0.5 border rounded-full" style="color: ${categoryColor(c.category)}; border-color: ${categoryColor(c.category)}">${c.category}</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+        })();
+    </script>
     <script>
         // --- INTERACTIVE HERO CANVAS CONSTELLATION MESH ---
         (function initHeroCanvas() {

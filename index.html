@@ -7,7 +7,7 @@
     <!-- Page transition (same as the old site): loads first, so arriving pages start covered -->
     <script src="assets/js/page-transition.js?v=3"></script>
     <!-- Menu logo turns into the round mark when scrolling -->
-    <script src="assets/js/site-header.js?v=2" defer></script>
+    <script src="assets/js/site-header.js?v=3" defer></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -433,20 +433,21 @@
                     <div class="lg:col-span-8 divide-y divide-brand-border border-y border-brand-border">
                         <div>
                             <button onclick="toggleFaq('faq-1')" class="w-full flex items-center justify-between gap-6 py-6 text-left text-lg font-bold hover:text-brand-cyan transition">
-                                <span>How do moviegoers connect their smartphones to CineGame?</span>
+                                <span>How do moviegoers connect to the CineGame?</span>
                                 <i class="fa-solid fa-plus text-brand-cyan" id="icon-faq-1"></i>
                             </button>
                             <div id="faq-1" class="hidden pb-6 text-gray-400 leading-relaxed max-w-2xl">
-                                Audiences simply scan the QR code displayed on the big screen or open a simple web URL. No app download is required to play.
+                                The audience downloads the CineGame app, available in the App Store and on Google Play, and enters the 4-digit code shown on the cinema screen to join the game.
                             </div>
                         </div>
                         <div>
                             <button onclick="toggleFaq('faq-2')" class="w-full flex items-center justify-between gap-6 py-6 text-left text-lg font-bold hover:text-brand-cyan transition">
-                                <span>Is programmatic cinema ad booking available globally?</span>
+                                <span>Is the CineGame a ‘must-have’ to run programmatic?</span>
                                 <i class="fa-solid fa-plus text-brand-cyan" id="icon-faq-2"></i>
                             </button>
-                            <div id="faq-2" class="hidden pb-6 text-gray-400 leading-relaxed max-w-2xl">
-                                Yes, Cinemataztic connects directly to primary cinema chains across Europe, North America, and select Nordic markets.
+                            <div id="faq-2" class="hidden pb-6 text-gray-400 leading-relaxed max-w-2xl space-y-3">
+                                <p>The CineGame is needed to capture the audience data used for programmatic targeting and voucher distribution.</p>
+                                <p>If your priority is programmatic, we offer a non-commercial CineGame (limited to 3 minutes), which is not sold as an ad format but only used for audience profiling.</p>
                             </div>
                         </div>
                         <div>
@@ -455,7 +456,7 @@
                                 <i class="fa-solid fa-plus text-brand-cyan" id="icon-faq-3"></i>
                             </button>
                             <div id="faq-3" class="hidden pb-6 text-gray-400 leading-relaxed max-w-2xl">
-                                We accept standard DCP cinema formats as well as high-bitrate MP4/MOV files (1080p / 4K) which our platform automatically transcodes.
+                                We accept MP4 (H.264) ads in 16:9 (1920×1080p) with a maximum video bitrate of 13 Mbit/s, and either stereo audio at a maximum volume of −4 dB or 5.1 surround sound with a maximum sound level of 80 dB.
                             </div>
                         </div>
                     </div>
@@ -561,7 +562,7 @@
                     </div>
                     <div>
                         <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Category *</label>
-                        <select id="editCaseCategory" onchange="syncCaseImagesField()" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
+                        <select id="editCaseCategory" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
                             <option value="CineGame">CineGame</option>
                             <option value="Programmatic">Programmatic</option>
                             <option value="CineFun">CineFun</option>
@@ -579,17 +580,17 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Cover Image URL *</label>
-                        <input type="text" id="editCaseCover" required class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
+                        <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Cover Image URL</label>
+                        <input type="text" id="editCaseCover" placeholder="Not needed for video cases" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
                     </div>
                 </div>
                 <div>
                     <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Video URL (MP4 / WebM)</label>
                     <input type="text" id="editCaseVideo" placeholder="https://domain.com/video.mp4" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
                 </div>
-                <!-- Pitch cases: images shown with arrows in the case popup instead of a video -->
-                <div id="editCaseImagesField" class="hidden">
-                    <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Pitch images (one URL per line)</label>
+                <!-- Images shown with arrows in the case popup instead of the video -->
+                <div id="editCaseImagesField">
+                    <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Images (one URL per line, shown with arrows instead of a video)</label>
                     <textarea id="editCaseImages" rows="4" placeholder="assets/cases/pitch-1.jpg" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none"></textarea>
                 </div>
                 <div>
@@ -655,7 +656,7 @@
         </div>
     </footer>
 
-    <script src="assets/js/cases-data.js?v=2"></script>
+    <script src="assets/js/cases-data.js?v=26"></script>
     <script>
         // --- CMS DATA (also read by cases.html); defaultCases comes from assets/js/cases-data.js ---
         const MAX_FEATURED = 9;
@@ -889,8 +890,16 @@
                 <article onclick="openCaseDetailModal('${c.id}')" class="group cursor-pointer">
                     <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-white transition-colors">
                         ${caseCover(c)}
-                        ${c.mediaType === 'video' ? `
-                            <div class="absolute top-3 right-3 bg-black/80 text-brand-cyan px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-brand-cyan/40">
+                        ${c.category === 'Programmatic' ? `
+                            <div class="absolute top-3 right-3 bg-black/80 text-white px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/40">
+                                <i class="fa-solid fa-chart-column mr-1"></i> Results
+                            </div>
+                        ` : c.images && c.images.length ? `
+                            <div class="absolute top-3 right-3 bg-black/80 text-white px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/40">
+                                <i class="fa-solid fa-images mr-1"></i> Gallery
+                            </div>
+                        ` : c.mediaType === 'video' ? `
+                            <div class="absolute top-3 right-3 bg-black/80 text-white px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/40">
                                 <i class="fa-solid fa-play mr-1"></i> Video
                             </div>
                         ` : ''}
@@ -899,7 +908,7 @@
                             <h3 class="text-xl font-black uppercase !leading-none text-white line-clamp-2">${c.title}</h3>
                             <p class="text-sm text-white/80 line-clamp-2 leading-relaxed">${c.description}</p>
                             <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/70">
-                                <span class="px-2 py-0.5 border border-white/70 rounded-full">${c.category}</span>
+                                <span class="px-2 py-0.5 border rounded-full" style="color: ${categoryColor(c.category)}; border-color: ${categoryColor(c.category)}">${c.category}</span>
                             </div>
                         </div>
                     </div>
@@ -920,8 +929,8 @@
             document.getElementById('caseModalDescription').innerText = item.description;
 
             const mediaBox = document.getElementById('caseModalMediaContainer');
-            if (item.category === 'Pitch' && item.images && item.images.length) {
-                mountPitchSlider(mediaBox, item.images); // pitch decks: images with arrows, no video
+            if (item.images && item.images.length) {
+                mountImageSlider(mediaBox, item.images, categoryColor(item.category)); // images with arrows instead of a video
             } else if (item.mediaType === 'video' && item.video) {
                 mediaBox.innerHTML = `
                     <video src="${item.video}" controls autoplay class="w-full h-full object-contain bg-black"></video>
@@ -939,6 +948,9 @@
             document.getElementById('caseDetailModal').classList.add('hidden');
             document.getElementById('caseModalMediaContainer').innerHTML = '';
         }
+
+        // Arrows beside the open case step through the front-page cases in the current filter
+        initCaseNav(() => currentFilter === 'All' ? frontPageCases() : frontPageCases().filter(c => c.category === currentFilter));
 
         // --- FAQ ---
         function toggleFaq(id) {
@@ -1079,15 +1091,8 @@
                 document.getElementById('editCaseFeatured').checked = false;
                 document.getElementById('editCaseImages').value = '';
             }
-            syncCaseImagesField();
             document.getElementById('editFeaturedCount').innerText = `(${featuredCount()} / ${MAX_FEATURED} selected)`;
             modal.classList.remove('hidden');
-        }
-
-        // The images field is only for Pitch cases
-        function syncCaseImagesField() {
-            const pitch = document.getElementById('editCaseCategory').value === 'Pitch';
-            document.getElementById('editCaseImagesField').classList.toggle('hidden', !pitch);
         }
 
         function closeCaseModal() {
@@ -1097,7 +1102,10 @@
         function saveCaseForm(e) {
             e.preventDefault();
             const id = document.getElementById('editCaseId').value;
+            // Keep fields the form doesn't show (a pitch case's logo and logo crop)
+            const existing = id ? appData.cases.find(c => c.id === id) : null;
             const newObj = {
+                ...existing,
                 id: id || 'c_' + Date.now(),
                 title: document.getElementById('editCaseTitle').value,
                 client: document.getElementById('editCaseClient').value,
@@ -1109,6 +1117,12 @@
                 featured: document.getElementById('editCaseFeatured').checked,
                 images: document.getElementById('editCaseImages').value.split('\n').map(s => s.trim()).filter(Boolean)
             };
+
+            // Case cards show the client logo; the cover is only shown in the popup when there is no video
+            if (!newObj.cover && !(newObj.mediaType === 'video' && newObj.video) && !newObj.images.length) {
+                alert('Add a cover image URL, or a video URL with media type Video.');
+                return;
+            }
 
             const wasFeatured = id ? !!appData.cases.find(c => c.id === id)?.featured : false;
             if (newObj.featured && !wasFeatured && featuredCount() >= MAX_FEATURED) {

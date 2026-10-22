@@ -69,10 +69,11 @@
             display: flex; flex-direction: column;
             padding-top: 80px; overflow-y: auto; overscroll-behavior: contain;
             background: #121216; color: #ffffff;
-            opacity: 0; visibility: hidden;
-            transition: opacity 300ms cubic-bezier(0.33, 1, 0.68, 1), visibility 0s linear 300ms;
+            /* Rolls down from the top, so the menu bar is on the dark panel from the first frame */
+            clip-path: inset(0 0 100% 0); visibility: hidden;
+            transition: clip-path 450ms cubic-bezier(0.65, 0, 0.35, 1), visibility 0s linear 450ms;
         }
-        .m-menu.is-open { opacity: 1; visibility: visible; transition-delay: 0s; }
+        .m-menu.is-open { clip-path: inset(0 0 0 0); visibility: visible; transition-delay: 0s; }
         @media (min-width: 768px) { .m-menu { display: none; } }
         .m-menu__inner { display: flex; flex-direction: column; flex: 1; padding: 32px 16px 24px; }
         @media (min-width: 640px) { .m-menu__inner { padding-left: 24px; padding-right: 24px; } }
@@ -92,6 +93,8 @@
         .m-menu__foot a, .m-menu__foot button { color: inherit; text-transform: uppercase; font-weight: 700; letter-spacing: 0.1em; }
         .m-menu__foot a:hover, .m-menu__foot button:hover { color: #ffffff; }
         /* While the panel is open the menu bar is see-through with white logo and cross */
+        /* The bar switches colour at once (no fade), in step with the panel */
+        header.menu-open, header.menu-switch, header.menu-switch * { transition: none !important; }
         header.menu-open { background-color: transparent !important; border-color: transparent !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
         header.menu-open, header.menu-open .text-white { color: #ffffff !important; }
         .m-burger { width: 32px; height: 32px; display: block; }
@@ -161,11 +164,24 @@
     btn.setAttribute('aria-expanded', 'false');
     oldBtn.replaceWith(btn);
 
+    // Opening: the bar turns see-through at once while the panel rolls down from the top. Closing: the
+    // panel rolls back up and the bar gets its colour back only once the panel is gone.
+    let closeTimer = 0;
     const setOpen = (open) => {
+        if (open === menu.classList.contains('is-open')) return;
         menu.classList.remove('hidden');
         menu.classList.toggle('is-open', open);
         menu.setAttribute('aria-hidden', String(!open));
-        header.classList.toggle('menu-open', open);
+        clearTimeout(closeTimer);
+        if (open) {
+            header.classList.add('menu-open');
+        } else {
+            closeTimer = setTimeout(() => {
+                header.classList.add('menu-switch');
+                header.classList.remove('menu-open');
+                requestAnimationFrame(() => requestAnimationFrame(() => header.classList.remove('menu-switch')));
+            }, 450);
+        }
         document.documentElement.classList.toggle('menu-locked', open);
         btn.setAttribute('aria-expanded', String(open));
         btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');

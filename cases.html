@@ -7,7 +7,7 @@
     <!-- Page transition (same as the old site): loads first, so arriving pages start covered -->
     <script src="assets/js/page-transition.js?v=3"></script>
     <!-- Menu logo turns into the round mark when scrolling -->
-    <script src="assets/js/site-header.js?v=2" defer></script>
+    <script src="assets/js/site-header.js?v=3" defer></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -282,7 +282,7 @@
         </div>
     </footer>
 
-    <script src="assets/js/cases-data.js?v=2"></script>
+    <script src="assets/js/cases-data.js?v=26"></script>
     <script>
         // --- CASE DATA ---
         // Same CMS store as index.html; falls back to defaultCases (assets/js/cases-data.js) when nothing is saved.
@@ -341,8 +341,16 @@
                 <article onclick="openCaseDetailModal('${c.id}')" class="case-card group cursor-pointer relative">
                     <div class="case-media relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-white transition-colors">
                         ${caseCover(c)}
-                        ${c.mediaType === 'video' ? `
-                            <div class="absolute top-3 right-3 bg-black/80 text-brand-cyan px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-brand-cyan/40">
+                        ${c.category === 'Programmatic' ? `
+                            <div class="absolute top-3 right-3 bg-black/80 text-white px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/40">
+                                <i class="fa-solid fa-chart-column mr-1"></i> Results
+                            </div>
+                        ` : c.images && c.images.length ? `
+                            <div class="absolute top-3 right-3 bg-black/80 text-white px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/40">
+                                <i class="fa-solid fa-images mr-1"></i> Gallery
+                            </div>
+                        ` : c.mediaType === 'video' ? `
+                            <div class="absolute top-3 right-3 bg-black/80 text-white px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/40">
                                 <i class="fa-solid fa-play mr-1"></i> Video
                             </div>
                         ` : ''}
@@ -351,7 +359,7 @@
                             <h3 class="text-xl font-black uppercase !leading-none text-white line-clamp-2">${c.title}</h3>
                             <p class="text-sm text-white/80 line-clamp-2 leading-relaxed">${c.description}</p>
                             <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/70">
-                                <span class="px-2 py-0.5 border border-white/70 rounded-full">${c.category}</span>
+                                <span class="px-2 py-0.5 border rounded-full" style="color: ${categoryColor(c.category)}; border-color: ${categoryColor(c.category)}">${c.category}</span>
                                 <span>${String(i + 1).padStart(2, '0')}</span>
                             </div>
                         </div>
@@ -507,8 +515,8 @@
             document.getElementById('caseModalDescription').innerText = item.description;
 
             const mediaBox = document.getElementById('caseModalMediaContainer');
-            if (item.category === 'Pitch' && item.images && item.images.length) {
-                mountPitchSlider(mediaBox, item.images); // pitch decks: images with arrows, no video
+            if (item.images && item.images.length) {
+                mountImageSlider(mediaBox, item.images, categoryColor(item.category)); // images with arrows instead of a video
             } else if (item.mediaType === 'video' && item.video) {
                 mediaBox.innerHTML = `
                     <video src="${item.video}" controls autoplay class="w-full h-full object-contain bg-black"></video>
@@ -528,6 +536,11 @@
             modal.classList.add('hidden');
             mediaBox.innerHTML = '';
         }
+
+        // Arrows beside the open case step through the cases in the current filter
+        initCaseNav((category) => category
+            ? allCases.filter(c => c.category === category)
+            : (currentFilter === 'All' ? allCases.filter(inAll) : allCases.filter(c => c.category === currentFilter)));
 
         // Mobile Menu Toggle
         document.getElementById('mobileMenuBtn').addEventListener('click', () => {
