@@ -11,7 +11,7 @@ const defaultCases = [
         cover: "assets/cases/programmatic/prog-3-mobile-results.svg",
         video: "",
         images: ["assets/cases/programmatic/prog-3-mobile-results.svg"],
-        description: "250,000 impressions and 35,000 vouchers with a 10.9% CTR. Leads: call center."
+        description: "250,000 impressions\n35,000 vouchers with a 10.9% CTR. \nLeads: call center."
     },
     {
         id: "prog-ase",
@@ -59,6 +59,7 @@ const defaultCases = [
     },
     {
         id: "prog-lego-house",
+        featured: true,
         title: "LEGO House",
         client: "LEGO House",
         category: "Programmatic",
@@ -70,6 +71,7 @@ const defaultCases = [
     },
     {
         id: "prog-specsavers",
+        featured: true,
         title: "Specsavers",
         client: "Specsavers",
         category: "Programmatic",
@@ -92,6 +94,7 @@ const defaultCases = [
     },
     {
         id: "prog-lyko",
+        featured: true,
         title: "LYKO",
         client: "LYKO",
         category: "Programmatic",
@@ -103,6 +106,7 @@ const defaultCases = [
     },
     {
         id: "nordlys",
+        featured: true,
         title: "Norlys",
         client: "Norlys",
         category: "CineFun",
@@ -113,6 +117,7 @@ const defaultCases = [
     },
     {
         id: "allianz",
+        featured: true,
         title: "Allianz",
         client: "Allianz",
         category: "CineFun",
@@ -134,7 +139,7 @@ const defaultCases = [
     {
         id: "subway",
         featured: true,
-        title: "Subway – Jump and stay alive",
+        title: "Jump and stay alive",
         client: "Subway",
         category: "CineGame",
         mediaType: "video",
@@ -144,7 +149,7 @@ const defaultCases = [
     },
     {
         id: "fanta-zip-and-ride",
-        featured: true,
+        featured: false,
         title: "Fanta – Ride n' Sip",
         client: "Fanta",
         category: "CineGame",
@@ -156,7 +161,7 @@ const defaultCases = [
     {
         id: "mars",
         featured: true,
-        title: "M&M's + Extra – The Jumper",
+        title: "M&M's – The Jumper",
         client: "M&M's + Extra",
         category: "CineGame",
         mediaType: "video",
@@ -166,8 +171,8 @@ const defaultCases = [
     },
     {
         id: "politikens-publisher",
-        featured: true,
-        title: "Politikens Forlag – The children's book game",
+        featured: false,
+        title: "The children's book game",
         client: "Politikens Forlag",
         category: "CineGame",
         mediaType: "video",
@@ -178,7 +183,7 @@ const defaultCases = [
     {
         id: "tivoli",
         featured: true,
-        title: "Tivoli – The Rollercoaster Ride",
+        title: "The Rollercoaster",
         client: "Tivoli",
         category: "CineGame",
         mediaType: "video",
@@ -189,7 +194,7 @@ const defaultCases = [
     {
         id: "ikea",
         featured: true,
-        title: "IKEA – It is Meatball Friday",
+        title: "It is meatball Friday",
         client: "IKEA",
         category: "CineGame",
         mediaType: "video",
@@ -199,7 +204,7 @@ const defaultCases = [
     },
     {
         id: "3dk2024",
-        featured: true,
+        featured: false,
         title: "3 – No worries",
         client: "3",
         category: "CineGame",
@@ -210,8 +215,8 @@ const defaultCases = [
     },
     {
         id: "fazer",
-        featured: true,
-        title: "Fazer – re-mix MINI",
+        featured: false,
+        title: "Fazer – Remix",
         client: "Fazer",
         category: "CineGame",
         mediaType: "video",
@@ -221,8 +226,8 @@ const defaultCases = [
     },
     {
         id: "hummel",
-        featured: true,
-        title: "Hummel – New official jersey",
+        featured: false,
+        title: "New official jersey",
         client: "Hummel",
         category: "CineGame",
         mediaType: "image",
@@ -234,7 +239,7 @@ const defaultCases = [
     {
         id: "jdsports",
         featured: false,
-        title: "JD Sports – King of the Game",
+        title: "King of the game",
         client: "JD Sports",
         category: "CineGame",
         mediaType: "video",
@@ -245,7 +250,7 @@ const defaultCases = [
     {
         id: "samsung",
         featured: false,
-        title: "Samsung – Galaxy S23 Series",
+        title: "Galaxy S23 Series",
         client: "Samsung",
         category: "CineGame",
         mediaType: "video",
@@ -290,7 +295,7 @@ const defaultCases = [
     {
         id: "podimo",
         featured: false,
-        title: "Podimo – Home of your favourite stories",
+        title: "Your favourite stories",
         client: "Podimo",
         category: "CineGame",
         mediaType: "image",
@@ -369,7 +374,7 @@ const defaultCases = [
     {
         id: "fanta-halloween",
         featured: false,
-        title: "Fanta – Halloween",
+        title: "Halloween",
         client: "Fanta",
         category: "CineGame",
         mediaType: "video",
@@ -380,7 +385,7 @@ const defaultCases = [
     {
         id: "toms",
         featured: false,
-        title: "Toms – Haunted House",
+        title: "Haunted House",
         client: "Toms",
         category: "CineGame",
         mediaType: "image",
@@ -403,7 +408,7 @@ const defaultCases = [
     {
         id: "pepsimax",
         featured: false,
-        title: "Pepsi Max – Max the Music",
+        title: "Max the music",
         client: "Pepsi Max",
         category: "CineGame",
         mediaType: "video",
@@ -414,7 +419,7 @@ const defaultCases = [
     {
         id: "cinerunner",
         featured: false,
-        title: "Cinemataztic – CineRunner",
+        title: "CineRunner",
         client: "Cinemataztic",
         category: "CineGame",
         mediaType: "video",
@@ -425,7 +430,7 @@ const defaultCases = [
     {
         id: "battery-black",
         featured: false,
-        title: "Battery – Black Energy",
+        title: "Black energy",
         client: "Battery",
         category: "CineGame",
         mediaType: "image",
@@ -448,7 +453,7 @@ const defaultCases = [
     {
         id: "coke-maze-game",
         featured: false,
-        title: "Coca-Cola – The Coke maze game",
+        title: "The Coke maze game",
         client: "Coca-Cola",
         category: "CineGame",
         mediaType: "video",
@@ -459,7 +464,7 @@ const defaultCases = [
     {
         id: "derby25",
         featured: false,
-        title: "Bet25 – Ganz genau",
+        title: "Ganz genau",
         client: "Bet25",
         category: "CineGame",
         mediaType: "image",
@@ -483,7 +488,7 @@ const defaultCases = [
     {
         id: "sonic",
         featured: false,
-        title: "Sonic – Are you fast?",
+        title: "Are you fast?",
         client: "Sonic",
         category: "CineGame",
         mediaType: "image",
@@ -495,7 +500,7 @@ const defaultCases = [
     {
         id: "sprite",
         featured: false,
-        title: "Sprite – Sprite the word",
+        title: "Sprite the word",
         client: "Sprite",
         category: "CineGame",
         mediaType: "image",
@@ -507,7 +512,7 @@ const defaultCases = [
     {
         id: "trolls",
         featured: false,
-        title: "Trolls World Tour – The rocking troll game",
+        title: "Trolls World Tour",
         client: "Trolls World Tour",
         category: "CineGame",
         mediaType: "image",
@@ -519,7 +524,7 @@ const defaultCases = [
     {
         id: "tuborg-derby",
         featured: false,
-        title: "Tuborg – Let the race begin",
+        title: "Let the race begin",
         client: "Tuborg",
         category: "CineGame",
         mediaType: "image",
@@ -531,7 +536,7 @@ const defaultCases = [
     {
         id: "mentos-friends",
         featured: false,
-        title: "Mentos – Complimentos",
+        title: "Complimentos",
         client: "Mentos",
         category: "CineGame",
         mediaType: "image",
@@ -543,7 +548,7 @@ const defaultCases = [
     {
         id: "paula",
         featured: false,
-        title: "Dr. Oetker – Where's Paula?",
+        title: "Where's Paula?",
         client: "Dr. Oetker",
         category: "CineGame",
         mediaType: "image",
@@ -694,7 +699,7 @@ const defaultCases = [
     {
         id: "bundeswehr",
         featured: false,
-        title: "Bundeswehr – Karriereberatung",
+        title: "Karriereberatung",
         client: "Bundeswehr",
         category: "CineGame",
         mediaType: "video",
@@ -705,7 +710,7 @@ const defaultCases = [
     {
         id: "specsavers",
         featured: false,
-        title: "Specsavers – Test your vision",
+        title: "Test your vision",
         client: "Specsavers",
         category: "CineGame",
         mediaType: "video",
@@ -716,7 +721,7 @@ const defaultCases = [
     {
         id: "bookbeat",
         featured: false,
-        title: "BookBeat – Nothing beats a good book",
+        title: "A good book",
         client: "BookBeat",
         category: "CineGame",
         mediaType: "video",
