@@ -31,6 +31,11 @@
             pointer-events: none;
         }
         html.pt-covered::after { visibility: visible; transform: translateY(0); }
+        /* While fully covered, the page itself is hidden on the panel's colour: iPhone Safari does not
+           draw the fixed panel under its bottom toolbar on a freshly loaded page, so the page showed
+           through there */
+        html.pt-covered { background: ${COLOR} !important; }
+        html.pt-covered body { visibility: hidden; }
         html.pt-in::after { visibility: visible; animation: pt-in ${MOVE}s cubic-bezier(0.45, 0, 0.55, 1) forwards; }
         html.pt-out::after { visibility: visible; animation: pt-out ${MOVE}s cubic-bezier(0.55, 0, 1, 0.45) forwards; }
         @keyframes pt-in { from { transform: translateY(100%); } to { transform: translateY(0); } }
@@ -71,6 +76,7 @@
         event.preventDefault();
         try { sessionStorage.setItem(KEY, '1'); } catch (e) { /* storage unavailable */ }
         root.classList.add('pt-in');
+        setTimeout(() => root.classList.add('pt-covered'), MOVE * 1000); // panel is up: hide the page behind it too
         setTimeout(() => { location.href = a.href; }, (MOVE + HOLD) * 1000);
     });
 
