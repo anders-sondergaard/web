@@ -529,7 +529,7 @@
                 <div class="bg-brand-card border border-brand-border p-6 rounded-xl space-y-4">
                     <div class="flex flex-col sm:flex-row gap-4">
                         <input type="text" id="newBrandName" placeholder="Brand name (e.g. Tuborg)" class="sm:w-56 bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-brand-cyan">
-                        <input type="url" id="newBrandLogo" placeholder="Logo URL (optional)" class="flex-grow bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-brand-cyan">
+                        <input type="text" id="newBrandLogo" placeholder="Logo URL (optional)" class="flex-grow bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-brand-cyan">
                         <button onclick="addLogoBrand()" class="px-5 py-2 bg-brand-cyan text-black font-bold text-xs uppercase hover:bg-brand-mint transition">Add</button>
                     </div>
                     <div id="adminBrandList" class="divide-y divide-brand-border border-t border-brand-border">
@@ -561,10 +561,12 @@
                     </div>
                     <div>
                         <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Category *</label>
-                        <select id="editCaseCategory" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
+                        <select id="editCaseCategory" onchange="syncCaseImagesField()" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
                             <option value="CineGame">CineGame</option>
                             <option value="Programmatic">Programmatic</option>
                             <option value="CineFun">CineFun</option>
+                            <option value="Leadsite">Leadsite</option>
+                            <option value="Pitch">Pitch</option>
                         </select>
                     </div>
                 </div>
@@ -578,12 +580,17 @@
                     </div>
                     <div>
                         <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Cover Image URL *</label>
-                        <input type="url" id="editCaseCover" required class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
+                        <input type="text" id="editCaseCover" required class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
                     </div>
                 </div>
                 <div>
                     <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Video URL (MP4 / WebM)</label>
-                    <input type="url" id="editCaseVideo" placeholder="https://domain.com/video.mp4" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
+                    <input type="text" id="editCaseVideo" placeholder="https://domain.com/video.mp4" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
+                </div>
+                <!-- Pitch cases: images shown with arrows in the case popup instead of a video -->
+                <div id="editCaseImagesField" class="hidden">
+                    <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Pitch images (one URL per line)</label>
+                    <textarea id="editCaseImages" rows="4" placeholder="assets/cases/pitch-1.jpg" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none"></textarea>
                 </div>
                 <div>
                     <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Description *</label>
@@ -695,6 +702,7 @@
         try {
             appData = JSON.parse(localStorage.getItem('cinemataztic_cms_data_v4')) || appData;
         } catch (e) { /* storage unavailable (private mode, sandboxed preview) */ }
+        if (Array.isArray(appData.cases)) addNewDefaultCases(appData);
         // Data saved before the brand wall existed gets the default brands
         if (!Array.isArray(appData.logoBrands)) appData.logoBrands = JSON.parse(JSON.stringify(defaultLogoBrands));
 
@@ -837,13 +845,14 @@
         }
 
         function frontPageCases() {
-            const hasFlags = appData.cases.some(c => 'featured' in c);
-            const list = hasFlags ? appData.cases.filter(c => c.featured) : appData.cases;
+            const cases = appData.cases.filter(c => c.category !== 'Pitch'); // pitches are only on the cases page
+            const hasFlags = cases.some(c => 'featured' in c);
+            const list = hasFlags ? cases.filter(c => c.featured) : cases;
             return list.slice(0, MAX_FEATURED);
         }
 
         // --- FEATURED WORK ---
-        const categories = ['All', 'CineGame', 'Programmatic', 'CineFun'];
+        const categories = ['All', 'CineGame', 'Programmatic', 'CineFun']; // Leadsite cases only show under All; Pitch cases never on the front page
         let currentFilter = 'All';
 
         function renderFilters() {
@@ -879,7 +888,7 @@
             grid.innerHTML = filtered.map(c => `
                 <article onclick="openCaseDetailModal('${c.id}')" class="group cursor-pointer">
                     <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-white transition-colors">
-                        <img src="${c.cover}" alt="${c.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        ${caseCover(c)}
                         ${c.mediaType === 'video' ? `
                             <div class="absolute top-3 right-3 bg-black/80 text-brand-cyan px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-brand-cyan/40">
                                 <i class="fa-solid fa-play mr-1"></i> Video
@@ -905,11 +914,15 @@
 
             document.getElementById('caseModalTitle').innerText = item.title;
             document.getElementById('caseModalClient').innerText = item.client;
-            document.getElementById('caseModalCategory').innerText = item.category;
+            const categoryEl = document.getElementById('caseModalCategory');
+            categoryEl.innerText = item.category;
+            categoryEl.style.backgroundColor = categoryColor(item.category);
             document.getElementById('caseModalDescription').innerText = item.description;
 
             const mediaBox = document.getElementById('caseModalMediaContainer');
-            if (item.mediaType === 'video' && item.video) {
+            if (item.category === 'Pitch' && item.images && item.images.length) {
+                mountPitchSlider(mediaBox, item.images); // pitch decks: images with arrows, no video
+            } else if (item.mediaType === 'video' && item.video) {
                 mediaBox.innerHTML = `
                     <video src="${item.video}" controls autoplay class="w-full h-full object-contain bg-black"></video>
                 `;
@@ -996,7 +1009,7 @@
                         ${b.logo ? `<img src="${escapeHtml(b.logo)}" alt="" class="brand-logo max-h-7 max-w-[56px] object-contain">` : '<span class="text-[9px] uppercase text-gray-500">No logo</span>'}
                     </div>
                     <span class="sm:w-40 text-sm font-bold text-white">${escapeHtml(b.name)}</span>
-                    <input type="url" value="${escapeHtml(b.logo || '')}" placeholder="Logo URL" onchange="updateBrandLogo(${i}, this.value)" class="flex-grow bg-brand-dark border border-brand-border rounded-lg px-3 py-1.5 text-white text-xs focus:outline-none focus:border-brand-cyan">
+                    <input type="text" value="${escapeHtml(b.logo || '')}" placeholder="Logo URL" onchange="updateBrandLogo(${i}, this.value)" class="flex-grow bg-brand-dark border border-brand-border rounded-lg px-3 py-1.5 text-white text-xs focus:outline-none focus:border-brand-cyan">
                     <div class="flex items-center gap-3 text-xs font-bold uppercase">
                         <button onclick="moveLogoBrand(${i}, -1)" class="text-gray-400 hover:text-white disabled:opacity-30" ${i === 0 ? 'disabled' : ''} title="Move up"><i class="fa-solid fa-arrow-up"></i></button>
                         <button onclick="moveLogoBrand(${i}, 1)" class="text-gray-400 hover:text-white disabled:opacity-30" ${i === appData.logoBrands.length - 1 ? 'disabled' : ''} title="Move down"><i class="fa-solid fa-arrow-down"></i></button>
@@ -1052,6 +1065,7 @@
                 document.getElementById('editCaseVideo').value = c.video || '';
                 document.getElementById('editCaseDescription').value = c.description;
                 document.getElementById('editCaseFeatured').checked = !!c.featured;
+                document.getElementById('editCaseImages').value = (c.images || []).join('\n');
             } else {
                 document.getElementById('editModalHeaderTitle').innerText = 'Add New Case';
                 document.getElementById('editCaseId').value = '';
@@ -1063,9 +1077,17 @@
                 document.getElementById('editCaseVideo').value = '';
                 document.getElementById('editCaseDescription').value = '';
                 document.getElementById('editCaseFeatured').checked = false;
+                document.getElementById('editCaseImages').value = '';
             }
+            syncCaseImagesField();
             document.getElementById('editFeaturedCount').innerText = `(${featuredCount()} / ${MAX_FEATURED} selected)`;
             modal.classList.remove('hidden');
+        }
+
+        // The images field is only for Pitch cases
+        function syncCaseImagesField() {
+            const pitch = document.getElementById('editCaseCategory').value === 'Pitch';
+            document.getElementById('editCaseImagesField').classList.toggle('hidden', !pitch);
         }
 
         function closeCaseModal() {
@@ -1084,7 +1106,8 @@
                 cover: document.getElementById('editCaseCover').value,
                 video: document.getElementById('editCaseVideo').value,
                 description: document.getElementById('editCaseDescription').value,
-                featured: document.getElementById('editCaseFeatured').checked
+                featured: document.getElementById('editCaseFeatured').checked,
+                images: document.getElementById('editCaseImages').value.split('\n').map(s => s.trim()).filter(Boolean)
             };
 
             const wasFeatured = id ? !!appData.cases.find(c => c.id === id)?.featured : false;
@@ -1288,7 +1311,7 @@
                         c.el.style.backgroundColor = `rgba(255, 255, 255, ${0.05 + (c.flicker > 0.97 ? 0.15 : 0)})`;
                     }
                 });
-                tag.textContent = `${active} screens targeted`;
+                tag.textContent = `${active} audience-targeted`;
                 const r = grid.getBoundingClientRect();
                 const tagW = tag.offsetWidth;
                 tag.style.left = `${Math.min(r.width - tagW, Math.max(0, target.x * r.width - tagW / 2))}px`;

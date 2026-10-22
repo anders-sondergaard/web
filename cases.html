@@ -289,13 +289,15 @@
         function loadCases() {
             try {
                 const saved = JSON.parse(localStorage.getItem('cinemataztic_cms_data_v4'));
-                if (saved && Array.isArray(saved.cases)) return saved.cases;
+                if (saved && Array.isArray(saved.cases)) return addNewDefaultCases(saved).cases;
             } catch (e) { /* storage unavailable */ }
             return defaultCases;
         }
 
         const allCases = loadCases();
-        const categories = ['All', 'CineGame', 'Programmatic', 'CineFun'];
+        const categories = ['All', 'CineGame', 'Programmatic', 'CineFun', 'Pitch']; // Leadsite cases only show under All
+        // Pitch cases are only shown under their own filter, not under All
+        const inAll = c => c.category !== 'Pitch';
         // ?category=CineGame (from the Product section on the front page) opens pre-filtered
         const requestedCategory = new URLSearchParams(window.location.search).get('category');
         let currentFilter = categories.includes(requestedCategory) ? requestedCategory : 'All';
@@ -306,7 +308,7 @@
             document.getElementById('gridHeading').innerText = currentFilter === 'All' ? 'All Cases' : currentFilter;
             const container = document.getElementById('filterContainer');
             container.innerHTML = categories.map(cat => {
-                const count = cat === 'All' ? allCases.length : allCases.filter(c => c.category === cat).length;
+                const count = cat === 'All' ? allCases.filter(inAll).length : allCases.filter(c => c.category === cat).length;
                 const active = cat === currentFilter;
                 return `
                     <button onclick="filterCases('${cat}')" class="px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${active ? 'bg-brand-cyan text-black' : 'border border-brand-border text-gray-300 hover:border-brand-cyan hover:text-white'}">
@@ -325,7 +327,7 @@
         // --- GRID ---
         function renderCasesGrid() {
             const grid = document.getElementById('casesGrid');
-            const filtered = currentFilter === 'All' ? allCases : allCases.filter(c => c.category === currentFilter);
+            const filtered = currentFilter === 'All' ? allCases.filter(inAll) : allCases.filter(c => c.category === currentFilter);
             document.getElementById('caseCount').innerText = filtered.length;
 
             if (filtered.length === 0) {
@@ -338,7 +340,7 @@
             grid.innerHTML = filtered.map((c, i) => `
                 <article onclick="openCaseDetailModal('${c.id}')" class="case-card group cursor-pointer relative">
                     <div class="case-media relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-white transition-colors">
-                        <img src="${c.cover}" alt="${c.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        ${caseCover(c)}
                         ${c.mediaType === 'video' ? `
                             <div class="absolute top-3 right-3 bg-black/80 text-brand-cyan px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-brand-cyan/40">
                                 <i class="fa-solid fa-play mr-1"></i> Video
@@ -499,11 +501,15 @@
 
             document.getElementById('caseModalTitle').innerText = item.title;
             document.getElementById('caseModalClient').innerText = item.client;
-            document.getElementById('caseModalCategory').innerText = item.category;
+            const categoryEl = document.getElementById('caseModalCategory');
+            categoryEl.innerText = item.category;
+            categoryEl.style.backgroundColor = categoryColor(item.category);
             document.getElementById('caseModalDescription').innerText = item.description;
 
             const mediaBox = document.getElementById('caseModalMediaContainer');
-            if (item.mediaType === 'video' && item.video) {
+            if (item.category === 'Pitch' && item.images && item.images.length) {
+                mountPitchSlider(mediaBox, item.images); // pitch decks: images with arrows, no video
+            } else if (item.mediaType === 'video' && item.video) {
                 mediaBox.innerHTML = `
                     <video src="${item.video}" controls autoplay class="w-full h-full object-contain bg-black"></video>
                 `;

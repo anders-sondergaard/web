@@ -317,7 +317,7 @@
             let cases = defaultCases;
             try {
                 const saved = JSON.parse(localStorage.getItem('cinemataztic_cms_data_v4'));
-                if (saved && Array.isArray(saved.cases)) cases = saved.cases;
+                if (saved && Array.isArray(saved.cases)) cases = addNewDefaultCases(saved).cases;
             } catch (e) { /* storage unavailable */ }
             const latest = cases.filter(c => c.category === 'CineGame').slice(0, 3);
             document.getElementById('gameCaseCount').innerText = latest.length;
@@ -328,7 +328,7 @@
             grid.innerHTML = latest.map(c => `
                 <a href="cases.html?case=${encodeURIComponent(c.id)}" class="group block">
                     <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-white transition-colors">
-                        <img src="${c.cover}" alt="${c.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        ${caseCover(c)}
                         ${c.mediaType === 'video' ? `
                             <div class="absolute top-3 right-3 bg-black/80 text-brand-cyan px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-brand-cyan/40">
                                 <i class="fa-solid fa-play mr-1"></i> Video

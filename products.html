@@ -567,7 +567,7 @@
                         c.el.style.backgroundColor = `rgba(255, 255, 255, ${0.05 + (c.flicker > 0.97 ? 0.15 : 0)})`;
                     }
                 });
-                tag.textContent = `${active} screens targeted`;
+                tag.textContent = `${active} audience-targeted`;
                 const r = grid.getBoundingClientRect();
                 const tagW = tag.offsetWidth;
                 tag.style.left = `${Math.min(r.width - tagW, Math.max(0, target.x * r.width - tagW / 2))}px`;
