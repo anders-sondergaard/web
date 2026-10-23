@@ -152,6 +152,17 @@ const siteCases = [
         description: "A CineFun game for Apotekets."
     },
     {
+        id: "ikea-collector",
+        featured: true,
+        title: "Collector",
+        client: "IKEA",
+        category: "CineGame",
+        mediaType: "video",
+        cover: "",
+        video: "https://storage.googleapis.com/cinemataztic-public/video/Collector_IKEA_EN2026_CutDown.mp4",
+        description: "Collector, a CineGame for IKEA from 2026."
+    },
+    {
         id: "santander",
         featured: true,
         title: "Swipe Hero",
@@ -219,7 +230,7 @@ const siteCases = [
     },
     {
         id: "ikea",
-        featured: true,
+        featured: false,
         title: "It is meatball Friday",
         client: "IKEA",
         category: "CineGame",
