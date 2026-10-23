@@ -227,21 +227,28 @@
             </div>
         </section>
 
-        <!-- HOW IT WORKS: sticky sidebar + the product's animation and three steps, as on leadsite.html -->
+        <!-- HOW IT WORKS: sticky sidebar + an animation of two games on the phone and three steps -->
         <section id="steps" class="border-b border-brand-border scroll-mt-20">
             <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
                         <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">How it works</span>
-                        <h2 class="section-title font-black uppercase !leading-none">Before and after the film</h2>
+                        <h2 class="section-title font-black uppercase !leading-none">Anytime<br>anywhere<br>anyplace.</h2>
                         <p class="text-sm text-gray-400 leading-relaxed">
                             CineFun keeps the audience playing in the CineGame app between cinema visits, with games and quizzes sponsored by an advertiser.
                         </p>
+                        <!-- SPLASH: a yellow box with a heading and a short text that calls out one point -->
+                        <div class="splash p-6 bg-brand-yellow text-black space-y-2">
+                            <h3 class="text-2xl font-black uppercase !leading-none">Unlimited media</h3>
+                            <p class="text-sm leading-relaxed">In the CineGame app, there can be an unlimited number of casual games for all types of brands.</p>
+                        </div>
                     </aside>
 
                     <div class="lg:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- The animation from the cinefun product card, filled in by more-products.js -->
-                        <div class="group relative min-h-[420px] overflow-hidden rounded-2xl bg-brand-card border border-brand-border hover:border-brand-mint transition-colors" data-product-visual="cinefun"></div>
+                        <!-- Two games on the phone, each won with a prize (initCineFunJourney) -->
+                        <div class="relative min-h-[520px] overflow-hidden rounded-2xl bg-brand-card border border-brand-border">
+                            <canvas id="cfJourney" class="absolute inset-0 w-full h-full" role="img" aria-label="Animation: a notification brings a new game to the CineGame app on a phone, the player plays it and wins a prize, then a second game arrives and is won too"></canvas>
+                        </div>
 
                         <ol class="grid grid-cols-1 gap-6">
                             <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
@@ -274,9 +281,9 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
                         <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">CineFun</span>
-                        <h2 class="section-title font-black uppercase !leading-none">Latest games</h2>
+                        <h2 class="section-title font-black uppercase !leading-none">Latest CineFun games</h2>
                         <p class="text-sm text-gray-400 leading-relaxed">
-                            The newest CineFun campaigns. See the <a href="cases.html?category=CineFun" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">work section</a> for all games.
+                            The newest CineFun campaigns.<br>See the <a href="cases.html?category=CineFun" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">work section</a> for all games.
                         </p>
                         <span id="gameCaseCount" class="hidden lg:block text-6xl font-black text-brand-mint">0</span>
                         <a href="cases.html?category=CineFun" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">
@@ -726,6 +733,292 @@
             if (document.fonts) document.fonts.ready.then(refit);
             window.addEventListener('load', refit);
             refit();
+        })();
+    </script>
+    <script>
+        // --- HOW IT WORKS: TWO GAMES ON THE PHONE ---
+        // A 20-second loop on a phone, in the style of the CineFun card: a notification brings a new game,
+        // the player plays it and wins a prize, then a second game arrives and is won too. The brands are
+        // made up (FIZZO soda, STAKKS cookies). The step card for the part being shown lights up beside it.
+        (function initCineFunJourney() {
+            const canvas = document.getElementById('cfJourney');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const stepCards = [...document.querySelectorAll('#steps ol > li')];
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            const MINT = '#6ceec4', CYAN = '#3dc0c8', YELLOW = '#fece00';
+            const FONT = '"General Sans", sans-serif';
+            const LOOP = 20;
+            // Two rounds: notification, game, prize
+            const ROUNDS = [
+                { notify: 0, game: 1.0, prize: 6.4, end: 9.9, kind: 'catch', brand: 'FIZZO', title: 'FIZZO Catch', color: CYAN, prize1: 'FREE FIZZO', prize2: 'A 33 cl can at the concession' },
+                { notify: 10, game: 11.0, prize: 16.4, end: 19.9, kind: 'stack', brand: 'STAKKS', title: 'STAKKS Stack', color: YELLOW, prize1: '2 FOR 1', prize2: 'STAKKS cookies at the concession' },
+            ];
+
+            let W = 0, H = 0;
+            function resize() {
+                const dpr = window.devicePixelRatio || 1;
+                W = canvas.clientWidth;
+                H = canvas.clientHeight;
+                canvas.width = W * dpr;
+                canvas.height = H * dpr;
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            }
+            new ResizeObserver(resize).observe(canvas);
+            resize();
+
+            const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+            const ease = x => 1 - Math.pow(1 - clamp(x, 0, 1), 3);
+            const span = (t, a, b, f = 0.35) => clamp(Math.min((t - a) / f, (b - t) / f), 0, 1);
+            const font = (weight, px) => `${weight} ${Math.round(px)}px ${FONT}`;
+            const rand = i => { const x = Math.sin(i * 12.9898) * 43758.5453; return x - Math.floor(x); };
+            function glowText(text, x, y, px, color, glow = color) {
+                ctx.font = font(900, px);
+                ctx.shadowColor = glow;
+                ctx.shadowBlur = px * 0.45;
+                ctx.fillStyle = color;
+                ctx.fillText(text, x, y);
+                ctx.shadowBlur = 0;
+            }
+
+            // --- Game 1: catch the falling FIZZO cans with the paddle ---
+            const CANS = 11, SPAWN = 0.45, FALL = 1.1;
+            function drawCatch(t, r, sw, sh, top) {
+                const g = t - r.game;
+                const padY = sh * 0.86, padW = sw * 0.3;
+                const cans = [...Array(CANS)].map((_, i) => ({ x: 0.15 + rand(i + 1) * 0.7, t0: i * SPAWN }));
+                // The paddle is always under the next can: it glides from one catch to the next
+                const caught = cans.filter(c => c.t0 + FALL <= g).length;
+                const prev = cans[Math.max(0, caught - 1)], next = cans[Math.min(CANS - 1, caught)];
+                const k = caught === 0 ? 1 : ease((g - (prev.t0 + FALL)) / SPAWN);
+                const padX = caught === 0 ? next.x : prev.x + (next.x - prev.x) * k;
+                // Brand header
+                ctx.textAlign = 'center';
+                glowText(r.brand, sw / 2, top + sh * 0.06, sw * 0.12, r.color);
+                ctx.font = font(700, sw * 0.045);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                ctx.fillText(`SCORE ${caught}`, sw / 2, top + sh * 0.12);
+                // Cans in the air
+                const cw = sw * 0.08, ch = cw * 1.6;
+                cans.forEach(c => {
+                    const p = (g - c.t0) / FALL;
+                    if (p < 0 || p >= 1) return;
+                    const x = c.x * sw, y = top + sh * 0.14 + p * (padY - top - sh * 0.14) - ch;
+                    ctx.fillStyle = r.color;
+                    ctx.beginPath(); ctx.roundRect(x - cw / 2, y, cw, ch, cw * 0.25); ctx.fill();
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.fillRect(x - cw / 2, y + ch * 0.4, cw, ch * 0.16);
+                });
+                // Sparks where a can was just caught
+                cans.forEach((c, i) => {
+                    const a = g - (c.t0 + FALL);
+                    if (a < 0 || a > 0.5) return;
+                    for (let j = 0; j < 8; j++) {
+                        const ang = -Math.PI * (0.15 + 0.7 * rand(i * 9 + j)), d = a * sw * 0.5;
+                        ctx.globalAlpha = 1 - a / 0.5;
+                        ctx.fillStyle = j % 2 ? r.color : '#ffffff';
+                        ctx.fillRect(c.x * sw + Math.cos(ang) * d, padY + Math.sin(ang) * d, 3, 3);
+                    }
+                    ctx.globalAlpha = 1;
+                });
+                // Paddle
+                ctx.shadowColor = MINT;
+                ctx.shadowBlur = 12;
+                ctx.fillStyle = MINT;
+                ctx.beginPath(); ctx.roundRect(padX * sw - padW / 2, padY, padW, sh * 0.022, sh * 0.011); ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+
+            // --- Game 2: stack the STAKKS cookies as they swing in from the side ---
+            const COOKIES = 9, EVERY = 0.55;
+            function drawStack(t, r, sw, sh, top) {
+                const g = t - r.game;
+                const cw = sw * 0.42, ch = sh * 0.045, base = sh * 0.9;
+                const dropped = Math.min(COOKIES, Math.floor(g / EVERY));
+                ctx.textAlign = 'center';
+                glowText(r.brand, sw / 2, top + sh * 0.06, sw * 0.12, r.color);
+                ctx.font = font(700, sw * 0.045);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                ctx.fillText(`SCORE ${dropped}`, sw / 2, top + sh * 0.12);
+                const cookie = (x, y, a = 1) => {
+                    ctx.globalAlpha = a;
+                    ctx.fillStyle = r.color;
+                    ctx.beginPath(); ctx.roundRect(x - cw / 2, y, cw, ch, ch / 2); ctx.fill();
+                    ctx.fillStyle = 'rgba(80, 50, 10, 0.55)';
+                    for (let d = 0; d < 4; d++) ctx.fillRect(x - cw * 0.3 + d * cw * 0.2, y + ch * 0.35, ch * 0.3, ch * 0.3);
+                    ctx.globalAlpha = 1;
+                };
+                // The tower: each cookie lands a little off centre
+                const offset = i => (rand(i + 40) - 0.5) * cw * 0.25;
+                for (let i = 0; i < dropped; i++) {
+                    const land = ease((g - (i + 1) * EVERY + 0.15) / 0.15);
+                    const y = base - (i + 1) * ch;
+                    cookie(sw / 2 + offset(i), y - (1 - land) * ch * 3);
+                }
+                // The next cookie swings above the tower until it drops
+                if (dropped < COOKIES) {
+                    const phase = (g % EVERY) / EVERY;
+                    const x = sw / 2 + offset(dropped) + Math.cos(phase * Math.PI) * sw * 0.22 * (1 - phase);
+                    cookie(x, Math.max(top + sh * 0.2, base - (dropped + 1) * ch - sh * 0.18));
+                }
+            }
+
+            // --- Prize screen ---
+            function drawPrize(t, r, sw, sh, top) {
+                const k = t - r.prize;
+                ctx.textAlign = 'center';
+                glowText('YOU WON!', sw / 2, top + sh * 0.22, sw * 0.13, '#ffffff', MINT);
+                // Gift
+                const gx = sw / 2, gy = top + sh * 0.4, gs = sw * 0.22, pop = 0.85 + 0.15 * ease(k / 0.4);
+                ctx.save();
+                ctx.translate(gx, gy);
+                ctx.scale(pop, pop);
+                ctx.shadowColor = MINT;
+                ctx.shadowBlur = 16;
+                ctx.fillStyle = MINT;
+                ctx.fillRect(-gs / 2, -gs * 0.2, gs, gs * 0.7);
+                ctx.fillStyle = '#a8f5dc';
+                ctx.fillRect(-gs * 0.58, -gs * 0.4, gs * 1.16, gs * 0.22);
+                ctx.shadowBlur = 0;
+                // Ribbon and bow
+                ctx.fillStyle = 'rgba(11, 20, 19, 0.45)';
+                ctx.fillRect(-gs * 0.05, -gs * 0.4, gs * 0.1, gs * 0.9);
+                ctx.strokeStyle = '#a8f5dc';
+                ctx.lineWidth = gs * 0.07;
+                ctx.beginPath(); ctx.ellipse(-gs * 0.16, -gs * 0.52, gs * 0.15, gs * 0.09, -0.4, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath(); ctx.ellipse(gs * 0.16, -gs * 0.52, gs * 0.15, gs * 0.09, 0.4, 0, Math.PI * 2); ctx.stroke();
+                ctx.restore();
+                // Voucher
+                const vx = sw * 0.12, vy = top + sh * 0.6, vw = sw * 0.76, vh = sh * 0.16;
+                ctx.setLineDash([5, 4]);
+                ctx.strokeStyle = MINT;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.roundRect(vx, vy, vw, vh, 8); ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.font = font(900, sw * 0.08);
+                ctx.fillStyle = r.color;
+                ctx.fillText(r.prize1, sw / 2, vy + vh * 0.42);
+                ctx.font = font(700, sw * 0.038);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
+                ctx.fillText(r.prize2.toUpperCase(), sw / 2, vy + vh * 0.74);
+                // Confetti
+                for (let i = 0; i < 30; i++) {
+                    const fall = (k * (0.25 + rand(i) * 0.25) + rand(i + 7)) % 1;
+                    ctx.globalAlpha = 0.8;
+                    ctx.fillStyle = [MINT, r.color, '#ffffff'][i % 3];
+                    ctx.fillRect(rand(i + 3) * sw, top + fall * sh, 3, 5);
+                }
+                ctx.globalAlpha = 1;
+            }
+
+            // --- Notification banner sliding in at the top of the screen ---
+            function drawNotification(t, r, sw, sh) {
+                const a = span(t, r.notify, r.game + 0.6, 0.3);
+                if (a <= 0) return;
+                const bw = sw * 0.9, bh = sh * 0.09, bx = (sw - bw) / 2, by = sh * 0.04 - (1 - ease(a)) * bh * 1.6;
+                ctx.globalAlpha = a;
+                ctx.fillStyle = 'rgba(245, 247, 246, 0.96)';
+                ctx.beginPath(); ctx.roundRect(bx, by, bw, bh, bh * 0.3); ctx.fill();
+                const is = bh * 0.62;
+                // App icon: the Cinemataztic mark, white on black
+                const ix = bx + bh * 0.2, iy = by + (bh - is) / 2;
+                ctx.fillStyle = '#0a0a0c';
+                ctx.beginPath(); ctx.roundRect(ix, iy, is, is, is * 0.25); ctx.fill();
+                if (mark.complete && mark.naturalWidth) ctx.drawImage(mark, ix + is * 0.18, iy + is * 0.18, is * 0.64, is * 0.64);
+                ctx.fillStyle = '#0a0a0c';
+                ctx.textAlign = 'left';
+                ctx.font = font(700, bh * 0.24);
+                ctx.fillText(`New game: ${r.title}`, bx + bh * 0.3 + is, by + bh * 0.38);
+                ctx.font = font(500, bh * 0.2);
+                ctx.fillStyle = 'rgba(10, 10, 12, 0.6)';
+                ctx.fillText('Play now and win a prize', bx + bh * 0.3 + is, by + bh * 0.7);
+                ctx.globalAlpha = 1;
+            }
+
+            const mark = new Image();
+            mark.src = 'assets/logos/cinemataztic-mark-white.svg';
+
+            let lastStep = -1;
+            function frame(now) {
+                const t = reduceMotion ? 3 : (now / 1000) % LOOP;
+                ctx.clearRect(0, 0, W, H);
+                // The phone, upright and floating gently, as tall as the panel allows
+                const ph = Math.min(H * 0.9, W * 0.95 * 19.5 / 9), pw = ph * 9 / 19.5;
+                const float = reduceMotion ? 0 : Math.sin(t * 1.3) * H * 0.006;
+                const px = (W - pw) / 2, py = (H - ph) / 2 + float;
+                ctx.save();
+                ctx.translate(px, py);
+                ctx.shadowColor = 'rgba(108, 238, 196, 0.35)';
+                ctx.shadowBlur = 50;
+                const body = ctx.createLinearGradient(0, 0, pw, ph);
+                body.addColorStop(0, '#34343e'); body.addColorStop(0.38, '#0b0b0e'); body.addColorStop(1, '#17171c');
+                ctx.fillStyle = body;
+                ctx.beginPath(); ctx.roundRect(0, 0, pw, ph, pw * 0.13); ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                const m = pw * 0.03, sw = pw - m * 2, sh = ph - m * 2;
+                ctx.translate(m, m);
+                ctx.save();
+                ctx.beginPath(); ctx.roundRect(0, 0, sw, sh, pw * 0.11); ctx.clip();
+                ctx.fillStyle = '#0b1413';
+                ctx.fillRect(0, 0, sw, sh);
+                const glow = ctx.createLinearGradient(0, 0, 0, sh);
+                glow.addColorStop(0, 'rgba(108, 238, 196, 0.1)');
+                glow.addColorStop(1, 'rgba(108, 238, 196, 0)');
+                ctx.fillStyle = glow;
+                ctx.fillRect(0, 0, sw, sh);
+                // Status bar and island
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.font = font(700, sw * 0.04);
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('9:41', sw * 0.08, sh * 0.03);
+                ctx.fillStyle = '#000000';
+                ctx.beginPath(); ctx.roundRect(sw * 0.34, sh * 0.012, sw * 0.32, sh * 0.03, sh * 0.015); ctx.fill();
+                ctx.textAlign = 'center';
+                ctx.font = font(800, sw * 0.045);
+                ctx.fillStyle = MINT;
+                ctx.fillText('CINEFUN', sw / 2, sh * 0.075);
+                const top = sh * 0.1;
+                // The round being played
+                let step = 0;
+                ROUNDS.forEach(r => {
+                    const game = span(t, r.game, r.prize, 0.3), prize = span(t, r.prize, r.end, 0.3);
+                    if (game > 0) {
+                        ctx.globalAlpha = game;
+                        (r.kind === 'catch' ? drawCatch : drawStack)(t, r, sw, sh - top, top);
+                        ctx.globalAlpha = 1;
+                    }
+                    if (prize > 0) {
+                        ctx.globalAlpha = prize;
+                        drawPrize(t, r, sw, sh - top, top);
+                        ctx.globalAlpha = 1;
+                    }
+                    if (t >= r.notify && t < r.end) step = t < r.game + 0.4 ? 0 : t < r.prize ? 1 : 2;
+                    drawNotification(t, r, sw, sh);
+                });
+                // Glare across the glass
+                const glare = ctx.createLinearGradient(0, 0, sw, sh * 0.6);
+                glare.addColorStop(0, 'rgba(255, 255, 255, 0.08)');
+                glare.addColorStop(0.4, 'rgba(255, 255, 255, 0)');
+                ctx.fillStyle = glare;
+                ctx.fillRect(0, 0, sw, sh);
+                ctx.restore();
+                ctx.restore();
+                // Light up the step card for the part being shown
+                if (step !== lastStep) {
+                    stepCards.forEach((li, i) => {
+                        li.style.transition = 'border-color 400ms';
+                        li.style.borderColor = i === step ? MINT : '';
+                    });
+                    lastStep = step;
+                }
+                if (!reduceMotion) requestAnimationFrame(frame);
+            }
+            requestAnimationFrame(frame);
         })();
     </script>
     <!-- More products: the three other product cards, as the last section above the footer -->
