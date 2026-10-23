@@ -126,8 +126,8 @@
                 <a href="tel:+4553587129">+45 5358 7129</a>
             </div>
             <div class="m-menu__rise" style="margin-top: 48px">
-                <div class="m-menu__code">CPH</div>
-                <div style="margin-top: 8px; font-size: 13px; font-weight: 700; text-transform: uppercase">Hellerup</div>
+                <div class="m-menu__code">HQ</div>
+                <div style="margin-top: 8px; font-size: 13px; font-weight: 700; text-transform: uppercase">Denmark</div>
                 <div style="margin-top: 4px; font-size: 13px; line-height: 1.5; color: #9ca3af">Hellerupvej 46<br>2900 Hellerup<br>Denmark</div>
             </div>
             <div class="m-menu__foot m-menu__rise">

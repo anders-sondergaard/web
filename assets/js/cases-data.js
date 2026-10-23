@@ -232,11 +232,13 @@ try {
     localStorage.removeItem('cinemataztic_cms_backup_before_title_restore');
 } catch (e) { /* storage unavailable */ }
 
-// --- CASE POPUP: PREVIOUS / NEXT CASE AND SHARE LINK ---
+// --- CASE POPUP: PREVIOUS / NEXT CASE, COPY LINK AND DOWNLOAD ---
 // Arrows just outside the open case (under it on smaller screens) step through the cases the page is
 // showing, in the same order, and wrap around at the ends. The arrow keys do the same unless the case
 // has an image slider, which uses them for its images. getList returns the cases currently listed.
-// A Share button copies a link that opens the case on the cases page, to paste into a mail or a chat.
+// A copy button copies a link that opens the case on the cases page, to paste into a mail or a chat.
+// A download button saves the case's video, or else its pictures (several in one zip); Programmatic results
+// slides are saved as PNG, the photo with the graphics on top.
 function initCaseNav(getList) {
     const modal = document.getElementById('caseDetailModal');
     const card = modal && modal.firstElementChild;
@@ -253,10 +255,14 @@ function initCaseNav(getList) {
         btn(1, 'fa-arrow-right', 'Next case', 'hidden lg:flex absolute top-1/2 -translate-y-1/2 -right-20') +
         `<div class="lg:hidden flex justify-between mt-4">${btn(-1, 'fa-arrow-left', 'Previous case', 'flex')}${btn(1, 'fa-arrow-right', 'Next case', 'flex')}</div>`);
 
-    // Share: copy the link to this case
+    // Copy link and download, as round icon buttons next to the client name
     const row = document.getElementById('caseModalClient');
+    const iconBtn = (attr, icon, label) => `<button type="button" ${attr} title="${label}" aria-label="${label}" class="w-9 h-9 rounded-full border border-white/30 text-white text-sm inline-flex items-center justify-center hover:bg-white hover:text-black transition"><i class="${icon}"></i></button>`;
     if (row) {
-        row.parentElement.insertAdjacentHTML('beforeend', `<button type="button" data-case-share style="margin-left: auto" class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/30 text-white text-xs font-bold uppercase tracking-wider hover:bg-white hover:text-black transition"><i class="fa-solid fa-link"></i><span>Share</span></button>`);
+        row.parentElement.insertAdjacentHTML('beforeend', `<span class="inline-flex gap-2" style="margin-left: auto">`
+            + iconBtn('data-case-share', 'fa-regular fa-copy', 'Copy link to this case')
+            + iconBtn('data-case-download', 'fa-solid fa-download', 'Download')
+            + `</span>`);
     }
     const copy = (text) => navigator.clipboard && window.isSecureContext
         ? navigator.clipboard.writeText(text)
@@ -269,25 +275,41 @@ function initCaseNav(getList) {
             t.remove();
             resolve();
         });
-    let resetLabel = 0;
+    // Briefly swap a button's icon (a tick when done, a spinner while working)
+    const flash = (b, icon, ms) => {
+        const i = b.querySelector('i');
+        clearTimeout(b.resetIcon);
+        b.dataset.icon = b.dataset.icon || i.className;
+        i.className = icon;
+        if (ms) b.resetIcon = setTimeout(() => { i.className = b.dataset.icon; }, ms);
+    };
     modal.addEventListener('click', (e) => {
         const share = e.target.closest('[data-case-share]');
-        if (!share || !current) return;
-        const link = new URL(`cases.html?case=${encodeURIComponent(current)}`, location.href).href;
-        copy(link).then(() => {
-            share.querySelector('i').className = 'fa-solid fa-check';
-            share.querySelector('span').textContent = 'Link copied';
-            clearTimeout(resetLabel);
-            resetLabel = setTimeout(() => {
-                share.querySelector('i').className = 'fa-solid fa-link';
-                share.querySelector('span').textContent = 'Share';
-            }, 2000);
-        });
+        if (share && current) {
+            const link = new URL(`cases.html?case=${encodeURIComponent(current)}`, location.href).href;
+            copy(link).then(() => flash(share, 'fa-solid fa-check', 2000));
+        }
+        const down = e.target.closest('[data-case-download]');
+        const item = current && siteCases.find(c => c.id === current);
+        if (down && item && !down.disabled) {
+            down.disabled = true;
+            flash(down, 'fa-solid fa-spinner fa-spin');
+            downloadCase(item)
+                .then(() => flash(down, 'fa-solid fa-check', 2000))
+                .catch(() => flash(down, 'fa-solid fa-xmark', 2000))
+                .finally(() => { down.disabled = false; });
+        }
     });
 
     let current = null;
     const open = window.openCaseDetailModal;
-    window.openCaseDetailModal = (id) => { current = id; open(id); };
+    window.openCaseDetailModal = (id) => {
+        current = id;
+        open(id);
+        const item = siteCases.find(c => c.id === id);
+        const down = modal.querySelector('[data-case-download]');
+        if (down) down.style.display = (item && (item.video || (item.images && item.images.length) || item.cover)) ? '' : 'none';
+    };
     const step = (dir) => {
         let list = getList();
         let i = list.findIndex(c => c.id === current);
@@ -308,4 +330,62 @@ function initCaseNav(getList) {
         if (e.key === 'ArrowLeft') step(-1);
         if (e.key === 'ArrowRight') step(1);
     });
+}
+
+// --- CASE DOWNLOAD ---
+const fileName = (url) => decodeURIComponent(String(url).split(/[?#]/)[0].split('/').pop() || 'file');
+function saveBlob(blob, name) {
+    const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: name });
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+}
+// An SVG results slide drawn into a PNG at its own size (1920 × 1080), photo and graphics together
+function svgToPng(url) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.naturalWidth || 1920;
+            canvas.height = img.naturalHeight || 1080;
+            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob(b => b ? resolve(b) : reject(new Error('png')), 'image/png');
+        };
+        img.onerror = reject;
+        img.src = url;
+    });
+}
+async function caseFile(url) {
+    if (/\.svg(\?|#|$)/i.test(url)) return { blob: await svgToPng(url), name: fileName(url).replace(/\.svg$/i, '.png') };
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(res.status);
+    return { blob: await res.blob(), name: fileName(url) };
+}
+let zipLib = null;
+const loadZip = () => zipLib || (zipLib = new Promise((resolve, reject) => {
+    const s = Object.assign(document.createElement('script'), { src: 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js' });
+    s.onload = () => resolve(window.JSZip);
+    s.onerror = () => { zipLib = null; reject(new Error('zip')); };
+    document.head.appendChild(s);
+}));
+async function downloadCase(c) {
+    // Videos sit on another server that doesn't allow the page to fetch them, so the browser opens the
+    // file itself; Chrome and Safari save it straight away or show it with their own download button.
+    if (c.video) {
+        const a = Object.assign(document.createElement('a'), { href: c.video, download: fileName(c.video), target: '_blank', rel: 'noopener' });
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        return;
+    }
+    const urls = c.images && c.images.length ? c.images : [c.cover];
+    if (urls.length === 1) {
+        const f = await caseFile(urls[0]);
+        return saveBlob(f.blob, f.name);
+    }
+    const [JSZip, files] = await Promise.all([loadZip(), Promise.all(urls.map(caseFile))]);
+    const zip = new JSZip();
+    files.forEach((f, i) => zip.file(`${String(i + 1).padStart(2, '0')}-${f.name}`, f.blob));
+    saveBlob(await zip.generateAsync({ type: 'blob' }), `${c.id}.zip`);
 }
