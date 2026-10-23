@@ -24,8 +24,8 @@ const caseLogos = {
     "Podimo": { src: "assets/logos/podimo.svg" },
     "LEGO": { src: "assets/logos/lego.svg" },
     "ARLA": { src: "assets/logos/arla.svg" },
-    "Red Bull": { src: brandIcon("redbull", "DB0A40") },
-    "Coca-Cola": { src: brandIcon("cocacola", "F40009") },
+    "Red Bull": { src: "assets/logos/redbull.svg", scale: 1.35 }, // Simple Icons, cropped to the drawing
+    "Coca-Cola": { src: "assets/logos/cocacola.svg" }, // Simple Icons, cropped to the drawing
     "Boozt.com": { src: "assets/logos/boozt.svg", white: true },
     // Pepsi left Simple Icons after 9.x: the old icon is painted here instead (see colourCaseLogo)
     "Pepsi Max": { src: "https://cdn.jsdelivr.net/npm/simple-icons@9.21.0/icons/pepsi.svg", color: "#2152A4" },
@@ -53,7 +53,15 @@ const caseLogos = {
     "Royal Copenhagen": { src: "assets/logos/royal-copenhagen.svg" },
     "Liiga": { src: "assets/logos/liiga.png" },
     "Battery": { src: "assets/logos/battery.png" },
-    "Bet25": { src: "assets/logos/bet25.svg" }
+    "Bet25": { src: "assets/logos/bet25.svg" },
+    "Tryg": { src: "assets/logos/tryg.svg" }, // Wikimedia Commons, File:Tryg logo.svg
+    "Toms": { src: "assets/logos/toms.svg" }, // Wikimedia Commons, File:Toms.svg
+    // White on transparent, made from the logo images supplied for these cases
+    "Sonic": { src: "assets/logos/sonic.png" },
+    "Scream VI": { src: "assets/logos/scream.png", scale: 1.4 },
+    "Bundeswehr": { src: "assets/logos/bundeswehr.png" },
+    "Visit Germany": { src: "assets/logos/visitgermany.png" },
+    "Trolls World Tour": { src: "assets/logos/trolls.png" }
 };
 
 (function () {
@@ -93,7 +101,7 @@ const NAME_INSTEAD_OF_LOGO = new Set(['assets/cases/pitch/logo_kims.png']);
 const KNOCKOUT_LOGOS = new Set([
     'assets/logos/ase.svg',
     'assets/logos/lego.svg', 'assets/logos/specsavers.svg', 'assets/logos/arla.svg', 'assets/logos/fanta.svg', 'assets/logos/ikea.svg',
-    'assets/logos/fazer.svg', 'assets/logos/benjerry.svg', 'assets/logos/mentos.svg', 'assets/logos/droetker.svg', 'assets/logos/oister.svg',
+    'assets/logos/fazer.svg', 'assets/logos/benjerry.svg', 'assets/logos/mentos.svg', 'assets/logos/droetker.svg', 'assets/logos/oister.svg', 'assets/logos/tryg.svg',
     'assets/cases/pitch/marvel_logo_trans.png', 'assets/cases/pitch/oreo_logo.png', 'assets/cases/pitch/kfc-logo.png', 'assets/cases/pitch/hj_logo.png',
     'assets/cases/pitch/lego_city_logo.png', 'assets/cases/pitch/cocio_logo.png', 'assets/cases/pitch/stimorol_logo.png',
     'assets/cases/pitch/mcd_logo_big.png'
@@ -114,7 +122,7 @@ function caseCover(c) {
             + ` style="width: ${W / w * 100}%; left: ${-x / w * 100}%; top: ${-y / h * 100}%"></span></div>`;
     }
     const mark = logo
-        ? `<img ${logo.color ? `data-src="${logo.src}" data-color="${logo.color}"` : `src="${logo.src}"`} alt="${name}" loading="lazy" onload="fitCaseLogo(this.closest('.case-logo').parentElement)" class="${logoClass(logo.src)}">`
+        ? `<img ${logo.color ? `data-src="${logo.src}" data-color="${logo.color}"` : `src="${logo.src}"`} alt="${name}"${logo.scale ? ` data-scale="${logo.scale}"` : ''} loading="lazy" onload="fitCaseLogo(this.closest('.case-logo').parentElement)" class="${logoClass(logo.src)}">`
         : `<span>${name}</span>`;
     return `<div class="case-logo-bg"></div><div class="case-logo">${mark}</div>`;
 }
@@ -148,8 +156,10 @@ function fitCaseLogo(media) {
             ratio = img.getBoundingClientRect().width / img.getBoundingClientRect().height || 1;
         }
         const w = media.offsetWidth;
-        let h = w * 0.3 / Math.sqrt(ratio);
-        h = Math.min(h, w * 0.72 / ratio, area.offsetHeight * 0.45);
+        // Compact or tall marks (Red Bull's bull, Scream's ghost) can ask for a little more room with `scale` in caseLogos
+        const scale = Number(img.dataset.scale) || 1;
+        let h = w * 0.3 * scale / Math.sqrt(ratio);
+        h = Math.min(h, w * 0.72 / ratio, area.offsetHeight * 0.45 * scale);
         if (crop) Object.assign(crop.style, { width: `${h * ratio}px`, height: `${h}px` });
         else img.style.height = `${h}px`;
     }
