@@ -382,7 +382,15 @@ const loadZip = () => zipLib || (zipLib = new Promise((resolve, reject) => {
     document.head.appendChild(s);
 }));
 async function downloadCase(c) {
-    // Videos sit on another server that doesn't allow the page to fetch them, so the site's download.php
+    // A video on this site downloads straight away
+    if (c.video && !/^https?:/.test(c.video)) {
+        const a = Object.assign(document.createElement('a'), { href: c.video, download: fileName(c.video) });
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        return;
+    }
+    // Videos on another server that doesn't allow the page to fetch them: the site's download.php
     // fetches the video and sends it as a download. Where there is no PHP (the local preview) the
     // browser opens the video in a new tab instead.
     if (c.video) {

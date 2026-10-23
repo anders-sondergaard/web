@@ -5,7 +5,6 @@
 
 $allowed = [
     'https://storage.googleapis.com/cinemataztic-public/',
-    'https://cinemataztic.com/static/',
 ];
 
 $url = isset($_GET['url']) ? (string) $_GET['url'] : '';

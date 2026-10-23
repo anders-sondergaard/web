@@ -371,7 +371,7 @@ const siteCases = [
         category: "CineGame",
         mediaType: "video",
         cover: "assets/cases/arla.jpg",
-        video: "https://cinemataztic.com/static/885c4ad0c2df757989cbe733f0981c2b/arla_findobject_web_18_skiplobby.mp4",
+        video: "assets/video/cases/arla_findobject_web_18_skiplobby.mp4",
         description: "Each player gets a unique cow on their phone and has to find it on the cinema screen with a magnifying lens. The game brings ARLA's AR universe for children to the cinema."
     },
     {
@@ -404,7 +404,7 @@ const siteCases = [
         category: "CineGame",
         mediaType: "video",
         cover: "assets/cases/boozt.jpg",
-        video: "https://cinemataztic.com/static/2e813ee52907a8ea3f6aa19fd6e0ed1e/boozt_shuffle_en_web_7.mp4",
+        video: "assets/video/cases/boozt_shuffle_en_web_7.mp4",
         description: "The Boozt.com Shuffle Game introduces five categories, one for each card. Each card presents both brand and product."
     },
     {
