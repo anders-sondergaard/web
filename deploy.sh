@@ -15,9 +15,9 @@ REMOTE="/webroots/www/ai"
 MANIFEST=".deploy-manifest"
 MODE="${1:-}"
 
-# Site files: everything except git, editor and design files, the local-only page and the master video
+# Site files: everything except git, editor and design files, the CSS build tool, the local-only page and the master video
 files=$(find . -type f \
-    ! -path './.git/*' ! -path './.claude/*' ! -path './design/*' \
+    ! -path './.git/*' ! -path './.claude/*' ! -path './design/*' ! -path './tools/*' \
     ! -name '.DS_Store' ! -name '.gitignore' ! -name 'deploy.sh' ! -name "$MANIFEST" ! -name "$MANIFEST.tmp" \
     ! -name 'cases-overview.html' ! -name 'cinemataztic_programmatic_final.mp4' \
     | sed 's|^\./||' | sort)

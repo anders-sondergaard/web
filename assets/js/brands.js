@@ -34,7 +34,7 @@ const siteBrands = [
     { name: "HBO", logo: "assets/logos/hbo.svg" },
     { name: "DFDS", logo: "assets/logos/dfds.svg" },
     { name: "Oister", logo: "assets/logos/oister.svg", badge: true },
-    { name: "Virgin Mobile", logo: "assets/logos/virginmobile.svg" },
+    { name: "Virgin Mobile", logo: "assets/logos/virginmobile.png" },
     { name: "Matas", logo: "assets/logos/matas.svg" },
     { name: "BookBeat", logo: "assets/logos/bookbeat.svg" },
     { name: "Specsavers", logo: "assets/logos/specsavers.svg", badge: true }

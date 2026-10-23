@@ -8,61 +8,6 @@
     <script src="assets/js/page-transition.js?v=3"></script>
     <!-- Menu logo turns into the round mark when scrolling -->
     <script src="assets/js/site-header.js?v=5" defer></script>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            cyan: '#3dc0c8',
-                            mint: '#6ceec4',
-                            pink: '#f869b9',
-                            orange: '#fea917',
-                            yellow: '#fece00',
-                            dark: '#0a0a0c',
-                            card: '#121216',
-                            border: '#1f1f26'
-                        }
-                    },
-                    // Typography after phloe.co: General Sans, tight tracking, 1.383 body leading
-                    fontFamily: {
-                        sans: ['"General Sans"', 'system-ui', 'sans-serif'],
-                        // Logo wordmark: Klavika Bold (installed, or Adobe Fonts kit "klavika-web"), falling back to General Sans
-                        logo: ['Klavika', '"klavika-web"', '"General Sans"', 'sans-serif']
-                    },
-                    letterSpacing: {
-                        tighter: '-0.0525em',
-                        tight: '-0.021em',
-                        wide: '-0.021em',
-                        wider: '-0.021em',
-                        widest: '-0.021em'
-                    },
-                    lineHeight: {
-                        none: '0.76',
-                        relaxed: '1.383'
-                    }
-                }
-            },
-            plugins: [
-                function ({ addBase }) {
-                    addBase({
-                        // Logo wordmark font: an installed Klavika Bold, else the licensed webfont file
-                        '@font-face': {
-                            fontFamily: 'Klavika',
-                            fontWeight: '700',
-                            fontStyle: 'normal',
-                            fontDisplay: 'swap',
-                            src: "local('Klavika Bold'), local('Klavika-Bold'), url('assets/fonts/Klavika-Bold.otf') format('opentype')"
-                        },
-                        body: { lineHeight: '1.383' },
-                        '.font-black': { letterSpacing: '-0.0525em' }
-                    });
-                }
-            ]
-        }
-    </script>
     <style>
         /* Premium buttons: light from above, a soft drop shadow, and a light sweep on hover */
         .btn-shine {
@@ -125,7 +70,6 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- TopoJSON reader for the partner world map -->
-    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
     <style>
         @keyframes cursorBlink {
             0%, 100% { opacity: 1; }
@@ -156,6 +100,8 @@
         header.on-hero nav > button { border-color: rgba(10, 10, 12, 0.35); }
         header.on-hero #mobileDrawer { color: #ffffff; }
     </style>
+    <!-- Tailwind CSS, built once for the whole site (classes from all pages and scripts) -->
+    <link rel="stylesheet" href="assets/css/site.css?v=1">
 </head>
 <body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
 
@@ -376,7 +322,7 @@
 
         <!-- STUDIO: full-bleed image band with headline + stats -->
         <section id="about" class="relative overflow-hidden border-b border-brand-border scroll-mt-20">
-            <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=1800&q=80" alt="Cinema theater" class="absolute inset-0 w-full h-full object-cover">
+            <img src="assets/images/cinema-theater.jpg" alt="Cinema theater" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/85 to-brand-dark/40"></div>
             <div class="relative w-full px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
                 <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow mb-10">Who we are</span>
@@ -506,8 +452,8 @@
     </footer>
 
     <script src="assets/js/cases.js?v=6"></script>
-    <script src="assets/js/brands.js?v=1"></script>
-    <script src="assets/js/cases-data.js?v=34"></script>
+    <script src="assets/js/brands.js?v=2"></script>
+    <script src="assets/js/cases-data.js?v=35"></script>
     <script>
 // Cases come from assets/js/cases.js and the brand wall from assets/js/brands.js
 const MAX_FEATURED = 9;
@@ -1345,11 +1291,12 @@ const MAX_FEATURED = 9;
         })();
 
         // --- PARTNERS: INTERACTIVE EUROPE MAP ---
-        // Countries come from Natural Earth (world-atlas, 50m) and are drawn with an Equal Earth
-        // projection. Hovering or focusing a partner country or its button swaps the text panel.
+        // The countries are Natural Earth (world-atlas, 50m) in an Equal Earth projection, already
+        // projected and cut down to the area of Europe the map shows (assets/data/europe-map.json).
+        // Hovering or focusing a partner country or its button swaps the text panel.
         (function initPartnerMap() {
             const svg = document.getElementById('partnerMap');
-            if (!svg || !window.topojson) return;
+            if (!svg) return;
             const SVG_NS = 'http://www.w3.org/2000/svg';
 
             const partners = [
@@ -1361,62 +1308,6 @@ const MAX_FEATURED = 9;
                 { id: '620', country: 'Portugal', partner: 'AdLine', lonLat: [-8.2, 39.6], text: "In Portugal, we work with AdLine.\n\nIn Portugal, our app is called CineGame.", image: 'assets/partners/cinegame.png', link: 'https://onelink.to/cinegame_pt', cinemas: ['UCI'] }
             ];
             const byId = Object.fromEntries(partners.map(p => [p.id, p]));
-
-            // Equal Earth projection (Šavrič, Patterson & Jenny, 2018)
-            const A1 = 1.340264, A2 = -0.081106, A3 = 0.000893, A4 = 0.003796, M = Math.sqrt(3) / 2;
-            function project([lon, lat]) {
-                const lam = lon * Math.PI / 180, phi = lat * Math.PI / 180;
-                const theta = Math.asin(M * Math.sin(phi)), t2 = theta * theta, t6 = t2 * t2 * t2;
-                const x = lam * Math.cos(theta) / (M * (A1 + 3 * A2 * t2 + t6 * (7 * A3 + 9 * A4 * t2)));
-                const y = theta * (A1 + A2 * t2 + t6 * (A3 + A4 * t2));
-                return [x * 100, -y * 100];
-            }
-
-            function ringPath(ring) {
-                return 'M' + ring.map(pt => project(pt).map(v => v.toFixed(1)).join(',')).join('L') + 'Z';
-            }
-
-            // Rings that cross the antimeridian (Russia, Fiji) jump from +180° to -180°, which draws a
-            // line straight across the map. Unwrap them into one continuous ring, draw the part that
-            // spills over the edge once more on the other side, and clip everything to the globe outline.
-            function unwrapRing(ring) {
-                let offset = 0;
-                return ring.map(([lon, lat], i) => {
-                    if (i > 0) {
-                        const step = lon - ring[i - 1][0];
-                        if (step > 180) offset -= 360;
-                        else if (step < -180) offset += 360;
-                    }
-                    return [lon + offset, lat];
-                });
-            }
-
-            function polygonCopies(poly) {
-                const rings = poly.map(unwrapRing);
-                const lons = rings[0].map(pt => pt[0]);
-                const copies = [rings];
-                if (Math.max(...lons) > 180) copies.push(rings.map(r => r.map(([lon, lat]) => [lon - 360, lat])));
-                if (Math.min(...lons) < -180) copies.push(rings.map(r => r.map(([lon, lat]) => [lon + 360, lat])));
-                return copies;
-            }
-
-            function polygonsOf(geom) {
-                return geom.type === 'Polygon' ? [geom.coordinates] : geom.type === 'MultiPolygon' ? geom.coordinates : [];
-            }
-
-            function geometryPath(geom) {
-                return polygonsOf(geom).flatMap(polygonCopies).map(poly => poly.map(ringPath).join('')).join('');
-            }
-
-            function globeOutline() {
-                const edge = [];
-                for (let lat = -90; lat <= 90; lat += 2) edge.push([180, lat]);
-                for (let lat = 90; lat >= -90; lat -= 2) edge.push([-180, lat]);
-                return ringPath(edge);
-            }
-
-            // Visible area in degrees
-            const EUROPE = { west: -25, east: 42, south: 34, north: 71.5 };
 
             let active = null;
             const countryEls = {};
@@ -1477,47 +1368,23 @@ const MAX_FEATURED = 9;
                 bindHover(btn, p.id);
             });
 
-            // The map shows Europe only (the more detailed 50m atlas holds up at this zoom)
-            fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json')
+            fetch('assets/data/europe-map.json?v=1')
                 .then(res => res.json())
-                .then(world => {
-                    const features = topojson.feature(world, world.objects.countries).features
-                        .filter(f => f.properties.name !== 'Antarctica');
-
-                    // Fit the viewBox to the projected outline of the Europe area
-                    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-                    for (let lon = EUROPE.west; lon <= EUROPE.east; lon += 1) {
-                        for (const lat of [EUROPE.south, EUROPE.north]) {
-                            const [x, y] = project([lon, lat]);
-                            if (x < minX) minX = x; if (x > maxX) maxX = x;
-                            if (y < minY) minY = y; if (y > maxY) maxY = y;
-                        }
-                    }
-                    svg.setAttribute('viewBox', `${minX.toFixed(1)} ${minY.toFixed(1)} ${(maxX - minX).toFixed(1)} ${(maxY - minY).toFixed(1)}`);
-
-                    const defs = document.createElementNS(SVG_NS, 'defs');
-                    const clip = document.createElementNS(SVG_NS, 'clipPath');
-                    clip.id = 'partnerMapClip';
-                    const outline = document.createElementNS(SVG_NS, 'path');
-                    outline.setAttribute('d', globeOutline());
-                    clip.appendChild(outline);
-                    defs.appendChild(clip);
-                    svg.appendChild(defs);
-
+                .then(map => {
+                    svg.setAttribute('viewBox', map.viewBox.join(' '));
                     const land = document.createElementNS(SVG_NS, 'g');
-                    land.setAttribute('clip-path', 'url(#partnerMapClip)');
-                    features.forEach(f => {
+                    map.countries.forEach(c => {
                         const path = document.createElementNS(SVG_NS, 'path');
-                        path.setAttribute('d', geometryPath(f.geometry));
+                        path.setAttribute('d', c.d);
                         path.setAttribute('stroke', '#0a0a0c');
                         path.setAttribute('stroke-width', '0.6');
                         path.setAttribute('vector-effect', 'non-scaling-stroke');
                         path.style.transition = 'fill 200ms linear';
-                        if (byId[f.id]) {
+                        if (byId[c.id]) {
                             path.setAttribute('fill', 'rgba(61, 192, 200, 0.35)');
                             path.style.cursor = 'pointer';
-                            countryEls[f.id] = path;
-                            bindHover(path, f.id);
+                            countryEls[c.id] = path;
+                            bindHover(path, c.id);
                         } else {
                             path.setAttribute('fill', 'rgba(255, 255, 255, 0.08)');
                         }

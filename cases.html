@@ -8,61 +8,6 @@
     <script src="assets/js/page-transition.js?v=3"></script>
     <!-- Menu logo turns into the round mark when scrolling -->
     <script src="assets/js/site-header.js?v=5" defer></script>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            cyan: '#3dc0c8',
-                            mint: '#6ceec4',
-                            pink: '#f869b9',
-                            orange: '#fea917',
-                            yellow: '#fece00',
-                            dark: '#0a0a0c',
-                            card: '#121216',
-                            border: '#1f1f26'
-                        }
-                    },
-                    // Typography after phloe.co: General Sans, tight tracking, 1.383 body leading
-                    fontFamily: {
-                        sans: ['"General Sans"', 'system-ui', 'sans-serif'],
-                        // Logo wordmark: Klavika Bold (installed, or Adobe Fonts kit "klavika-web"), falling back to General Sans
-                        logo: ['Klavika', '"klavika-web"', '"General Sans"', 'sans-serif']
-                    },
-                    letterSpacing: {
-                        tighter: '-0.0525em',
-                        tight: '-0.021em',
-                        wide: '-0.021em',
-                        wider: '-0.021em',
-                        widest: '-0.021em'
-                    },
-                    lineHeight: {
-                        none: '0.76',
-                        relaxed: '1.383'
-                    }
-                }
-            },
-            plugins: [
-                function ({ addBase }) {
-                    addBase({
-                        // Logo wordmark font: an installed Klavika Bold, else the licensed webfont file
-                        '@font-face': {
-                            fontFamily: 'Klavika',
-                            fontWeight: '700',
-                            fontStyle: 'normal',
-                            fontDisplay: 'swap',
-                            src: "local('Klavika Bold'), local('Klavika-Bold'), url('assets/fonts/Klavika-Bold.otf') format('opentype')"
-                        },
-                        body: { lineHeight: '1.383' },
-                        '.font-black': { letterSpacing: '-0.0525em' }
-                    });
-                }
-            ]
-        }
-    </script>
     <style>
         /* Premium buttons: light from above, a soft drop shadow, and a light sweep on hover */
         .btn-shine {
@@ -149,6 +94,8 @@
             box-shadow: 0 24px 48px rgba(0, 0, 0, 0.55);
         }
     </style>
+    <!-- Tailwind CSS, built once for the whole site (classes from all pages and scripts) -->
+    <link rel="stylesheet" href="assets/css/site.css?v=1">
 </head>
 <body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
 
@@ -276,7 +223,7 @@
     </footer>
 
     <script src="assets/js/cases.js?v=6"></script>
-    <script src="assets/js/cases-data.js?v=34"></script>
+    <script src="assets/js/cases-data.js?v=35"></script>
     <script>
         // --- CASE DATA ---
         // Every case, in the order of assets/js/cases.js

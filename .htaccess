@@ -5,3 +5,9 @@
         Header set Cache-Control "no-cache"
     </FilesMatch>
 </IfModule>
+
+# Compress text files on the way out (the server already does this for HTML; logos, the map data,
+# styles and scripts gain the most)
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript text/javascript application/json image/svg+xml
+</IfModule>

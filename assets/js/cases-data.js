@@ -38,7 +38,7 @@ const caseLogos = {
     "HBO": { src: "assets/logos/hbo.svg", white: true },
     "DFDS": { src: "assets/logos/dfds.svg", white: true },
     "Oister": { src: "assets/logos/oister.svg" },
-    "Virgin Mobile": { src: "assets/logos/virginmobile.svg" },
+    "Virgin Mobile": { src: "assets/logos/virginmobile.png" },
     "Matas": { src: "assets/logos/matas.svg", white: true },
     "Specsavers": { src: "assets/logos/specsavers.svg" },
     "BookBeat": { src: "assets/logos/bookbeat.svg", white: true },

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex">
+<title>Build site.css</title>
+<!-- The same Tailwind version the site was built with -->
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<style>body { font: 14px system-ui; margin: 24px; } textarea { width: 100%; height: 50vh; font: 12px ui-monospace, monospace; }</style>
+</head>
+<body>
+<h1>Build assets/css/site.css</h1>
+<p>
+    The pages use a stylesheet built once with Tailwind instead of the Tailwind script. When a page or script gets a
+    class that wasn't used anywhere before, open this page from a local web server in the project folder and press Build:
+    every class-like word in the pages and scripts goes on one hidden element, Tailwind writes the CSS, and you
+    save the result over assets/css/site.css (and bump its ?v= in the pages). Not uploaded with the site.
+</p>
+<button id="build">Build</button>
+<a id="save" download="site.css" hidden>Save site.css</a>
+<p id="status"></p>
+<textarea id="out" readonly></textarea>
+<script>
+const FILES = ['index.html', 'cases.html', 'cinegame.html', 'programmatic.html', 'cinefun.html', 'products.html', 'technology.html', 'guide.html', 'leadsite.html',
+    'assets/js/cases-data.js', 'assets/js/more-products.js', 'assets/js/site-header.js', 'assets/js/page-transition.js'];
+// The Tailwind config the site uses (brand colours, fonts, Klavika and the base rules)
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                brand: {
+                    cyan: '#3dc0c8',
+                    mint: '#6ceec4',
+                    pink: '#f869b9',
+                    orange: '#fea917',
+                    yellow: '#fece00',
+                    dark: '#0a0a0c',
+                    card: '#121216',
+                    border: '#1f1f26'
+                }
+            },
+            // Typography after phloe.co: General Sans, tight tracking, 1.383 body leading
+            fontFamily: {
+                sans: ['"General Sans"', 'system-ui', 'sans-serif'],
+                // Logo wordmark: Klavika Bold (installed, or Adobe Fonts kit "klavika-web"), falling back to General Sans
+                logo: ['Klavika', '"klavika-web"', '"General Sans"', 'sans-serif']
+            },
+            letterSpacing: {
+                tighter: '-0.0525em',
+                tight: '-0.021em',
+                wide: '-0.021em',
+                wider: '-0.021em',
+                widest: '-0.021em'
+            },
+            lineHeight: {
+                none: '0.76',
+                relaxed: '1.383'
+            }
+        }
+    },
+    plugins: [
+        function ({ addBase }) {
+            addBase({
+                // Logo wordmark font: an installed Klavika Bold, else the licensed webfont file (path from assets/css/)
+                '@font-face': {
+                    fontFamily: 'Klavika',
+                    fontWeight: '700',
+                    fontStyle: 'normal',
+                    fontDisplay: 'swap',
+                    src: "local('Klavika Bold'), local('Klavika-Bold'), url('../fonts/Klavika-Bold.otf') format('opentype')"
+                },
+                body: { lineHeight: '1.383' },
+                '.font-black': { letterSpacing: '-0.0525em' }
+            });
+        }
+    ]
+};
+document.getElementById('build').addEventListener('click', async () => {
+    const status = document.getElementById('status');
+    status.textContent = 'Reading the pages…';
+    const texts = await Promise.all(FILES.map(async f => (await fetch(`../${f}?r=${Date.now()}`)).text()));
+    // Candidates, roughly as Tailwind's own extractor finds them
+    const tokens = new Set();
+    texts.forEach(t => (t.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || []).forEach(w => {
+        if (w.length < 2 || w.length > 120) return;
+        tokens.add(w);
+        tokens.add(w.replace(/[,;)]+$/, ''));
+    }));
+    const el = document.createElement('div');
+    el.hidden = true;
+    el.className = [...tokens].join(' ');
+    document.body.appendChild(el);
+    status.textContent = 'Building…';
+    await new Promise(r => setTimeout(r, 3000));
+    // Tailwind's own output only, not this page's style
+    const css = [...document.querySelectorAll('head style')].filter(s => s.textContent.includes('--tw-')).map(s => s.textContent).join('\n');
+    document.getElementById('out').value = css;
+    const save = document.getElementById('save');
+    save.href = URL.createObjectURL(new Blob([css], { type: 'text/css' }));
+    save.hidden = false;
+    status.textContent = `${tokens.size} words checked, ${Math.round(css.length / 1024)} KB of CSS.`;
+});
+</script>
+</body>
+</html>
