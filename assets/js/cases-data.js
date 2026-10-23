@@ -370,10 +370,15 @@ const loadZip = () => zipLib || (zipLib = new Promise((resolve, reject) => {
     document.head.appendChild(s);
 }));
 async function downloadCase(c) {
-    // Videos sit on another server that doesn't allow the page to fetch them, so the browser opens the
-    // file itself; Chrome and Safari save it straight away or show it with their own download button.
+    // Videos sit on another server that doesn't allow the page to fetch them, so the site's download.php
+    // fetches the video and sends it as a download. Where there is no PHP (the local preview) the
+    // browser opens the video in a new tab instead.
     if (c.video) {
-        const a = Object.assign(document.createElement('a'), { href: c.video, download: fileName(c.video), target: '_blank', rel: 'noopener' });
+        let viaPhp = false;
+        try { viaPhp = (await fetch('download.php', { method: 'HEAD', cache: 'no-store' })).status === 400; } catch (e) { /* offline */ }
+        const a = Object.assign(document.createElement('a'), viaPhp
+            ? { href: `download.php?url=${encodeURIComponent(c.video)}`, download: fileName(c.video) }
+            : { href: c.video, download: fileName(c.video), target: '_blank', rel: 'noopener' });
         document.body.appendChild(a);
         a.click();
         a.remove();
