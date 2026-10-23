@@ -770,6 +770,80 @@ const siteCases = [
     // Images are copies from cinemataztic.com in assets/cases/pitch. logoBox is the visible part of the logo image
     // [x, y, width, height, image width, image height], so the card can crop away its empty margins.
     {
+        id: "pitch-cocacola-jumper",
+        title: "Coca-Cola – Jumper",
+        client: "Coca-Cola",
+        category: "Pitch",
+        mediaType: "image",
+        cover: "assets/cases/pitch/cocacola-jumper-1.jpg",
+        video: "",
+        images: [
+            "assets/cases/pitch/cocacola-jumper-1.jpg",
+            "assets/cases/pitch/cocacola-jumper-2.jpg",
+            "assets/cases/pitch/cocacola-jumper-3.jpg"
+        ],
+        description: "A CineGame pitch for Coca-Cola: Jumper."
+    },
+    {
+        id: "pitch-lidl-shuffle",
+        title: "Lidl – Shuffle",
+        client: "Lidl",
+        category: "Pitch",
+        mediaType: "image",
+        cover: "assets/cases/pitch/lidl-shuffle-1.jpg",
+        logo: "assets/cases/pitch/lidl_logo.png",
+        logoBox: [8, 10, 172, 69, 194, 87],
+        video: "",
+        images: [
+            "assets/cases/pitch/lidl-shuffle-1.jpg",
+            "assets/cases/pitch/lidl-shuffle-2.jpg",
+            "assets/cases/pitch/lidl-shuffle-3.jpg",
+            "assets/cases/pitch/lidl-shuffle-4.jpg",
+            "assets/cases/pitch/lidl-shuffle-5.jpg",
+            "assets/cases/pitch/lidl-shuffle-6.jpg",
+            "assets/cases/pitch/lidl-shuffle-7.jpg"
+        ],
+        description: "A CineGame pitch for Lidl: Shuffle."
+    },
+    {
+        id: "pitch-booking-swipehero",
+        title: "Booking.com – Swipe Hero",
+        client: "Booking.com",
+        category: "Pitch",
+        mediaType: "image",
+        cover: "assets/cases/pitch/booking-swipehero-1.jpg",
+        logo: "assets/cases/pitch/logo_booking.png",
+        logoBox: [2, 27, 189, 32, 194, 87],
+        video: "",
+        images: [
+            "assets/cases/pitch/booking-swipehero-1.jpg",
+            "assets/cases/pitch/booking-swipehero-2.jpg",
+            "assets/cases/pitch/booking-swipehero-3.jpg",
+            "assets/cases/pitch/booking-swipehero-4.jpg",
+            "assets/cases/pitch/booking-swipehero-5.jpg",
+            "assets/cases/pitch/booking-swipehero-6.jpg"
+        ],
+        description: "A CineGame pitch for Booking.com: Swipe Hero."
+    },
+    {
+        id: "pitch-dsgroup-quizshow",
+        title: "DS Group – Quiz Show",
+        client: "DS Group",
+        category: "Pitch",
+        mediaType: "image",
+        cover: "assets/cases/pitch/dsgroup-quizshow-1.jpg",
+        video: "",
+        images: [
+            "assets/cases/pitch/dsgroup-quizshow-1.jpg",
+            "assets/cases/pitch/dsgroup-quizshow-2.jpg",
+            "assets/cases/pitch/dsgroup-quizshow-3.jpg",
+            "assets/cases/pitch/dsgroup-quizshow-4.jpg",
+            "assets/cases/pitch/dsgroup-quizshow-5.jpg",
+            "assets/cases/pitch/dsgroup-quizshow-6.jpg"
+        ],
+        description: "A CineGame pitch for DS Group: Quiz Show."
+    },
+    {
         id: "pitch-lidl",
         title: "Lidl – Go Full Lidl",
         client: "Lidl",
