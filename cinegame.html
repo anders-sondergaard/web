@@ -208,8 +208,8 @@
             <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
-                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">User journey</span>
-                        <h2 class="section-title font-black uppercase !leading-none">Step by step</h2>
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">CineGame?</span>
+                        <h2 class="section-title font-black uppercase !leading-none">What is CineGame</h2>
                         <p class="text-sm text-gray-400 leading-relaxed">
                             From the preshow to a prize in three steps: join with your phone, play together and win.
                         </p>
@@ -565,9 +565,9 @@
     </script>
     <script>
         // --- USER JOURNEY: CODE, JOIN, PLAY, WIN ---
-        // A 16-second loop in the style of the CineGame card: a 4-digit code on the cinema screen, a guest
-        // types it into the CineGame app, the whole auditorium plays together, and the guest wins a prize
-        // that lands in the app. The step card for the part being shown lights up beside it.
+        // A 16-second loop in the style of the CineGame card: the game waits on the cinema screen with a
+        // 4-digit code in the corner, a guest types it into the CineGame app, the whole auditorium plays
+        // together, and the guest wins a prize that lands in the app. The step card for the part being shown lights up beside it.
         (function initUserJourney() {
             const canvas = document.getElementById('ujCanvas');
             if (!canvas) return;
@@ -581,7 +581,7 @@
             const LOOP = 16;
             const S = { join: 3.5, play: 7.5, win: 12.5 }; // scene starts, in seconds; the code shows from 0
             const TYPED = [4.4, 4.9, 5.4, 5.9];             // when each digit is typed on the phone
-            const JOINED = [4.2, 5.0, 6.4, 5.6, 6.9];       // when each guest's phone joins (seat order)
+            const JOINED = [1.0, 1.8, 6.4, 2.6, 3.2];       // when each guest's phone joins (seat order); "You" after typing the code
             const SEATS = [1, 3, 0, 2, 4];                  // which player each seat plays, "You" (0) in the middle
 
             let W = 0, H = 0;
@@ -622,36 +622,9 @@
                 ctx.textBaseline = 'middle';
                 const cx = s.x + s.w / 2;
 
-                // 1. The code, with how many have joined
-                let a = span(t, -1, S.play - 0.2);
-                if (a > 0) {
-                    ctx.globalAlpha = a;
-                    ctx.font = font(700, W * 0.03);
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-                    ctx.fillText('JOIN IN THE CINEGAME APP', cx, s.y + s.h * 0.2);
-                    const box = Math.min(s.w * 0.15, s.h * 0.34), gap = box * 0.22;
-                    const x0 = cx - (box * 4 + gap * 3) / 2, y0 = s.y + s.h * 0.34;
-                    [...CODE].forEach((d, i) => {
-                        const x = x0 + i * (box + gap);
-                        ctx.strokeStyle = PINK;
-                        ctx.shadowColor = PINK;
-                        ctx.shadowBlur = 10;
-                        ctx.lineWidth = 2;
-                        ctx.strokeRect(x, y0, box, box);
-                        ctx.shadowBlur = 0;
-                        glowText(d, x + box / 2, y0 + box / 2 + box * 0.04, box * 0.62);
-                    });
-                    const joined = JOINED.filter(j => t >= j).length;
-                    if (t > S.join) {
-                        ctx.font = font(700, W * 0.03);
-                        ctx.fillStyle = PINK;
-                        ctx.fillText(`${joined} / 5 PLAYERS READY`, cx, s.y + s.h * 0.86);
-                    }
-                    ctx.globalAlpha = 1;
-                }
-
-                // 2. The game: five players chase the ball, and "You" scores
-                a = span(t, S.play, S.win - 0.1);
+                // The game on the screen from the start: players wait on their spots until everyone has
+                // joined (each appears when its guest joins), then chase the ball, and "You" scores
+                let a = span(t, -1, S.win - 0.1);
                 if (a > 0) {
                     ctx.globalAlpha = a;
                     const p = { x: s.x + s.w * 0.06, y: s.y + s.h * 0.12, w: s.w * 0.88, h: s.h * 0.76 };
@@ -666,21 +639,26 @@
                     ctx.fillRect(p.x + p.w, p.y + p.h * 0.34, 4, p.h * 0.32);
                     ctx.shadowBlur = 0;
                     // The ball wanders, then heads for the right-hand goal
-                    const g = t - S.play, toGoal = ease((t - 10.2) / 0.8);
-                    let bx = 0.5 + Math.sin(g * 1.7) * 0.28, by = 0.5 + Math.sin(g * 2.6) * 0.3;
+                    const g = Math.max(0, t - S.play), toGoal = ease((t - 10.2) / 0.8);
+                    const moving = ease((t - S.play) / 0.6); // from the spots into the game
+                    let bx = 0.5 + Math.sin(g * 1.7) * 0.28 * moving, by = 0.5 + Math.sin(g * 2.6) * 0.3 * moving;
                     bx += (1.02 - bx) * toGoal;
                     by += (0.5 - by) * toGoal;
                     const players = [
-                        { name: 'YOU', pink: true, x: bx - 0.06, y: by + 0.04 },
-                        { name: 'PLAYER 2', x: 0.25 + Math.sin(g * 1.3) * 0.08, y: 0.25 + Math.sin(g) * 0.08 },
-                        { name: 'PLAYER 3', x: bx + 0.12, y: by - 0.1 + Math.sin(g * 2) * 0.05 },
-                        { name: 'PLAYER 4', x: 0.78 + Math.sin(g * 1.1) * 0.06, y: 0.25 + Math.sin(g * 1.6) * 0.1 },
-                        { name: 'PLAYER 5', pink: true, x: 0.8 + Math.sin(g * 0.9) * 0.05, y: 0.75 + Math.sin(g * 1.4) * 0.08 },
+                        { name: 'YOU', pink: true, home: [0.3, 0.5], x: bx - 0.06, y: by + 0.04 },
+                        { name: 'PLAYER 2', home: [0.22, 0.25], x: 0.25 + Math.sin(g * 1.3) * 0.08, y: 0.25 + Math.sin(g) * 0.08 },
+                        { name: 'PLAYER 3', home: [0.7, 0.5], x: bx + 0.12, y: by - 0.1 + Math.sin(g * 2) * 0.05 },
+                        { name: 'PLAYER 4', home: [0.6, 0.24], x: 0.78 + Math.sin(g * 1.1) * 0.06, y: 0.25 + Math.sin(g * 1.6) * 0.1 },
+                        { name: 'PLAYER 5', pink: true, home: [0.78, 0.78], x: 0.8 + Math.sin(g * 0.9) * 0.05, y: 0.75 + Math.sin(g * 1.4) * 0.08 },
                     ];
                     const sq = Math.max(6, W * 0.03);
                     ctx.textBaseline = 'bottom';
-                    players.forEach(pl => {
-                        const x = p.x + clamp(pl.x, 0.03, 0.97) * p.w, y = p.y + clamp(pl.y, 0.08, 0.95) * p.h;
+                    players.forEach((pl, i) => {
+                        const shown = clamp((t - JOINED[SEATS.indexOf(i)]) / 0.3, 0, 1);
+                        if (shown <= 0) return;
+                        ctx.globalAlpha = a * shown;
+                        const px = pl.home[0] + (pl.x - pl.home[0]) * moving, py = pl.home[1] + (pl.y - pl.home[1]) * moving;
+                        const x = p.x + clamp(px, 0.03, 0.97) * p.w, y = p.y + clamp(py, 0.08, 0.95) * p.h;
                         ctx.fillStyle = pl.pink ? PINK : 'rgba(255, 255, 255, 0.7)';
                         if (pl.pink) { ctx.shadowColor = PINK; ctx.shadowBlur = 10; }
                         ctx.fillRect(x - sq / 2, y - sq / 2, sq, sq);
@@ -689,6 +667,7 @@
                         ctx.fillStyle = pl.pink ? PINK : 'rgba(255, 255, 255, 0.55)';
                         ctx.fillText(pl.name, x, y - sq / 2 - 2);
                     });
+                    ctx.globalAlpha = a;
                     const b = Math.max(4, W * 0.018);
                     ctx.fillStyle = '#ffffff';
                     ctx.shadowColor = '#ffffff';
@@ -704,7 +683,32 @@
                     ctx.globalAlpha = 1;
                 }
 
-                // 3. The result
+                // The code, small in the top right corner of the screen, with how many have joined
+                a = span(t, -1, S.play + 0.6);
+                if (a > 0) {
+                    ctx.globalAlpha = a;
+                    const cw = s.w * 0.3, ch = s.h * 0.3, x0 = s.x + s.w - cw - s.w * 0.02, y0 = s.y + s.h * 0.04;
+                    ctx.fillStyle = 'rgba(10, 10, 12, 0.88)';
+                    ctx.beginPath(); ctx.roundRect(x0, y0, cw, ch, 4); ctx.fill();
+                    ctx.font = font(700, Math.max(6, W * 0.018));
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
+                    ctx.fillText('GAME CODE', x0 + cw / 2, y0 + ch * 0.17);
+                    const box = cw * 0.17, gap = cw * 0.04, bx0 = x0 + cw / 2 - (box * 4 + gap * 3) / 2, by0 = y0 + ch * 0.3;
+                    [...CODE].forEach((d, i) => {
+                        const x = bx0 + i * (box + gap);
+                        ctx.strokeStyle = PINK;
+                        ctx.lineWidth = 1.5;
+                        ctx.strokeRect(x, by0, box, box * 1.15);
+                        glowText(d, x + box / 2, by0 + box * 0.6, box * 0.72);
+                    });
+                    const joined = JOINED.filter(j => t >= j).length;
+                    ctx.font = font(700, Math.max(6, W * 0.017));
+                    ctx.fillStyle = PINK;
+                    ctx.fillText(`${joined} / 5 READY`, x0 + cw / 2, y0 + ch * 0.85);
+                    ctx.globalAlpha = 1;
+                }
+
+                // The result
                 a = span(t, S.win, LOOP + 1);
                 if (a > 0) {
                     ctx.globalAlpha = a;
