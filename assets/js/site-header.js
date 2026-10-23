@@ -53,7 +53,7 @@
     update();
 })();
 
-// Phone menu, in the style of koalition.com: a full-screen dark panel under the menu bar with big
+// Phone menu: a full-screen dark panel under the menu bar with big
 // links that rise in one after another, then contact details and the office. The
 // hamburger folds into a cross. Built from each page's own #mobileDrawer, so the links stay per page.
 (function () {
