@@ -7,7 +7,7 @@
     <!-- Page transition (same as the old site): loads first, so arriving pages start covered -->
     <script src="assets/js/page-transition.js?v=3"></script>
     <!-- Menu logo turns into the round mark when scrolling -->
-    <script src="assets/js/site-header.js?v=3" defer></script>
+    <script src="assets/js/site-header.js?v=4" defer></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -172,9 +172,6 @@
                 <a href="cases.html" class="hover:text-brand-cyan transition">Cases</a>
                 <a href="products.html" class="hover:text-brand-cyan transition">Products</a>
                 <a href="technology.html" class="hover:text-brand-cyan transition">Technology</a>
-                <button onclick="switchView('admin')" class="px-4 py-2 uppercase tracking-widest font-bold border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition">
-                    <i class="fa-solid fa-gear mr-1"></i> CMS
-                </button>
                 <a href="guide.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Guide to programmatic</a>
             </nav>
 
@@ -188,10 +185,6 @@
             <a href="products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
             <a href="technology.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Technology</a>
             <a href="guide.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Guide to programmatic</a>
-            <hr class="border-brand-border my-2">
-            <button onclick="switchView('admin')" class="w-full text-left py-2 text-sm uppercase font-bold text-brand-cyan">
-                <i class="fa-solid fa-gear mr-2"></i> Open CMS Admin
-            </button>
         </div>
     </header>
 
@@ -355,7 +348,7 @@
             </div>
         </section>
 
-        <!-- BRANDS: sticky sidebar + grey logo tiles, same look as Featured Cases (brands managed in the CMS) -->
+        <!-- BRANDS: sticky sidebar + grey logo tiles, same look as Featured Cases (brands in assets/js/brands.js) -->
         <section id="brands" class="border-b border-brand-border scroll-mt-20">
             <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
@@ -374,7 +367,7 @@
 
                     <div class="lg:col-span-9">
                         <div id="brandWall" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-6">
-                            <!-- Populated from the CMS -->
+                            <!-- Filled from assets/js/brands.js -->
                         </div>
                     </div>
                 </div>
@@ -465,150 +458,6 @@
         </section>
     </main>
 
-    <!-- CMS ADMIN PORTAL CONTAINER -->
-    <main id="adminView" class="hidden flex-grow pt-20 bg-black min-h-screen">
-        <div class="w-full px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-            
-            <!-- Admin Top Bar -->
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-brand-border pb-6 gap-4">
-                <div>
-                    <span class="text-xs uppercase font-bold text-brand-cyan tracking-widest">Internal Management Portal</span>
-                    <h1 class="text-3xl font-black uppercase">Cinemataztic CMS</h1>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <button onclick="resetDataToDefault()" class="px-4 py-2 border border-red-500/40 text-red-400 hover:bg-red-500/10 text-xs font-bold uppercase tracking-wider transition">
-                        Reset Demo Data
-                    </button>
-                    <button onclick="switchView('public')" class="px-5 py-2.5 bg-brand-cyan text-black text-xs font-bold uppercase tracking-wider hover:bg-brand-mint transition">
-                        Back to Website
-                    </button>
-                </div>
-            </div>
-
-            <!-- Admin Tabs -->
-            <div class="flex space-x-2 border-b border-brand-border overflow-x-auto pb-2">
-                <button onclick="switchAdminTab('cases')" id="tabBtn-cases" class="admin-tab active px-5 py-2.5 font-bold text-xs uppercase tracking-wider bg-brand-cyan text-black transition shrink-0">
-                    Manage Cases
-                </button>
-                <button onclick="switchAdminTab('brands')" id="tabBtn-brands" class="admin-tab px-5 py-2.5 font-bold text-xs uppercase tracking-wider bg-brand-card border border-brand-border text-gray-300 hover:text-white transition shrink-0">
-                    Brand Wall
-                </button>
-            </div>
-
-            <!-- TAB 1: MANAGE CASES -->
-            <div id="tab-cases" class="admin-content space-y-6">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-xl font-bold uppercase">Case Studies & Video Reels</h3>
-                    <button onclick="openCaseModal()" class="px-4 py-2 bg-brand-cyan text-black font-bold text-xs uppercase tracking-wider hover:bg-brand-mint transition">
-                        + Add New Case
-                    </button>
-                </div>
-
-                <div class="bg-brand-card border border-brand-border rounded-xl overflow-hidden">
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-brand-dark border-b border-brand-border text-xs uppercase text-gray-400">
-                            <tr>
-                                <th class="p-4">Case Title</th>
-                                <th class="p-4">Client</th>
-                                <th class="p-4">Category</th>
-                                <th class="p-4">Media Type</th>
-                                <th class="p-4">Front Page <span id="featuredCountLabel" class="text-brand-cyan"></span></th>
-                                <th class="p-4 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminCasesTable" class="divide-y divide-brand-border text-gray-300">
-                            <!-- Populated dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- TAB: BRAND WALL -->
-            <div id="tab-brands" class="admin-content hidden space-y-6">
-                <h3 class="text-xl font-bold uppercase">Brand Wall</h3>
-                <p class="text-sm text-gray-400 max-w-2xl">Brands shown in the logo grid on the front page. Paste a link to a logo (SVG or PNG with a transparent background works best); it is shown in grey. Without a logo the brand name is shown instead.</p>
-                <div class="bg-brand-card border border-brand-border p-6 rounded-xl space-y-4">
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <input type="text" id="newBrandName" placeholder="Brand name (e.g. Tuborg)" class="sm:w-56 bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-brand-cyan">
-                        <input type="text" id="newBrandLogo" placeholder="Logo URL (optional)" class="flex-grow bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-brand-cyan">
-                        <button onclick="addLogoBrand()" class="px-5 py-2 bg-brand-cyan text-black font-bold text-xs uppercase hover:bg-brand-mint transition">Add</button>
-                    </div>
-                    <div id="adminBrandList" class="divide-y divide-brand-border border-t border-brand-border">
-                        <!-- Dynamic brand rows -->
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <!-- CMS CASE EDIT/CREATE MODAL -->
-    <div id="caseEditModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-brand-card border border-brand-border max-w-2xl w-full rounded-2xl p-6 sm:p-8 space-y-6 my-8">
-            <div class="flex justify-between items-center border-b border-brand-border pb-4">
-                <h3 id="editModalHeaderTitle" class="text-xl font-bold uppercase">Add New Case</h3>
-                <button onclick="closeCaseModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <form onsubmit="saveCaseForm(event)" class="space-y-4">
-                <input type="hidden" id="editCaseId">
-                <div>
-                    <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Title *</label>
-                    <input type="text" id="editCaseTitle" required class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Client *</label>
-                        <input type="text" id="editCaseClient" required class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Category *</label>
-                        <select id="editCaseCategory" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
-                            <option value="CineGame">CineGame</option>
-                            <option value="Programmatic">Programmatic</option>
-                            <option value="CineFun">CineFun</option>
-                            <option value="Leadsite">Leadsite</option>
-                            <option value="Pitch">Pitch</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Media Type</label>
-                        <select id="editCaseMediaType" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
-                            <option value="image">Image Only</option>
-                            <option value="video">Video Reel (MP4)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Cover Image URL</label>
-                        <input type="text" id="editCaseCover" placeholder="Not needed for video cases" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Video URL (MP4 / WebM)</label>
-                    <input type="text" id="editCaseVideo" placeholder="https://domain.com/video.mp4" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none">
-                </div>
-                <!-- Images shown with arrows in the case popup instead of the video -->
-                <div id="editCaseImagesField">
-                    <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Images (one URL per line, shown with arrows instead of a video)</label>
-                    <textarea id="editCaseImages" rows="4" placeholder="assets/cases/pitch-1.jpg" class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none"></textarea>
-                </div>
-                <div>
-                    <label class="block text-xs uppercase font-bold text-gray-400 mb-1">Description *</label>
-                    <textarea id="editCaseDescription" rows="4" required class="w-full bg-brand-dark border border-brand-border rounded-lg px-4 py-2 text-white text-sm focus:border-brand-cyan focus:outline-none"></textarea>
-                </div>
-                <label class="flex items-center space-x-3 cursor-pointer select-none">
-                    <input type="checkbox" id="editCaseFeatured" class="w-4 h-4 accent-[#3dc0c8]">
-                    <span class="text-xs uppercase font-bold text-gray-300">Show on front page <span id="editFeaturedCount" class="text-gray-500"></span></span>
-                </label>
-                <div class="flex justify-end space-x-3 pt-4">
-                    <button type="button" onclick="closeCaseModal()" class="px-5 py-2 border border-brand-border text-gray-400 text-xs font-bold uppercase">Cancel</button>
-                    <button type="submit" class="px-5 py-2 bg-brand-cyan text-black text-xs font-bold uppercase hover:bg-brand-mint transition">Save Case</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- CASE PUBLIC DETAIL MODAL -->
     <div id="caseDetailModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
         <div class="bg-brand-card border border-brand-border max-w-4xl w-full rounded-2xl overflow-hidden relative my-8">
@@ -656,78 +505,12 @@
         </div>
     </footer>
 
-    <script src="assets/js/cases-data.js?v=27"></script>
+    <script src="assets/js/cases.js?v=1"></script>
+    <script src="assets/js/brands.js?v=1"></script>
+    <script src="assets/js/cases-data.js?v=28"></script>
     <script>
-        // --- CMS DATA (also read by cases.html); defaultCases comes from assets/js/cases-data.js ---
-        const MAX_FEATURED = 9;
-        // Brand wall: a logo URL is optional; brands without one show their name as a grey wordmark
-        const defaultLogoBrands = [
-            { name: "Coca-Cola", logo: "https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/cocacola.svg" },
-            { name: "Pepsi", logo: "https://cdn.jsdelivr.net/npm/simple-icons@9.21.0/icons/pepsi.svg" },
-            { name: "Carlsberg", logo: "assets/logos/carlsberg.svg" },
-            { name: "Santander", logo: "https://upload.wikimedia.org/wikipedia/commons/b/b8/Banco_Santander_Logotipo.svg" },
-            { name: "Red Bull", logo: "https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/redbull.svg" },
-            { name: "McDonald's", logo: "https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/mcdonalds.svg" },
-            { name: "UNICEF", logo: "https://upload.wikimedia.org/wikipedia/commons/e/ed/Logo_of_UNICEF.svg" },
-            { name: "M&M's", logo: "assets/logos/mms.svg" },
-            { name: "Subway", logo: "assets/logos/subway.svg" },
-            { name: "Fanta", logo: "assets/logos/fanta.svg", badge: true },
-            { name: "Politiken", logo: "assets/logos/politiken.svg" },
-            { name: "IKEA", logo: "assets/logos/ikea.svg", badge: true },
-            { name: "Tivoli", logo: "assets/logos/tivoli.svg" },
-            { name: "3", logo: "assets/logos/three.svg" },
-            { name: "Fazer", logo: "assets/logos/fazer.svg", badge: true },
-            { name: "JD Sports", logo: "assets/logos/jdsports.svg" },
-            { name: "Hummel", logo: "assets/logos/hummel.svg" },
-            { name: "Samsung", logo: "assets/logos/samsung.svg" },
-            { name: "Podimo", logo: "assets/logos/podimo.svg" },
-            { name: "Arla", logo: "assets/logos/arla.svg", badge: true },
-            { name: "LEGO", logo: "assets/logos/lego.svg", badge: true },
-            { name: "Boozt", logo: "assets/logos/boozt.svg" },
-            { name: "Ben & Jerry's", logo: "assets/logos/benjerry.svg", badge: true },
-            { name: "Sprite", logo: "assets/logos/sprite.svg" },
-            { name: "Mentos", logo: "assets/logos/mentos.svg", badge: true },
-            { name: "Dr. Oetker", logo: "assets/logos/droetker.svg", badge: true },
-            { name: "HBO", logo: "assets/logos/hbo.svg" },
-            { name: "DFDS", logo: "assets/logos/dfds.svg" },
-            { name: "Oister", logo: "assets/logos/oister.svg", badge: true },
-            { name: "Virgin Mobile", logo: "assets/logos/virginmobile.svg" },
-            { name: "Matas", logo: "assets/logos/matas.svg" },
-            { name: "BookBeat", logo: "assets/logos/bookbeat.svg" },
-            { name: "Specsavers", logo: "assets/logos/specsavers.svg", badge: true }
-        ];
-
-        const defaultState = { logoBrands: defaultLogoBrands, cases: defaultCases };
-
-        let appData = JSON.parse(JSON.stringify(defaultState));
-        try {
-            appData = JSON.parse(localStorage.getItem('cinemataztic_cms_data_v4')) || appData;
-        } catch (e) { /* storage unavailable (private mode, sandboxed preview) */ }
-        if (Array.isArray(appData.cases)) addNewDefaultCases(appData);
-        // Data saved before the brand wall existed gets the default brands
-        if (!Array.isArray(appData.logoBrands)) appData.logoBrands = JSON.parse(JSON.stringify(defaultLogoBrands));
-
-        function saveAppData() {
-            try {
-                localStorage.setItem('cinemataztic_cms_data_v4', JSON.stringify(appData));
-            } catch (e) { /* storage unavailable: changes last for this visit only */ }
-            renderAllViews();
-        }
-
-        function resetDataToDefault() {
-            if (confirm("Reset all CMS cases and the brand wall to default demo data?")) {
-                appData = JSON.parse(JSON.stringify(defaultState));
-                saveAppData();
-            }
-        }
-
-        function renderAllViews() {
-            renderFilters();
-            renderCasesGrid();
-            renderBrandWall();
-            renderAdminCases();
-            renderAdminBrands();
-        }
+// Cases come from assets/js/cases.js and the brand wall from assets/js/brands.js
+const MAX_FEATURED = 9;
 
         // --- BRAND WALL ---
         function escapeHtml(value) {
@@ -740,29 +523,29 @@
 
         const BRAND_SLOTS = 8;
         const BRAND_SWAP_MS = 2200;
-        let brandSlots = [];   // index into appData.logoBrands for each visible place
+        let brandSlots = [];   // index into siteBrands for each visible place
         let brandSwapTimer = null;
 
         function brandCellContent(i) {
-            const b = appData.logoBrands[i];
+            const b = siteBrands[i];
             return b.logo
                 ? `<img src="${escapeHtml(b.logo)}" alt="${escapeHtml(b.name)}" loading="lazy" class="brand-logo${b.badge ? ' brand-logo--badge' : ''} max-h-12 max-w-[130px] w-auto object-contain" data-brand-index="${i}">`
                 : brandWordmark(b.name);
         }
 
         function fillBrandCell(cell, i) {
-            cell.title = appData.logoBrands[i].name;
+            cell.title = siteBrands[i].name;
             cell.innerHTML = brandCellContent(i);
             // A broken logo link falls back to the name
             const img = cell.querySelector('img[data-brand-index]');
             if (!img) return;
-            img.addEventListener('error', () => { img.outerHTML = brandWordmark(appData.logoBrands[i].name); }, { once: true });
-            if (!appData.logoBrands[i].badge) tightenSvgLogo(img);
+            img.addEventListener('error', () => { img.outerHTML = brandWordmark(siteBrands[i].name); }, { once: true });
+            if (!siteBrands[i].badge) tightenSvgLogo(img);
         }
 
         function renderBrandWall() {
             const wall = document.getElementById('brandWall');
-            const total = appData.logoBrands.length;
+            const total = siteBrands.length;
             brandSlots = [...Array(Math.min(BRAND_SLOTS, total)).keys()];
             wall.innerHTML = brandSlots.map(() => `
                 <div class="brand-cell group flex items-center justify-center aspect-[3/2] px-4 bg-brand-card border border-brand-border hover:border-brand-cyan transition-colors"></div>
@@ -802,7 +585,7 @@
                 if (!res.ok) return;
                 const svg = new DOMParser().parseFromString(await res.text(), 'image/svg+xml').documentElement;
                 if (svg.nodeName.toLowerCase() !== 'svg' || !img.isConnected) return;
-                // Logo links can come from the CMS: drop anything executable before inlining
+                // Drop anything executable before inlining
                 svg.querySelectorAll('script, foreignObject').forEach(el => el.remove());
                 [svg, ...svg.querySelectorAll('*')].forEach(el => {
                     [...el.attributes].forEach(a => { if (/^on/i.test(a.name) || /^\s*javascript:/i.test(a.value)) el.removeAttribute(a.name); });
@@ -822,34 +605,10 @@
             } catch (e) { /* keep the plain <img> */ }
         }
 
-        // --- PUBLIC / ADMIN VIEW SWITCH ---
-        function switchView(view) {
-            const pub = document.getElementById('publicView');
-            const adm = document.getElementById('adminView');
-            if (view === 'admin') {
-                pub.classList.add('hidden');
-                adm.classList.remove('hidden');
-                window.scrollTo(0, 0);
-            } else {
-                adm.classList.add('hidden');
-                pub.classList.remove('hidden');
-            }
-            document.getElementById('mobileDrawer').classList.add('hidden');
-        }
-
-        // In-page links always lead back to the public site, also from the CMS
-        document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', () => switchView('public')));
-
-        // Cases ticked in the CMS, max 9; old data without flags shows the first 9
-        function featuredCount() {
-            return appData.cases.filter(c => c.featured).length;
-        }
-
+        // Cases marked featured in cases.js, max 9; pitches are only on the cases page
         function frontPageCases() {
-            const cases = appData.cases.filter(c => c.category !== 'Pitch'); // pitches are only on the cases page
-            const hasFlags = cases.some(c => 'featured' in c);
-            const list = hasFlags ? cases.filter(c => c.featured) : cases;
-            return list.slice(0, MAX_FEATURED);
+            const cases = siteCases.filter(c => c.category !== 'Pitch');
+            return cases.filter(c => c.featured).slice(0, MAX_FEATURED);
         }
 
         // --- FEATURED WORK ---
@@ -918,7 +677,7 @@
 
         // --- CASE DETAIL MODAL ---
         function openCaseDetailModal(caseId) {
-            const item = appData.cases.find(c => c.id === caseId);
+            const item = siteCases.find(c => c.id === caseId);
             if (!item) return;
 
             document.getElementById('caseModalTitle').innerText = item.title;
@@ -968,185 +727,6 @@
         document.querySelectorAll('#mobileDrawer a').forEach(a => a.addEventListener('click', () => {
             document.getElementById('mobileDrawer').classList.add('hidden');
         }));
-
-        // --- CMS ADMIN TAB SYSTEM ---
-        function switchAdminTab(tabName) {
-            document.querySelectorAll('.admin-tab').forEach(b => {
-                b.className = 'admin-tab px-5 py-2.5 font-bold text-xs uppercase tracking-wider bg-brand-card border border-brand-border text-gray-300 hover:text-white transition shrink-0';
-            });
-            document.querySelectorAll('.admin-content').forEach(c => c.classList.add('hidden'));
-
-            document.getElementById(`tabBtn-${tabName}`).className = 'admin-tab active px-5 py-2.5 font-bold text-xs uppercase tracking-wider bg-brand-cyan text-black transition shrink-0';
-            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-        }
-
-        // Admin Table Renders
-        function renderAdminCases() {
-            const tbody = document.getElementById('adminCasesTable');
-            tbody.innerHTML = appData.cases.map(c => `
-                <tr>
-                    <td class="p-4 font-bold text-white">${c.title}</td>
-                    <td class="p-4">${c.client}</td>
-                    <td class="p-4"><span class="px-2 py-1 rounded bg-brand-dark text-xs border border-brand-border">${c.category}</span></td>
-                    <td class="p-4 uppercase text-xs font-bold text-brand-cyan">${c.mediaType}</td>
-                    <td class="p-4">
-                        <input type="checkbox" ${c.featured ? 'checked' : ''} onchange="toggleFeatured('${c.id}', this)" class="w-4 h-4 accent-[#3dc0c8] cursor-pointer" title="Show on front page">
-                    </td>
-                    <td class="p-4 text-right space-x-2">
-                        <button onclick="openCaseModal('${c.id}')" class="text-xs text-brand-cyan font-bold uppercase hover:underline">Edit</button>
-                        <button onclick="deleteCase('${c.id}')" class="text-xs text-red-400 font-bold uppercase hover:underline">Delete</button>
-                    </td>
-                </tr>
-            `).join('');
-            document.getElementById('featuredCountLabel').innerText = `${featuredCount()} / ${MAX_FEATURED}`;
-        }
-
-        function toggleFeatured(id, checkbox) {
-            const item = appData.cases.find(c => c.id === id);
-            if (checkbox.checked && featuredCount() >= MAX_FEATURED) {
-                alert(`Only ${MAX_FEATURED} cases can be shown on the front page. Untick another case first.`);
-                checkbox.checked = false;
-                return;
-            }
-            item.featured = checkbox.checked;
-            saveAppData();
-        }
-
-        // Brand Wall admin
-        function renderAdminBrands() {
-            const list = document.getElementById('adminBrandList');
-            list.innerHTML = appData.logoBrands.map((b, i) => `
-                <div class="flex flex-col sm:flex-row sm:items-center gap-3 py-3">
-                    <div class="w-16 h-10 shrink-0 flex items-center justify-center bg-brand-dark border border-brand-border">
-                        ${b.logo ? `<img src="${escapeHtml(b.logo)}" alt="" class="brand-logo max-h-7 max-w-[56px] object-contain">` : '<span class="text-[9px] uppercase text-gray-500">No logo</span>'}
-                    </div>
-                    <span class="sm:w-40 text-sm font-bold text-white">${escapeHtml(b.name)}</span>
-                    <input type="text" value="${escapeHtml(b.logo || '')}" placeholder="Logo URL" onchange="updateBrandLogo(${i}, this.value)" class="flex-grow bg-brand-dark border border-brand-border rounded-lg px-3 py-1.5 text-white text-xs focus:outline-none focus:border-brand-cyan">
-                    <div class="flex items-center gap-3 text-xs font-bold uppercase">
-                        <button onclick="moveLogoBrand(${i}, -1)" class="text-gray-400 hover:text-white disabled:opacity-30" ${i === 0 ? 'disabled' : ''} title="Move up"><i class="fa-solid fa-arrow-up"></i></button>
-                        <button onclick="moveLogoBrand(${i}, 1)" class="text-gray-400 hover:text-white disabled:opacity-30" ${i === appData.logoBrands.length - 1 ? 'disabled' : ''} title="Move down"><i class="fa-solid fa-arrow-down"></i></button>
-                        <button onclick="removeLogoBrand(${i})" class="text-red-400 hover:underline">Remove</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function addLogoBrand() {
-            const nameInput = document.getElementById('newBrandName');
-            const logoInput = document.getElementById('newBrandLogo');
-            const name = nameInput.value.trim();
-            if (!name) return;
-            appData.logoBrands.push({ name, logo: logoInput.value.trim() });
-            nameInput.value = '';
-            logoInput.value = '';
-            saveAppData();
-        }
-
-        function updateBrandLogo(index, url) {
-            appData.logoBrands[index].logo = url.trim();
-            saveAppData();
-        }
-
-        function moveLogoBrand(index, direction) {
-            const target = index + direction;
-            if (target < 0 || target >= appData.logoBrands.length) return;
-            const [brand] = appData.logoBrands.splice(index, 1);
-            appData.logoBrands.splice(target, 0, brand);
-            saveAppData();
-        }
-
-        function removeLogoBrand(index) {
-            if (confirm(`Remove ${appData.logoBrands[index].name} from the brand wall?`)) {
-                appData.logoBrands.splice(index, 1);
-                saveAppData();
-            }
-        }
-
-        // CMS Case Create/Edit Modal
-        function openCaseModal(id = null) {
-            const modal = document.getElementById('caseEditModal');
-            if (id) {
-                const c = appData.cases.find(item => item.id === id);
-                document.getElementById('editModalHeaderTitle').innerText = 'Edit Case';
-                document.getElementById('editCaseId').value = c.id;
-                document.getElementById('editCaseTitle').value = c.title;
-                document.getElementById('editCaseClient').value = c.client;
-                document.getElementById('editCaseCategory').value = c.category;
-                document.getElementById('editCaseMediaType').value = c.mediaType || 'image';
-                document.getElementById('editCaseCover').value = c.cover;
-                document.getElementById('editCaseVideo').value = c.video || '';
-                document.getElementById('editCaseDescription').value = c.description;
-                document.getElementById('editCaseFeatured').checked = !!c.featured;
-                document.getElementById('editCaseImages').value = (c.images || []).join('\n');
-            } else {
-                document.getElementById('editModalHeaderTitle').innerText = 'Add New Case';
-                document.getElementById('editCaseId').value = '';
-                document.getElementById('editCaseTitle').value = '';
-                document.getElementById('editCaseClient').value = '';
-                document.getElementById('editCaseCategory').value = 'CineGame';
-                document.getElementById('editCaseMediaType').value = 'image';
-                document.getElementById('editCaseCover').value = '';
-                document.getElementById('editCaseVideo').value = '';
-                document.getElementById('editCaseDescription').value = '';
-                document.getElementById('editCaseFeatured').checked = false;
-                document.getElementById('editCaseImages').value = '';
-            }
-            document.getElementById('editFeaturedCount').innerText = `(${featuredCount()} / ${MAX_FEATURED} selected)`;
-            modal.classList.remove('hidden');
-        }
-
-        function closeCaseModal() {
-            document.getElementById('caseEditModal').classList.add('hidden');
-        }
-
-        function saveCaseForm(e) {
-            e.preventDefault();
-            const id = document.getElementById('editCaseId').value;
-            // Keep fields the form doesn't show (a pitch case's logo and logo crop)
-            const existing = id ? appData.cases.find(c => c.id === id) : null;
-            const newObj = {
-                ...existing,
-                id: id || 'c_' + Date.now(),
-                title: document.getElementById('editCaseTitle').value,
-                client: document.getElementById('editCaseClient').value,
-                category: document.getElementById('editCaseCategory').value,
-                mediaType: document.getElementById('editCaseMediaType').value,
-                cover: document.getElementById('editCaseCover').value,
-                video: document.getElementById('editCaseVideo').value,
-                description: document.getElementById('editCaseDescription').value,
-                featured: document.getElementById('editCaseFeatured').checked,
-                images: document.getElementById('editCaseImages').value.split('\n').map(s => s.trim()).filter(Boolean)
-            };
-
-            // Case cards show the client logo; the cover is only shown in the popup when there is no video
-            if (!newObj.cover && !(newObj.mediaType === 'video' && newObj.video) && !newObj.images.length) {
-                alert('Add a cover image URL, or a video URL with media type Video.');
-                return;
-            }
-
-            const wasFeatured = id ? !!appData.cases.find(c => c.id === id)?.featured : false;
-            if (newObj.featured && !wasFeatured && featuredCount() >= MAX_FEATURED) {
-                alert(`Only ${MAX_FEATURED} cases can be shown on the front page. Untick another case first.`);
-                return;
-            }
-
-            if (id) {
-                const idx = appData.cases.findIndex(c => c.id === id);
-                appData.cases[idx] = newObj;
-            } else {
-                appData.cases.unshift(newObj);
-            }
-
-            saveAppData();
-            closeCaseModal();
-        }
-
-        function deleteCase(id) {
-            if (confirm("Are you sure you want to delete this case?")) {
-                appData.cases = appData.cases.filter(c => c.id !== id);
-                saveAppData();
-            }
-        }
 
         // --- INTERACTIVE HERO CANVAS CONSTELLATION MESH ---
         (function initHeroCanvas() {
@@ -1971,9 +1551,9 @@
         document.getElementById('todayLabel').innerText = new Date()
             .toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: '2-digit', year: '2-digit' })
             .replace(/,/g, '').replace(/\//g, '.');
-        renderAllViews();
-        // Sub pages link to index.html#cms to open the CMS
-        if (window.location.hash === '#cms') switchView('admin');
+        renderFilters();
+        renderCasesGrid();
+        renderBrandWall();
     </script>
     <script>
         // --- FIT TEXT TO NARROW SCREENS ---

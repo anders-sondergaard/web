@@ -7,7 +7,7 @@
     <!-- Page transition (same as the old site): loads first, so arriving pages start covered -->
     <script src="assets/js/page-transition.js?v=3"></script>
     <!-- Menu logo turns into the round mark when scrolling -->
-    <script src="assets/js/site-header.js?v=3" defer></script>
+    <script src="assets/js/site-header.js?v=4" defer></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -165,9 +165,6 @@
                 <a href="cases.html" class="text-brand-cyan">Cases</a>
                 <a href="products.html" class="hover:text-brand-cyan transition">Products</a>
                 <a href="technology.html" class="hover:text-brand-cyan transition">Technology</a>
-                <a href="index.html#cms" class="px-4 py-2 uppercase tracking-widest font-bold border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition">
-                    <i class="fa-solid fa-gear mr-1"></i> CMS
-                </a>
                 <a href="guide.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Guide to programmatic</a>
             </nav>
 
@@ -181,10 +178,6 @@
             <a href="products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
             <a href="technology.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Technology</a>
             <a href="guide.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Guide to programmatic</a>
-            <hr class="border-brand-border my-2">
-            <a href="index.html#cms" class="block w-full text-left py-2 text-sm uppercase font-bold text-brand-cyan">
-                <i class="fa-solid fa-gear mr-2"></i> Open CMS Admin
-            </a>
         </div>
     </header>
 
@@ -282,19 +275,12 @@
         </div>
     </footer>
 
-    <script src="assets/js/cases-data.js?v=27"></script>
+    <script src="assets/js/cases.js?v=1"></script>
+    <script src="assets/js/cases-data.js?v=28"></script>
     <script>
         // --- CASE DATA ---
-        // Same CMS store as index.html; falls back to defaultCases (assets/js/cases-data.js) when nothing is saved.
-        function loadCases() {
-            try {
-                const saved = JSON.parse(localStorage.getItem('cinemataztic_cms_data_v4'));
-                if (saved && Array.isArray(saved.cases)) return addNewDefaultCases(saved).cases;
-            } catch (e) { /* storage unavailable */ }
-            return defaultCases;
-        }
-
-        const allCases = loadCases();
+        // Every case, in the order of assets/js/cases.js
+        const allCases = siteCases;
         const categories = ['All', 'CineGame', 'Programmatic', 'CineFun', 'Pitch']; // Leadsite cases only show under All
         // Pitch cases are only shown under their own filter, not under All
         const inAll = c => c.category !== 'Pitch';

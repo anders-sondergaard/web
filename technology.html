@@ -7,7 +7,7 @@
     <!-- Page transition (same as the old site): loads first, so arriving pages start covered -->
     <script src="assets/js/page-transition.js?v=3"></script>
     <!-- Menu logo turns into the round mark when scrolling -->
-    <script src="assets/js/site-header.js?v=3" defer></script>
+    <script src="assets/js/site-header.js?v=4" defer></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -111,7 +111,6 @@
         header.on-hero { background-color: #fea917 !important; border-color: rgba(10, 10, 12, 0.12) !important; color: #0a0a0c; }
         header.on-hero .text-white,
         header.on-hero nav > a.text-brand-cyan { color: #0a0a0c !important; }
-        header.on-hero nav > a[href$="#cms"] { border-color: rgba(10, 10, 12, 0.35); }
         header.on-hero #mobileDrawer { color: #ffffff; }
         /* Case cards: text sits on the image over a blur that fades in towards the bottom */
         .case-blur {
@@ -238,9 +237,6 @@
                 <a href="cases.html" class="hover:text-brand-cyan transition">Cases</a>
                 <a href="products.html" class="hover:text-brand-cyan transition">Products</a>
                 <a href="technology.html" class="text-brand-cyan">Technology</a>
-                <a href="index.html#cms" class="px-4 py-2 uppercase tracking-widest font-bold border border-brand-border hover:border-brand-cyan hover:text-brand-cyan transition">
-                    <i class="fa-solid fa-gear mr-1"></i> CMS
-                </a>
                 <a href="guide.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Guide to programmatic</a>
             </nav>
 
@@ -254,10 +250,6 @@
             <a href="products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
             <a href="technology.html" class="block text-lg font-bold uppercase text-brand-cyan">Technology</a>
             <a href="guide.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Guide to programmatic</a>
-            <hr class="border-brand-border my-2">
-            <a href="index.html#cms" class="block w-full text-left py-2 text-sm uppercase font-bold text-brand-cyan">
-                <i class="fa-solid fa-gear mr-2"></i> Open CMS Admin
-            </a>
         </div>
     </header>
 

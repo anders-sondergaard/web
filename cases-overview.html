@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Case-oversigt — Cinemataztic</title>
+    <!-- Local overview of every case in assets/js/cases.js. Not part of the site: don't upload it. -->
+    <style>
+        :root { --bg: #0a0a0c; --card: #121216; --border: #1f1f26; --text: #f3f4f6; --muted: #9ca3af; --cyan: #3dc0c8; --yellow: #fece00; }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.4 system-ui, -apple-system, sans-serif; }
+        header { position: sticky; top: 0; z-index: 2; background: rgba(10, 10, 12, 0.95); border-bottom: 1px solid var(--border); padding: 16px; }
+        h1 { margin: 0 0 4px; font-size: 20px; text-transform: uppercase; letter-spacing: -0.02em; }
+        .note { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
+        .note code { color: var(--text); }
+        .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+        .bar button, .bar input, .bar label { font: inherit; font-size: 12px; color: var(--text); background: transparent; border: 1px solid var(--border); padding: 6px 10px; border-radius: 6px; }
+        .bar button { cursor: pointer; font-weight: 700; text-transform: uppercase; }
+        .bar button.active { background: var(--cyan); border-color: var(--cyan); color: #000; }
+        .bar input[type=search] { min-width: 200px; flex: 1 1 200px; max-width: 320px; }
+        .bar label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+        .summary { margin-left: auto; color: var(--muted); font-size: 12px; }
+        .summary b { color: var(--text); }
+        .summary .warn { color: #f87171; }
+        main { padding: 16px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        th { text-align: left; font-size: 11px; text-transform: uppercase; color: var(--muted); padding: 8px; border-bottom: 1px solid var(--border); }
+        td { padding: 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+        tr:hover td { background: var(--card); }
+        .num { color: var(--muted); font-variant-numeric: tabular-nums; }
+        .thumb { width: 72px; height: 72px; border-radius: 8px; background: var(--card) center / cover no-repeat; border: 1px solid var(--border); }
+        .title { font-weight: 700; }
+        .id { color: var(--muted); font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
+        .cat { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; border: 1px solid currentColor; }
+        .star { color: var(--yellow); font-size: 16px; }
+        .desc { color: #d1d5db; white-space: pre-line; max-width: 420px; }
+        .media { color: var(--muted); font-size: 12px; white-space: nowrap; }
+        a { color: var(--cyan); }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Case-oversigt</h1>
+        <p class="note">Alle cases fra <code>assets/js/cases.js</code> i den rækkefølge, de vises på sitet. Kun til dig lokalt, skal ikke uploades.</p>
+        <div class="bar">
+            <span id="filters"></span>
+            <input type="search" id="search" placeholder="Søg i titel, kunde, id …">
+            <label><input type="checkbox" id="frontOnly"> Kun forsiden</label>
+            <span class="summary" id="summary"></span>
+        </div>
+    </header>
+    <main>
+        <table>
+            <thead>
+                <tr><th>#</th><th>Forside</th><th></th><th>Titel / id</th><th>Kunde</th><th>Kategori</th><th>Medier</th><th>Beskrivelse</th><th></th></tr>
+            </thead>
+            <tbody id="rows"></tbody>
+        </table>
+    </main>
+
+    <script src="assets/js/cases.js"></script>
+    <script>
+        const categoryColors = { CineGame: '#f869b9', Programmatic: '#3dc0c8', CineFun: '#6ceec4', Leadsite: '#fea917', Pitch: '#fece00' };
+        const esc = s => String(s ?? '').replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]);
+        const categories = ['Alle', ...new Set(siteCases.map(c => c.category))];
+        let category = 'Alle';
+
+        function render() {
+            const q = document.getElementById('search').value.trim().toLowerCase();
+            const frontOnly = document.getElementById('frontOnly').checked;
+            document.getElementById('filters').innerHTML = categories.map(cat => {
+                const n = cat === 'Alle' ? siteCases.length : siteCases.filter(c => c.category === cat).length;
+                return `<button class="${cat === category ? 'active' : ''}" onclick="category='${cat}';render()">${cat} ${n}</button>`;
+            }).join(' ');
+
+            const front = siteCases.filter(c => c.featured && c.category !== 'Pitch');
+            document.getElementById('summary').innerHTML = `<b>${siteCases.length}</b> cases · `
+                + `<b class="${front.length > 9 ? 'warn' : ''}">${front.length}</b> på forsiden (max 9)`;
+
+            document.getElementById('rows').innerHTML = siteCases.map((c, i) => ({ c, n: i + 1 }))
+                .filter(({ c }) => category === 'Alle' || c.category === category)
+                .filter(({ c }) => !frontOnly || c.featured)
+                .filter(({ c }) => !q || [c.id, c.title, c.client, c.description].join(' ').toLowerCase().includes(q))
+                .map(({ c, n }) => {
+                    const pic = c.cover || (c.images || [])[0] || '';
+                    const media = [c.video ? 'video' : '', c.images && c.images.length ? `${c.images.length} billed${c.images.length > 1 ? 'er' : ''}` : ''].filter(Boolean).join(' + ') || '–';
+                    return `<tr>
+                        <td class="num">${n}</td>
+                        <td>${c.featured ? '<span class="star" title="Vises på forsiden">★</span>' : ''}</td>
+                        <td><div class="thumb" style="background-image: url('${esc(pic)}')"></div></td>
+                        <td><div class="title">${esc(c.title)}</div><div class="id">${esc(c.id)}</div></td>
+                        <td>${esc(c.client)}</td>
+                        <td><span class="cat" style="color: ${categoryColors[c.category] || '#9ca3af'}">${esc(c.category)}</span></td>
+                        <td class="media">${media}</td>
+                        <td class="desc">${esc(c.description)}</td>
+                        <td><a href="cases.html?case=${encodeURIComponent(c.id)}" target="_blank">Åbn</a></td>
+                    </tr>`;
+                }).join('');
+        }
+
+        document.getElementById('search').addEventListener('input', render);
+        document.getElementById('frontOnly').addEventListener('change', render);
+        render();
+    </script>
+</body>
+</html>

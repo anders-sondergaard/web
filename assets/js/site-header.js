@@ -54,7 +54,7 @@
 })();
 
 // Phone menu, in the style of koalition.com: a full-screen dark panel under the menu bar with big
-// links that rise in one after another, then contact details, the office and the CMS link. The
+// links that rise in one after another, then contact details and the office. The
 // hamburger folds into a cross. Built from each page's own #mobileDrawer, so the links stay per page.
 (function () {
     const oldDrawer = document.getElementById('mobileDrawer');
@@ -111,12 +111,11 @@
 
     // Links from the old drawer; the one for this page is shown white
     const here = location.pathname.split('/').pop() || 'index.html';
-    const links = [...oldDrawer.querySelectorAll(':scope > a')].filter(a => !a.querySelector('i'));
-    const cms = oldDrawer.querySelector(':scope > button, :scope > a:has(i)');
+    const links = [...oldDrawer.querySelectorAll(':scope > a')];
 
     const menu = document.createElement('div');
     menu.className = 'm-menu';
-    menu.id = 'mobileDrawer'; // index.html's switchView() still hides it by this id
+    menu.id = 'mobileDrawer';
     menu.setAttribute('aria-hidden', 'true');
     menu.innerHTML = `
         <div class="m-menu__inner">
@@ -132,7 +131,6 @@
                 <div style="margin-top: 4px; font-size: 13px; line-height: 1.5; color: #9ca3af">Hellerupvej 46<br>2900 Hellerup<br>Denmark</div>
             </div>
             <div class="m-menu__foot m-menu__rise">
-                <span class="m-menu__cms"></span>
                 <span>© 2026 Cinemataztic</span>
             </div>
         </div>`;
@@ -144,12 +142,6 @@
         if (link.getAttribute('href') === here) link.classList.add('is-current');
         nav.appendChild(link);
     });
-    if (cms) {
-        const item = cms.cloneNode(true);
-        item.removeAttribute('class');
-        item.innerHTML = 'CMS Admin';
-        menu.querySelector('.m-menu__cms').appendChild(item);
-    }
     // Everything after the links rises in on the same stagger
     [...nav.children, ...menu.querySelectorAll('.m-menu__inner > .m-menu__rise')].forEach((el, i) => {
         el.classList.add('m-menu__rise');
