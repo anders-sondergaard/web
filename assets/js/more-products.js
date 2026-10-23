@@ -109,7 +109,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                 <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
                     <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Products</span>
-                    <h2 class="section-title font-black uppercase !leading-none">More products</h2>
+                    <h2 class="section-title font-black uppercase !leading-none">Additional products</h2>
                     <p class="text-sm text-gray-400 leading-relaxed">
                         More ways to engage the cinema audience, on the big screen, in the lobby and on their phones.
                     </p>

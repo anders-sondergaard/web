@@ -57,6 +57,7 @@ const caseLogos = {
     "Tryg": { src: "assets/logos/tryg.svg" }, // Wikimedia Commons, File:Tryg logo.svg
     "Toms": { src: "assets/logos/toms.svg" }, // Wikimedia Commons, File:Toms.svg
     "Santander": { src: "assets/logos/santander.svg" }, // Wikimedia Commons, File:Banco Santander Logotipo.svg
+    "ODEON": { src: "assets/logos/odeon.svg" }, // Wikimedia Commons, File:Odeon logo.svg
     // White on transparent, made from the logo images supplied for these cases
     "Sonic": { src: "assets/logos/sonic.png" },
     "Scream VI": { src: "assets/logos/scream.png", scale: 1.4 },

@@ -152,6 +152,16 @@ const siteCases = [
         description: "A CineFun game for Apotekets."
     },
     {
+        id: "odeon-sportsball",
+        title: "Sports Ball",
+        client: "ODEON",
+        category: "CineGame",
+        mediaType: "video",
+        cover: "",
+        video: "https://storage.googleapis.com/cinemataztic-public/video/CineGame_SportsBall_2026_IE_Recording_1.mov",
+        description: "Sports Ball, a CineGame for ODEON cinemas in Ireland in 2026."
+    },
+    {
         id: "ikea-collector",
         featured: true,
         title: "Collector",
