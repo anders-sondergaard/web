@@ -1,3 +1,6 @@
 .DS_Store
 # Original master video (191 MB, over GitHub's 100 MB limit); the site uses cinemataztic_programmatic_web.mp4
 assets/video/cinemataztic_programmatic_final.mp4
+# Upload state for deploy.sh (local to this Mac)
+.deploy-manifest
+.deploy-manifest.tmp
