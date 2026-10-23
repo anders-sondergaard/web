@@ -152,8 +152,19 @@ const siteCases = [
         description: "A CineFun game for Apotekets."
     },
     {
-        id: "subway",
+        id: "santander",
         featured: true,
+        title: "Swipe Hero",
+        client: "Santander",
+        category: "CineGame",
+        mediaType: "video",
+        cover: "",
+        video: "https://storage.googleapis.com/cinemataztic-public/video/SwipeHero_Santander_DK2025_CutDown.mp4",
+        description: "Swipe Hero, a CineGame for Santander in Danish cinemas in 2025."
+    },
+    {
+        id: "subway",
+        featured: false,
         title: "Jump and stay alive",
         client: "Subway",
         category: "CineGame",
