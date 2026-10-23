@@ -203,6 +203,44 @@
             </div>
         </section>
 
+        <!-- HOW IT WORKS: sticky sidebar + three steps, as on leadsite.html -->
+        <section id="steps" class="border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">How it works</span>
+                        <h2 class="section-title font-black uppercase !leading-none">From booking to results</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            Book cinema advertising like digital: pick your audience and slots, see your spot on the big screen and follow the results as they come in.
+                        </p>
+                    </aside>
+
+                    <div class="lg:col-span-9">
+                        <ol class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">01</span>
+                                <i class="fa-solid fa-sliders text-2xl text-brand-cyan"></i>
+                                <h3 class="text-xl font-black uppercase !leading-none">Book the campaign</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">Choose spots, creatives, time slots, audience and budget in the programmatic platform, or let our trading desk do it.</p>
+                            </li>
+                            <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">02</span>
+                                <i class="fa-solid fa-film text-2xl text-brand-cyan"></i>
+                                <h3 class="text-xl font-black uppercase !leading-none">On the big screen</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">Your spot plays in the preshow at the cinemas and times you picked, with a voucher for the audience if you want one.</p>
+                            </li>
+                            <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">03</span>
+                                <i class="fa-solid fa-chart-column text-2xl text-brand-cyan"></i>
+                                <h3 class="text-xl font-black uppercase !leading-none">Follow the results</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">See impressions, vouchers, CTR and leads in real-time reporting, and adjust while the campaign runs.</p>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- LATEST PROGRAMMATIC CASES: same look as Featured Cases on the front page -->
         <section id="cases" class="border-b border-brand-border scroll-mt-20">
             <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
@@ -676,6 +714,6 @@
         })();
     </script>
     <!-- More products: the three other product cards, as the last section above the footer -->
-    <script src="assets/js/more-products.js?v=2" data-current="programmatic"></script>
+    <script src="assets/js/more-products.js?v=3" data-current="programmatic"></script>
 </body>
 </html>

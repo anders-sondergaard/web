@@ -227,6 +227,47 @@
             </div>
         </section>
 
+        <!-- HOW IT WORKS: sticky sidebar + the product's animation and three steps, as on leadsite.html -->
+        <section id="steps" class="border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">How it works</span>
+                        <h2 class="section-title font-black uppercase !leading-none">Before and after the film</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            CineFun keeps the audience playing in the CineGame app between cinema visits, with games and quizzes sponsored by an advertiser.
+                        </p>
+                    </aside>
+
+                    <div class="lg:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- The animation from the cinefun product card, filled in by more-products.js -->
+                        <div class="group relative min-h-[420px] overflow-hidden rounded-2xl bg-brand-card border border-brand-border hover:border-brand-mint transition-colors" data-product-visual="cinefun"></div>
+
+                        <ol class="grid grid-cols-1 gap-6">
+                            <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">01</span>
+                                <i class="fa-solid fa-bell text-2xl text-brand-mint"></i>
+                                <h3 class="text-xl font-black uppercase !leading-none">A new game arrives</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">Users get a notification when a new sponsored game or TrailerQuiz lands in the Game Center of their CineGame app.</p>
+                            </li>
+                            <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">02</span>
+                                <i class="fa-solid fa-mobile-screen-button text-2xl text-brand-mint"></i>
+                                <h3 class="text-xl font-black uppercase !leading-none">Play anytime</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">They play whenever they want, before and after the cinema visit, and spend an average of 12 minutes on a game.</p>
+                            </li>
+                            <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                                <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">03</span>
+                                <i class="fa-solid fa-gift text-2xl text-brand-mint"></i>
+                                <h3 class="text-xl font-black uppercase !leading-none">Win and redeem</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">Players win prizes from the advertiser, or earn coins to swap for products in the concession.</p>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- LATEST GAMES: the newest CineFun cases, same section as on the CineGame page -->
         <section id="cases" class="border-b border-brand-border scroll-mt-20">
             <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
@@ -688,6 +729,6 @@
         })();
     </script>
     <!-- More products: the three other product cards, as the last section above the footer -->
-    <script src="assets/js/more-products.js?v=2" data-current="cinefun"></script>
+    <script src="assets/js/more-products.js?v=3" data-current="cinefun"></script>
 </body>
 </html>

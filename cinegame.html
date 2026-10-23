@@ -228,13 +228,43 @@
             </div>
         </section>
 
+        <!-- HOW IT WORKS: the three steps of a CineGame, side by side -->
+        <section id="steps" class="border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <ol class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                        <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">01</span>
+                        <i class="fa-solid fa-mobile-screen-button text-2xl text-brand-pink"></i>
+                        <h3 class="text-xl font-black uppercase !leading-none">Join with your phone</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">The game appears on the big screen with a 4-digit code. The audience joins from the CineGame app on their phones.</p>
+                    </li>
+                    <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                        <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">02</span>
+                        <i class="fa-solid fa-gamepad text-2xl text-brand-pink"></i>
+                        <h3 class="text-xl font-black uppercase !leading-none">Play together</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">The whole auditorium plays the advertiser's branded game at the same time, with their phones as controllers.</p>
+                    </li>
+                    <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                        <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">03</span>
+                        <i class="fa-solid fa-trophy text-2xl text-brand-pink"></i>
+                        <h3 class="text-xl font-black uppercase !leading-none">Win prizes</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">The best players win prizes from the advertiser, delivered as vouchers in the app after the game.</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
         <!-- WHY CINEGAME: sticky sidebar + six cards, same look as the other sections -->
         <section id="why" class="border-b border-brand-border scroll-mt-20">
             <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
                     <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
                         <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Why CineGame</span>
-                        <h2 class="section-title font-black uppercase !leading-none">Our games have become an integral part of the cinema experience</h2>
+                        <!-- "Our games" at heading size, the rest of the sentence smaller underneath -->
+                        <h2 class="font-black uppercase">
+                            <span class="block section-title !leading-none">Our games</span>
+                            <span class="block mt-2 text-lg !leading-none">have become an integral part of the cinema experience</span>
+                        </h2>
                         <p class="text-sm text-gray-400 leading-relaxed">The CineGame is a interactive advertising format, where the audience connect to the cinema screen via the CineGame app and engage in a branded game sponsored by the advertiser.</p>
                         <p class="text-sm text-gray-400 leading-relaxed">10-15% of the cinema audience engage in the CineGame.<br>Together with the largest brands in World, we create unforgettable branded experiences that the audience love.</p>
                     </aside>
@@ -517,6 +547,6 @@
         })();
     </script>
     <!-- More products: the three other product cards, as the last section above the footer -->
-    <script src="assets/js/more-products.js?v=2" data-current="cinegame"></script>
+    <script src="assets/js/more-products.js?v=3" data-current="cinegame"></script>
 </body>
 </html>
