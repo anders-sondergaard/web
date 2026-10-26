@@ -64,6 +64,10 @@
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* Card grids: more cards across on big screens so the cards stop growing. Products and cases get 4 from
+           1700px; cases get 5 from 2300px. Two classes, so they win over the xl:grid-cols-3 in site.css */
+        @media (min-width: 1700px) { .grid.card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (min-width: 2300px) { .grid.card-grid--wide { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
     </style>
     <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
     <link rel="preconnect" href="https://api.fontshare.com">
@@ -151,7 +155,7 @@
                             <span>Next-Gen Cinema Advertising</span>
                         </span>
                         <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tighter !leading-none text-black">
-                            We do digital cinema advertising.
+                            We do<br>digital cinema<br>advertising.
                         </h1>
                     </div>
                     <div class="lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
@@ -191,7 +195,7 @@
                     </aside>
 
                     <div class="lg:col-span-9">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <div class="grid card-grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                             <a href="programmatic.html" class="group block">
                                 <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
                                     <!-- Programmatic: cells are cinema screens, the cursor is the targeting -->
@@ -250,7 +254,7 @@
                     </aside>
 
                     <div class="lg:col-span-9">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-12" id="casesGrid">
+                        <div class="grid card-grid card-grid--wide grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-12" id="casesGrid">
                             <!-- Dynamically Populated by JS -->
                         </div>
                     </div>

@@ -62,6 +62,10 @@
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* Card grids: more cards across on big screens so the cards stop growing. Products and cases get 4 from
+           1700px; cases get 5 from 2300px. Two classes, so they win over the xl:grid-cols-3 in site.css */
+        @media (min-width: 1700px) { .grid.card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (min-width: 2300px) { .grid.card-grid--wide { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
     </style>
     <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
     <link rel="preconnect" href="https://api.fontshare.com">
@@ -166,7 +170,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-12" id="casesGrid">
+                    <div class="grid card-grid card-grid--wide grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-12" id="casesGrid">
                         <!-- Dynamically Populated by JS -->
                     </div>
                    </div>
@@ -320,7 +324,9 @@
         const conveyor = { active: false, cols: 1, steps: 0, visibleSlots: 0, cardW: 0, rowH: 0, s: 0, target: 0 };
 
         function columnsForWidth() {
-            return window.innerWidth >= 1280 ? 3 : window.innerWidth >= 640 ? 2 : 1;
+            // Same steps as the grid's CSS: 2 from 640px, 3 from 1280px, 4 from 1700px, 5 from 2300px
+            const w = window.innerWidth;
+            return w >= 2300 ? 5 : w >= 1700 ? 4 : w >= 1280 ? 3 : w >= 640 ? 2 : 1;
         }
 
         // Path slot n -> top-left position. Slot 0 is the exit end of row 1 (right side);
