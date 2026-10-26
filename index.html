@@ -111,6 +111,11 @@
         /* The wall shows 8 places; their logos fade out and in as they rotate through all brands */
         .brand-cell > * { transition: opacity 400ms ease; }
         .brand-cell.is-swapping > * { opacity: 0 !important; }
+        /* Brand wall: 4 logos on phones (2 x 2), 8 on tablets (2 rows of 4) and 12 in 2 rows of 6 on big
+           screens with a mouse (the script adds brand-wall--big) */
+        #brandWall.grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        @media (min-width: 640px) { #brandWall.grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        #brandWall.grid.brand-wall--big { grid-template-columns: repeat(6, minmax(0, 1fr)); }
         /* Menu sits on the yellow hero: yellow bar with dark text while the hero is in view */
         header { transition: background-color 250ms linear, color 250ms linear, border-color 250ms linear; }
         header.on-hero { background-color: #fece00 !important; border-color: rgba(10, 10, 12, 0.12) !important; color: #0a0a0c; }
@@ -330,7 +335,7 @@
                     </aside>
 
                     <div class="lg:col-span-9">
-                        <div id="brandWall" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <div id="brandWall" class="grid gap-6">
                             <!-- Filled from assets/js/brands.js -->
                         </div>
                     </div>
@@ -532,7 +537,9 @@ const MAX_FEATURED = 9;
             return `<span class="text-lg sm:text-xl font-black uppercase tracking-wider text-white/55 group-hover:text-white transition text-center leading-tight">${escapeHtml(name)}</span>`;
         }
 
-        const BRAND_SLOTS = 8;
+        // 12 places on big screens with a mouse, 8 on tablets (also an iPad held sideways), 4 on phones
+        const bigBrandWall = window.matchMedia('(min-width: 1280px) and (hover: hover) and (pointer: fine)');
+        const tabletBrandWall = window.matchMedia('(min-width: 640px)');
         const BRAND_SWAP_MS = 2200;
         let brandSlots = [];   // index into siteBrands for each visible place
         let brandSwapTimer = null;
@@ -557,7 +564,8 @@ const MAX_FEATURED = 9;
         function renderBrandWall() {
             const wall = document.getElementById('brandWall');
             const total = siteBrands.length;
-            brandSlots = [...Array(Math.min(BRAND_SLOTS, total)).keys()];
+            wall.classList.toggle('brand-wall--big', bigBrandWall.matches);
+            brandSlots = [...Array(Math.min(bigBrandWall.matches ? 12 : tabletBrandWall.matches ? 8 : 4, total)).keys()];
             wall.innerHTML = brandSlots.map(() => `
                 <div class="brand-cell group flex items-center justify-center aspect-[3/2] px-4 bg-brand-card border border-brand-border hover:border-brand-cyan transition-colors"></div>
             `).join('');
@@ -1495,6 +1503,8 @@ const MAX_FEATURED = 9;
         renderFilters();
         renderCasesGrid();
         renderBrandWall();
+        bigBrandWall.addEventListener('change', renderBrandWall);
+        tabletBrandWall.addEventListener('change', renderBrandWall);
     </script>
     <script>
         // --- FIT TEXT TO NARROW SCREENS ---
