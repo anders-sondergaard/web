@@ -1,0 +1,13 @@
+name: Claude Code Agent
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  run-agent:
+    if: github.event.label.name == 'claude-execute'
+    uses: cinemataztic/github-actions-claude-agent/.github/workflows/claude-code-agent.yml@v0.4.0
+    secrets:
+      CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+      CLAUDE_AGENT_APP_ID: ${{ secrets.CLAUDE_AGENT_APP_ID }}
+      CLAUDE_AGENT_APP_PRIVATE_KEY: ${{ secrets.CLAUDE_AGENT_APP_PRIVATE_KEY }}
