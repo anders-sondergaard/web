@@ -54,7 +54,7 @@
 })();
 
 // Phone menu: a full-screen dark panel under the menu bar with big
-// links that rise in one after another, then contact details and the office. The
+// links that rise in one after another, then the office. The
 // hamburger folds into a cross. Built from each page's own #mobileDrawer, so the links stay per page.
 (function () {
     const oldDrawer = document.getElementById('mobileDrawer');
@@ -86,8 +86,6 @@
         .m-menu__rise { opacity: 0; transform: translateY(24px); transition: opacity 500ms ease, transform 600ms cubic-bezier(0.22, 1, 0.36, 1); }
         .m-menu.is-open .m-menu__rise { opacity: 1; transform: none; transition-delay: calc(80ms + var(--i, 0) * 55ms); }
         .m-menu__rule { border: 0; border-top: 1px solid #1f1f26; margin: 40px 0; }
-        .m-menu__contact a { display: block; font-size: 17px; line-height: 1.6; }
-        .m-menu__contact a:first-child { font-weight: 700; }
         .m-menu__code { font-size: 34px; font-weight: 900; letter-spacing: -0.03em; line-height: 1; }
         .m-menu__foot { margin-top: auto; padding-top: 40px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 12px; color: #9ca3af; }
         .m-menu__foot a, .m-menu__foot button { color: inherit; text-transform: uppercase; font-weight: 700; letter-spacing: 0.1em; }
@@ -121,17 +119,14 @@
         <div class="m-menu__inner">
             <nav class="m-menu__links" aria-label="Menu"></nav>
             <hr class="m-menu__rule m-menu__rise">
-            <div class="m-menu__contact m-menu__rise">
-                <a href="mailto:info@cinemataztic.com">info@cinemataztic.com</a>
-                <a href="tel:+4531667341">+45 31 66 73 41</a>
-            </div>
-            <div class="m-menu__rise" style="margin-top: 48px">
+            <div class="m-menu__rise">
                 <div class="m-menu__code">HQ</div>
                 <div style="margin-top: 8px; font-size: 13px; font-weight: 700; text-transform: uppercase">Denmark</div>
                 <div style="margin-top: 4px; font-size: 13px; line-height: 1.5; color: #9ca3af">Hellerupvej 46<br>2900 Hellerup<br>Denmark</div>
             </div>
             <div class="m-menu__foot m-menu__rise">
                 <span>© 2026 Cinemataztic</span>
+                <span>VAT: 37207187</span>
             </div>
         </div>`;
     const nav = menu.querySelector('nav');
