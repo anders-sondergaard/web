@@ -123,7 +123,7 @@
             <hr class="m-menu__rule m-menu__rise">
             <div class="m-menu__contact m-menu__rise">
                 <a href="mailto:info@cinemataztic.com">info@cinemataztic.com</a>
-                <a href="tel:+4553587129">+45 5358 7129</a>
+                <a href="tel:+4531667341">+45 31 66 73 41</a>
             </div>
             <div class="m-menu__rise" style="margin-top: 48px">
                 <div class="m-menu__code">HQ</div>

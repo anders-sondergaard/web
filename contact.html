@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — Cinemataztic</title>
+    <!-- Page transition (same as the old site): loads first, so arriving pages start covered -->
+    <script src="assets/js/page-transition.js?v=3"></script>
+    <!-- Menu logo turns into the round mark when scrolling -->
+    <script src="assets/js/site-header.js?v=11" defer></script>
+    <style>
+        /* Premium buttons: light from above, a soft drop shadow, and a light sweep on hover */
+        .btn-shine {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.08) 45%, rgba(0, 0, 0, 0.06) 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+                0 1px 2px rgba(0, 0, 0, 0.25),
+                0 8px 20px -6px rgba(0, 0, 0, 0.45);
+        }
+        .btn-shine::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+            transform: translateX(-120%);
+            transition: transform 600ms ease;
+        }
+        .btn-shine:hover {
+            transform: translateY(-1px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+                0 2px 4px rgba(0, 0, 0, 0.25),
+                0 14px 28px -8px rgba(0, 0, 0, 0.5);
+        }
+        .btn-shine:hover::after { transform: translateX(120%); }
+        .btn-shine:active { transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) {
+            .btn-shine:hover { transform: none; }
+            .btn-shine::after { display: none; }
+        }
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .animate-blink {
+            animation: cursorBlink 1s infinite;
+        }
+        /* Menu sits on the blue hero: blue bar with dark text while the hero is in view */
+        header { transition: background-color 250ms linear, color 250ms linear, border-color 250ms linear; }
+        header.on-hero { background-color: #3dc0c8 !important; border-color: rgba(10, 10, 12, 0.12) !important; color: #0a0a0c; }
+        header.on-hero .text-white,
+        header.on-hero nav > a.text-brand-cyan { color: #0a0a0c !important; }
+        header.on-hero #mobileDrawer { color: #ffffff; }
+        /* Case cards: text sits on the image over a blur that fades in towards the bottom */
+        .case-blur {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 55%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0) 100%);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            -webkit-mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            mask-image: linear-gradient(to top, #000 50%, transparent 100%);
+            pointer-events: none;
+        }
+        /* Section headings: one size everywhere, set so the longest word ("TRANSFORMATION")
+           fits the narrow sidebar column; it scales with the screen width */
+        .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
+        @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* Contact form: two columns of fields from 640px, dark fields with a cyan focus line */
+        .cf-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+        @media (min-width: 640px) { .cf-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cf-wide { grid-column: 1 / -1; } }
+        .cf-field label { display: block; margin-bottom: 0.5rem; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #d1d5db; }
+        .cf-req { color: #f869b9; }
+        .cf-field input, .cf-field select, .cf-field textarea {
+            display: block; width: 100%; padding: 0.8rem 1rem; border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.14);
+            color: #ffffff; font: inherit; font-size: 1rem; transition: border-color 200ms, background-color 200ms;
+        }
+        .cf-field select { appearance: none; padding-right: 2.5rem; cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%239ca3af' stroke-width='1.6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 1rem center; }
+        .cf-field select option { background: #141418; color: #ffffff; }
+        .cf-field textarea { resize: vertical; min-height: 8rem; }
+        .cf-field input:hover, .cf-field select:hover, .cf-field textarea:hover { border-color: rgba(255, 255, 255, 0.3); }
+        .cf-field input:focus, .cf-field select:focus, .cf-field textarea:focus { outline: none; border-color: #3dc0c8; background-color: rgba(61, 192, 200, 0.06); }
+        .cf-field.is-invalid input, .cf-field.is-invalid select { border-color: #f869b9; }
+        .cf-error { display: block; margin-top: 0.4rem; font-size: 12px; color: #f869b9; }
+        .cf-check { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.875rem; line-height: 1.6; color: #9ca3af; cursor: pointer; }
+        .cf-check input { flex: none; width: 1.1rem; height: 1.1rem; margin-top: 0.2rem; accent-color: #3dc0c8; cursor: pointer; }
+        .cf-check.is-invalid { color: #f869b9; }
+        .cf-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+        #contactForm button[disabled] { opacity: 0.6; cursor: wait; }
+    </style>
+    <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS, built once for the whole site (classes from all pages and scripts) -->
+    <link rel="stylesheet" href="assets/css/site.css?v=1">
+</head>
+<body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
+        <div class="w-full px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <span class="text-2xl sm:text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white group-hover:opacity-90 transition">
+                    CINEMATAZTIC
+                </span>
+            </a>
+
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-widest uppercase">
+                <a href="cases.html" class="hover:text-brand-cyan transition">Cases</a>
+                <a href="products.html" class="hover:text-brand-cyan transition">Products</a>
+                <a href="technology.html" class="hover:text-brand-cyan transition">Technology</a>
+                <a href="contact.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Contact</a>
+            </nav>
+
+            <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
+            <a href="cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
+            <a href="products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
+            <a href="technology.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Technology</a>
+            <a href="contact.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Contact</a>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+        <!-- HERO: same animated hero as the front page, in blue -->
+        <section id="hero" class="relative overflow-hidden border-b border-brand-border bg-brand-cyan">
+            <!-- Canvas Interactive Background -->
+            <canvas id="heroCanvas" class="absolute inset-0 z-0 w-full h-full"></canvas>
+            <div class="relative z-10 w-full px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-28 lg:pb-32">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-end">
+                    <div class="lg:col-span-8 space-y-8">
+                        <span class="inline-flex items-center space-x-2 text-[10px] font-bold uppercase tracking-widest text-brand-dark">
+                            <span class="w-2 h-2 rounded-full bg-brand-dark animate-ping"></span>
+                            <span>Contact us</span>
+                        </span>
+                        <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tighter !leading-none text-black">
+                            Let’s work<br>together
+                        </h1>
+                    </div>
+                    <div class="lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
+                        <p>
+                            See what the big screen can do for your brand. Tell us a little about you, and we will get back to you.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT FORM: sidebar with the direct details, the form beside it. Sent by contact.php -->
+        <section id="contact" class="border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Get in touch</span>
+                        <h2 class="section-title font-black uppercase !leading-none">Let’s Talk</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            Ready to take your brand to the cinema? Fill in the form, and one of our specialists will contact you to talk about your campaign.
+                        </p>
+                        <div class="space-y-1">
+                            <a href="mailto:info@cinemataztic.com" class="block text-lg font-bold text-white hover:text-brand-cyan transition">info@cinemataztic.com</a>
+                            <a href="tel:+4531667341" class="block text-lg font-bold text-white hover:text-brand-cyan transition">+45 31 66 73 41</a>
+                        </div>
+                    </aside>
+
+                    <div class="lg:col-span-9">
+                        <div class="p-8 sm:p-12 lg:p-16 rounded-2xl bg-brand-card border border-brand-border">
+                            <form id="contactForm" class="cf-grid" action="contact.php" method="post" novalidate>
+                                <div class="cf-field">
+                                    <label for="cfFirstName">First name <span class="cf-req" aria-hidden="true">*</span></label>
+                                    <input id="cfFirstName" name="first_name" type="text" autocomplete="given-name" maxlength="100" required>
+                                </div>
+                                <div class="cf-field">
+                                    <label for="cfLastName">Last name <span class="cf-req" aria-hidden="true">*</span></label>
+                                    <input id="cfLastName" name="last_name" type="text" autocomplete="family-name" maxlength="100" required>
+                                </div>
+                                <div class="cf-field">
+                                    <label for="cfEmail">Work email <span class="cf-req" aria-hidden="true">*</span></label>
+                                    <input id="cfEmail" name="email" type="email" autocomplete="email" maxlength="200" required>
+                                </div>
+                                <div class="cf-field">
+                                    <label for="cfTitle">Job title <span class="cf-req" aria-hidden="true">*</span></label>
+                                    <input id="cfTitle" name="job_title" type="text" autocomplete="organization-title" maxlength="100" required>
+                                </div>
+                                <div class="cf-field">
+                                    <label for="cfCompany">Company name <span class="cf-req" aria-hidden="true">*</span></label>
+                                    <input id="cfCompany" name="company" type="text" autocomplete="organization" maxlength="150" required>
+                                </div>
+                                <div class="cf-field">
+                                    <label for="cfPhone">Phone number <span class="cf-req" aria-hidden="true">*</span></label>
+                                    <input id="cfPhone" name="phone" type="tel" autocomplete="tel" maxlength="40" required>
+                                </div>
+                                <div class="cf-field">
+                                    <label for="cfCountry">Country <span class="cf-req" aria-hidden="true">*</span></label>
+                                    <select id="cfCountry" name="country" required>
+                                        <option value="">Select…</option>
+                                        <option>Denmark</option>
+                                        <option>Finland</option>
+                                        <option>Germany</option>
+                                        <option>Ireland</option>
+                                        <option>Portugal</option>
+                                        <option>Sweden</option>
+                                        <option disabled>──────────</option>
+                                        <option>Austria</option>
+                                        <option>Belgium</option>
+                                        <option>Estonia</option>
+                                        <option>France</option>
+                                        <option>Iceland</option>
+                                        <option>Italy</option>
+                                        <option>Latvia</option>
+                                        <option>Lithuania</option>
+                                        <option>Netherlands</option>
+                                        <option>Norway</option>
+                                        <option>Poland</option>
+                                        <option>Spain</option>
+                                        <option>Switzerland</option>
+                                        <option>United Kingdom</option>
+                                        <option>United States</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                                <div class="cf-field">
+                                    <label for="cfInterest">Area of interest <span class="cf-req" aria-hidden="true">*</span></label>
+                                    <select id="cfInterest" name="interest" required>
+                                        <option value="">Select…</option>
+                                        <option>CineGame</option>
+                                        <option>CineFun</option>
+                                        <option>Leadsite</option>
+                                        <option>Programmatic</option>
+                                        <option>Becoming a cinema partner</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                                <div class="cf-field cf-wide">
+                                    <label for="cfType">Company type <span class="cf-req" aria-hidden="true">*</span></label>
+                                    <select id="cfType" name="company_type" required>
+                                        <option value="">Select…</option>
+                                        <option>Brand / Advertiser</option>
+                                        <option>Media agency</option>
+                                        <option>Creative agency</option>
+                                        <option>Cinema / Exhibitor</option>
+                                        <option>Sales house</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                                <div class="cf-field cf-wide">
+                                    <label for="cfMessage">Message</label>
+                                    <textarea id="cfMessage" name="message" rows="5" maxlength="5000"></textarea>
+                                </div>
+                                <!-- Left empty by people; bots that fill in every field are ignored -->
+                                <div class="cf-trap" aria-hidden="true">
+                                    <label for="cfWebsite">Website</label>
+                                    <input id="cfWebsite" name="website" type="text" tabindex="-1" autocomplete="off">
+                                </div>
+                                <label class="cf-check cf-wide">
+                                    <input name="consent" type="checkbox" value="yes" required>
+                                    <span>I agree that Cinemataztic may store these details and contact me about my enquiry. <span class="cf-req" aria-hidden="true">*</span></span>
+                                </label>
+                                <div class="cf-wide flex flex-wrap items-center gap-6">
+                                    <button type="submit" class="btn-shine px-8 py-3.5 bg-white text-black text-xs font-bold uppercase tracking-wider hover:bg-brand-cyan transition">Submit</button>
+                                    <p id="cfStatus" class="text-sm text-gray-400" role="status" aria-live="polite"></p>
+                                </div>
+                            </form>
+                            <!-- Shown instead of the form once it is sent -->
+                            <div id="cfThanks" class="hidden space-y-4" tabindex="-1">
+                                <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Thank you</span>
+                                <h3 class="section-title font-black uppercase !leading-none">We’ll be in touch</h3>
+                                <p class="text-gray-300 leading-relaxed">Your message is on its way. One of our specialists will get back to you shortly.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
+        <!-- LET'S TALK: same sidebar layout as the page sections -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-b border-brand-border">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                <aside class="lg:col-span-3 space-y-6">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Contact</span>
+                    <h2 class="section-title font-black uppercase !leading-none text-white">Let’s Talk</h2>
+                    <a href="contact.html" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">Contact</a>
+                    <div class="space-y-1">
+                        <a href="tel:+4531667341" class="block text-lg font-bold text-white hover:text-brand-cyan transition">+45 31 66 73 41</a>
+                        <span class="block text-xs text-gray-400">(Not for support related inquiries)</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">All support requests should be made <a href="http://support.cinegame.com/" target="_blank" rel="noopener" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">here</a></p>
+                </aside>
+            </div>
+        </div>
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-gray-500">
+            <span>© 2026 Cinemataztic ApS. All rights reserved.</span>
+            <span class="md:text-center">Hellerupvej 46 - 2900 Hellerup - Denmark</span>
+            <div class="flex items-center md:justify-end gap-5 text-lg">
+                <a href="https://www.facebook.com/CinemaTaztic" target="_blank" rel="noopener" aria-label="Cinemataztic on Facebook" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" aria-label="Cinemataztic on LinkedIn" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- INTERACTIVE HERO CANVAS CONSTELLATION MESH ---
+        (function initHeroCanvas() {
+            const canvas = document.getElementById('heroCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let width, height;
+            let particles = [];
+            const particleCount = 45;
+            const maxDistance = 140;
+
+            const mouse = { x: null, y: null, radius: 180 };
+
+            function resize() {
+                width = canvas.width = canvas.parentElement.offsetWidth;
+                height = canvas.height = canvas.parentElement.offsetHeight;
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Track Mouse Position
+            const heroSection = document.getElementById('hero');
+            heroSection.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+
+            heroSection.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.8;
+                    this.vy = (Math.random() - 0.5) * 0.8;
+                    this.radius = Math.random() * 2 + 1.5;
+                    this.color = Math.random() > 0.3 ? '#3dc0c8' : '#ffffff';
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    // Mouse Interaction
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const dx = mouse.x - this.x;
+                        const dy = mouse.y - this.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < mouse.radius) {
+                            const angle = Math.atan2(dy, dx);
+                            const force = (mouse.radius - dist) / mouse.radius;
+                            this.x -= Math.cos(angle) * force * 2;
+                            this.y -= Math.sin(angle) * force * 2;
+                        }
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = this.color;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw connecting lines between particles
+                for (let a = 0; a < particles.length; a++) {
+                    particles[a].update();
+                    particles[a].draw();
+
+                    for (let b = a + 1; b < particles.length; b++) {
+                        const dx = particles[a].x - particles[b].x;
+                        const dy = particles[a].y - particles[b].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < maxDistance) {
+                            const opacity = 1 - (dist / maxDistance);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.strokeStyle = `rgba(61, 192, 200, ${opacity * 0.35})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Draw line to mouse if close
+                    if (mouse.x !== null && mouse.y !== null) {
+                        const mdx = particles[a].x - mouse.x;
+                        const mdy = particles[a].y - mouse.y;
+                        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                        if (mdist < mouse.radius) {
+                            const mOpacity = 1 - (mdist / mouse.radius);
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${mOpacity * 0.5})`;
+                            ctx.lineWidth = 1.2;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        })();
+
+        // --- MENU ON THE HERO ---
+        // The menu bar turns blue while any of the (blue) hero is visible below it.
+        (function initHeroMenu() {
+            const header = document.querySelector('body > header');
+            const hero = document.getElementById('hero');
+            if (!header || !hero) return;
+            const observer = new IntersectionObserver(([entry]) => {
+                header.classList.toggle('on-hero', entry.isIntersecting);
+            }, { rootMargin: `-${header.offsetHeight}px 0px 0px 0px` });
+            observer.observe(hero);
+        })();
+
+        // --- CONTACT FORM ---
+        // Checks the fields here, then sends them to contact.php, which emails them to info@cinemataztic.com.
+        // On success the form is replaced by a thank-you note; on failure the email address is offered instead.
+        (function initContactForm() {
+            const form = document.getElementById('contactForm');
+            if (!form) return;
+            const status = document.getElementById('cfStatus');
+            const thanks = document.getElementById('cfThanks');
+            const button = form.querySelector('button[type="submit"]');
+
+            function message(input) {
+                if (input.validity.valueMissing) return input.type === 'checkbox' ? 'Please tick the box to continue.' : 'Please fill in this field.';
+                if (input.validity.typeMismatch) return 'Please enter a valid email address.';
+                return '';
+            }
+            function check(input) {
+                const wrap = input.closest('.cf-field, .cf-check');
+                if (!wrap) return true;
+                const text = message(input);
+                wrap.classList.toggle('is-invalid', !!text);
+                input.setAttribute('aria-invalid', String(!!text));
+                let error = wrap.querySelector('.cf-error');
+                if (text && input.type !== 'checkbox') {
+                    if (!error) {
+                        error = document.createElement('span');
+                        error.className = 'cf-error';
+                        error.id = input.id + 'Error';
+                        input.setAttribute('aria-describedby', error.id);
+                        wrap.appendChild(error);
+                    }
+                    error.textContent = text;
+                } else if (error) {
+                    error.remove();
+                    input.removeAttribute('aria-describedby');
+                }
+                return !text;
+            }
+            const fields = [...form.querySelectorAll('[required]')];
+            // Errors show once a field has been left, and clear as soon as it is filled in
+            fields.forEach(input => {
+                input.addEventListener('blur', () => { if (input.type !== 'checkbox') check(input); });
+                input.addEventListener('input', () => { if (input.closest('.is-invalid')) check(input); });
+                input.addEventListener('change', () => { if (input.closest('.is-invalid')) check(input); });
+            });
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const invalid = fields.filter(input => !check(input));
+                if (invalid.length) {
+                    status.textContent = '';
+                    invalid[0].focus();
+                    return;
+                }
+                button.disabled = true;
+                status.textContent = 'Sending…';
+                try {
+                    const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+                    const data = await res.json().catch(() => ({}));
+                    if (!res.ok || !data.ok) throw new Error(data.error || 'Not sent');
+                    form.classList.add('hidden');
+                    thanks.classList.remove('hidden');
+                    thanks.focus();
+                } catch (err) {
+                    button.disabled = false;
+                    status.innerHTML = 'Sorry, the message could not be sent. Please email us at <a href="mailto:info@cinemataztic.com" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">info@cinemataztic.com</a>.';
+                }
+            });
+        })();
+
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileDrawer').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
