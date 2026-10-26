@@ -390,15 +390,11 @@ async function downloadCase(c) {
         a.remove();
         return;
     }
-    // Videos on another server that doesn't allow the page to fetch them: the site's download.php
-    // fetches the video and sends it as a download. Where there is no PHP (the local preview) the
-    // browser opens the video in a new tab instead.
+    // Videos in Cinemataztic's Google Cloud bucket: the browser ignores `download` for another server, so the
+    // videos there carry "Content-Disposition: attachment", which makes the link save the file. (A video
+    // without it opens in a new tab instead of replacing the page.)
     if (c.video) {
-        let viaPhp = false;
-        try { viaPhp = (await fetch('download.php', { method: 'HEAD', cache: 'no-store' })).status === 400; } catch (e) { /* offline */ }
-        const a = Object.assign(document.createElement('a'), viaPhp
-            ? { href: `download.php?url=${encodeURIComponent(c.video)}`, download: fileName(c.video) }
-            : { href: c.video, download: fileName(c.video), target: '_blank', rel: 'noopener' });
+        const a = Object.assign(document.createElement('a'), { href: c.video, download: fileName(c.video), target: '_blank', rel: 'noopener' });
         document.body.appendChild(a);
         a.click();
         a.remove();

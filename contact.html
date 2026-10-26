@@ -165,7 +165,7 @@
             </div>
         </section>
 
-        <!-- CONTACT FORM: sidebar with a short intro, the form beside it. Sent by contact.php -->
+        <!-- CONTACT FORM: sidebar with a short intro, the form beside it. Sent by Web3Forms (see the script) -->
         <section id="contact" class="border-b border-brand-border scroll-mt-20">
             <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
@@ -179,7 +179,7 @@
 
                     <div class="lg:col-span-9">
                         <div class="p-8 sm:p-12 lg:p-16 rounded-2xl bg-brand-card border border-brand-border">
-                            <form id="contactForm" class="cf-grid" action="contact.php" method="post" novalidate>
+                            <form id="contactForm" class="cf-grid" action="https://api.web3forms.com/submit" method="post" novalidate>
                                 <div class="cf-field">
                                     <label for="cfFirstName">First name <span class="cf-req" aria-hidden="true">*</span></label>
                                     <input id="cfFirstName" name="first_name" type="text" autocomplete="given-name" maxlength="100" required>
@@ -455,8 +455,11 @@
         })();
 
         // --- CONTACT FORM ---
-        // Checks the fields here, then sends them to contact.php, which emails them to mikkel@cinemataztic.com.
+        // Checks the fields here, then sends them to Web3Forms (web3forms.com), which emails them to
+        // mikkel@cinemataztic.com; the site has no server of its own. The access key only lets this form send to
+        // that address, so it may be public. Replies go to the sender's work email.
         // On success the form is replaced by a thank-you note; on failure the email address is offered instead.
+        const WEB3FORMS_KEY = 'd852562c-9442-4e12-b62f-eaa5556b72d9';
         (function initContactForm() {
             const form = document.getElementById('contactForm');
             if (!form) return;
@@ -507,12 +510,40 @@
                     invalid[0].focus();
                     return;
                 }
+                const v = name => (form.elements[name].value || '').trim();
+                // Bots fill in the hidden "website" field: thank them and send nothing
+                if (v('website')) {
+                    form.classList.add('hidden');
+                    thanks.classList.remove('hidden');
+                    return;
+                }
                 button.disabled = true;
                 status.textContent = 'Sending…';
+                // The mail lists the fields under these names, in this order
+                const mail = {
+                    access_key: WEB3FORMS_KEY,
+                    subject: `Contact form: ${v('company')} (${v('interest')})`,
+                    from_name: 'Cinemataztic website',
+                    'First name': v('first_name'),
+                    'Last name': v('last_name'),
+                    email: v('email'),
+                    'Job title': v('job_title'),
+                    'Company name': v('company'),
+                    'Phone number': v('phone'),
+                    Country: v('country'),
+                    'Area of interest': v('interest'),
+                    'Company type': v('company_type'),
+                    Message: v('message') || '(none)',
+                    'Consent to be contacted': 'Yes',
+                };
                 try {
-                    const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+                    const res = await fetch(form.action, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(mail),
+                    });
                     const data = await res.json().catch(() => ({}));
-                    if (!res.ok || !data.ok) throw new Error(data.error || 'Not sent');
+                    if (!res.ok || !data.success) throw new Error(data.message || 'Not sent');
                     form.classList.add('hidden');
                     thanks.classList.remove('hidden');
                     thanks.focus();
