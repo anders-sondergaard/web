@@ -261,6 +261,9 @@
 
         function filterCases(category) {
             currentFilter = category;
+            // Back to the top first: with fewer cases the page gets shorter, and from further down the
+            // conveyor could have moved the new cases out of view
+            window.scrollTo({ top: 0, behavior: 'instant' });
             renderFilters();
             renderCasesGrid();
         }
