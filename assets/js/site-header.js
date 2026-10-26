@@ -183,3 +183,43 @@
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
     window.matchMedia('(min-width: 768px)').addEventListener('change', (e) => { if (e.matches) setOpen(false); });
 })();
+
+// Section dividers: the line under each section draws itself from the middle out to both sides when it
+// scrolls into view, bright while it grows, then settles into the normal border colour. The section's
+// own bottom border is swapped for these two lines.
+(function () {
+    const sections = [...document.querySelectorAll('main section.border-b')];
+    if (!sections.length) return;
+    const style = document.createElement('style');
+    style.textContent = `
+        .section-line { border-bottom-width: 0 !important; }
+        .section-line:not(.relative):not(.absolute):not(.fixed) { position: relative; }
+        .section-line::after {
+            content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; z-index: 1;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.55) 30%, rgba(255, 255, 255, 0.55) 70%, transparent);
+            pointer-events: none;
+            transform: scaleX(0); transform-origin: center; transition: transform 1400ms cubic-bezier(0.22, 1, 0.36, 1), opacity 900ms ease;
+        }
+        .section-line.is-drawn::after { transform: scaleX(1); }
+        /* Once drawn, the bright line gives way to the normal border colour underneath */
+        .section-line::before {
+            content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; z-index: 1;
+            background: var(--section-line, #1f1f26); pointer-events: none; opacity: 0; transition: opacity 900ms ease;
+        }
+        .section-line.is-settled::before { opacity: 1; }
+        .section-line.is-settled::after { opacity: 0; }
+        @media (prefers-reduced-motion: reduce) { .section-line::after { display: none; } .section-line::before { opacity: 1; transition: none; } }
+    `;
+    document.head.appendChild(style);
+    const observer = new IntersectionObserver(entries => entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('is-drawn');
+        setTimeout(() => e.target.classList.add('is-settled'), 1500);
+        observer.unobserve(e.target);
+    }), { rootMargin: '0px 0px -10% 0px' });
+    sections.forEach(s => {
+        s.style.setProperty('--section-line', getComputedStyle(s).borderBottomColor);
+        s.classList.add('section-line');
+        observer.observe(s);
+    });
+})();

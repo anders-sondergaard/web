@@ -7,7 +7,7 @@
     <!-- Page transition (same as the old site): loads first, so arriving pages start covered -->
     <script src="assets/js/page-transition.js?v=3"></script>
     <!-- Menu logo turns into the round mark when scrolling -->
-    <script src="assets/js/site-header.js?v=6" defer></script>
+    <script src="assets/js/site-header.js?v=8" defer></script>
     <style>
         /* Premium buttons: light from above, a soft drop shadow, and a light sweep on hover */
         .btn-shine {
@@ -330,7 +330,7 @@
                 <div id="aboutSlides" class="grid max-w-3xl" aria-roledescription="carousel" aria-label="Who we are">
                     <div class="about-slide [grid-area:1/1] space-y-8 transition-opacity duration-500" aria-roledescription="slide" aria-label="1 of 3">
                         <h2 class="text-4xl sm:text-6xl font-black uppercase !leading-none">
-                            We love <span class="text-brand-pink">cinemas!</span>
+                            We love <span class="text-brand-cyan">cinemas!</span>
                         </h2>
                         <p class="text-lg sm:text-xl text-gray-200 !leading-relaxed max-w-2xl">
                             We’re Cinemataztic and we want to shape the future of the cinema experience by developing new creative and interactive formats that the audience love. Because what people love, matters…..
@@ -338,7 +338,7 @@
                     </div>
                     <div class="about-slide [grid-area:1/1] space-y-8 transition-opacity duration-500" style="opacity: 0" aria-hidden="true" aria-roledescription="slide" aria-label="2 of 3">
                         <h2 class="text-4xl sm:text-6xl font-black uppercase !leading-none">
-                            Our stack...<br><span class="text-brand-pink">it's better than yours</span>
+                            Our stack...<br><span class="text-brand-cyan">it's better than yours</span>
                         </h2>
                         <p class="text-lg sm:text-xl text-gray-200 !leading-relaxed max-w-2xl">
                             Cinemataztic is a cinema-loving, design thinking and software engineering company, developing new digital products for cinemas to both enhance the cinema experience for the audience and create new digital revenue streams for exhibitors and ad networks.
@@ -346,7 +346,7 @@
                     </div>
                     <div class="about-slide [grid-area:1/1] space-y-8 transition-opacity duration-500" style="opacity: 0" aria-hidden="true" aria-roledescription="slide" aria-label="3 of 3">
                         <h2 class="text-4xl sm:text-6xl font-black uppercase !leading-none">
-                            Tech &amp; <span class="text-brand-pink">creativity</span>
+                            Tech &amp; <span class="text-brand-cyan">creativity</span>
                         </h2>
                         <p class="text-lg sm:text-xl text-gray-200 !leading-relaxed max-w-2xl">
                             The digital transformation is not about 1 and 0, but about shaping experiences to match new digital behaviors and social relations of an audience. We believe in mixing the physical analog experience with a digital interactive layer to enhance engagement and allow the audience to become part of the experience.
@@ -415,7 +415,7 @@
             </div>
             <div class="p-8 space-y-6">
                 <div class="flex items-center space-x-3">
-                    <span id="caseModalCategory" class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-brand-cyan text-black">Category</span>
+                    <span id="caseModalCategory" class="px-3 py-1 rounded text-xs font-bold uppercase">Category</span>
                     <span id="caseModalClient" class="text-xs font-bold uppercase tracking-wider text-gray-400">Client Name</span>
                 </div>
                 <h2 id="caseModalTitle" class="text-3xl sm:text-4xl font-black uppercase">Case Title</h2>
@@ -596,15 +596,15 @@ const MAX_FEATURED = 9;
                     <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-white transition-colors">
                         ${caseCover(c)}
                         ${c.category === 'Programmatic' ? `
-                            <div class="absolute top-3 right-3 bg-black/80 text-white px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/40">
+                            <div class="absolute top-3 right-3 px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-white" style="background-color: rgba(255, 255, 255, 0.25)">
                                 <i class="fa-solid fa-chart-column mr-1"></i> Results
                             </div>
                         ` : c.images && c.images.length ? `
-                            <div class="absolute top-3 right-3 bg-black/80 text-white px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/40">
+                            <div class="absolute top-3 right-3 px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-white" style="background-color: rgba(255, 255, 255, 0.25)">
                                 <i class="fa-solid fa-images mr-1"></i> Gallery
                             </div>
                         ` : c.mediaType === 'video' ? `
-                            <div class="absolute top-3 right-3 bg-black/80 text-white px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/40">
+                            <div class="absolute top-3 right-3 px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-white" style="background-color: rgba(255, 255, 255, 0.25)">
                                 <i class="fa-solid fa-play mr-1"></i> Video
                             </div>
                         ` : ''}
@@ -613,7 +613,7 @@ const MAX_FEATURED = 9;
                             <h3 class="text-xl font-black uppercase !leading-none text-white line-clamp-2">${c.title}</h3>
                             <p class="text-sm text-white/80 line-clamp-2 leading-relaxed">${c.description}</p>
                             <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/70">
-                                <span class="px-2 py-0.5 border rounded-full" style="color: ${categoryColor(c.category)}; border-color: ${categoryColor(c.category)}">${c.category}</span>
+                                <span class="px-2 py-0.5 rounded" style="background-color: ${categoryColor(c.category)}40; color: ${categoryColor(c.category)}">${c.category}</span>
                             </div>
                         </div>
                     </div>
@@ -630,7 +630,8 @@ const MAX_FEATURED = 9;
             document.getElementById('caseModalClient').innerText = item.client;
             const categoryEl = document.getElementById('caseModalCategory');
             categoryEl.innerText = item.category;
-            categoryEl.style.backgroundColor = categoryColor(item.category);
+            categoryEl.style.backgroundColor = `${categoryColor(item.category)}40`; // the colour, tinted
+            categoryEl.style.color = categoryColor(item.category);
             document.getElementById('caseModalDescription').innerText = item.description;
 
             const mediaBox = document.getElementById('caseModalMediaContainer');
