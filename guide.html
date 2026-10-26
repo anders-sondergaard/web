@@ -62,6 +62,14 @@
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* Screens with ordinary pixels (like most external monitors): the thin, grey body text gets hard to read
+           there, so text is drawn with normal smoothing, paragraphs a little heavier and the grey a little
+           lighter. Retina screens are unchanged */
+        @media (max-resolution: 1.5dppx), (-webkit-max-device-pixel-ratio: 1.5) {
+            body.antialiased { -webkit-font-smoothing: auto; -moz-osx-font-smoothing: auto; }
+            body p, body li { font-weight: 500; }
+            body .text-gray-400 { color: #d1d5db; }
+        }
         /* Hero text beside the big heading: 16px up to about 1500px wide, then it grows with the screen (to 24px)
            so it doesn't look tiny on big screens. The small second paragraph keeps its size relative to it */
         .hero-copy.text-base { font-size: clamp(1rem, 0.4rem + 0.6vw, 1.5rem); }
@@ -223,7 +231,7 @@
                         </div>
                         <div class="p-8 rounded-2xl border border-brand-border space-y-6">
                             <div class="space-y-1">
-                                <h3 class="text-xs font-bold uppercase tracking-widest text-white">Adjustments to base-CPM</h3>
+                                <h3 class="text-sm font-bold uppercase tracking-widest text-white">Adjustments to base-CPM</h3>
                                 <p class="text-sm text-gray-400">The base-CPM adjusts automatically based on your campaign specifications:</p>
                             </div>
                             <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5 text-sm text-gray-300">
@@ -281,7 +289,7 @@
                             </li>
                         </ol>
                         <div class="space-y-4">
-                            <h3 class="text-xs font-bold uppercase tracking-widest text-white">Upload specifications</h3>
+                            <h3 class="text-sm font-bold uppercase tracking-widest text-white">Upload specifications</h3>
                             <dl class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                                 <div class="p-6 rounded-2xl border border-brand-border space-y-2">
                                     <dt class="text-[10px] font-bold uppercase tracking-widest text-gray-400"><i class="fa-solid fa-expand mr-2 text-brand-cyan"></i>Size</dt>
@@ -318,22 +326,22 @@
                     <div class="lg:col-span-9 space-y-10">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div class="space-y-3">
-                                <h3 class="text-xs font-bold uppercase tracking-widest text-white">How it works</h3>
+                                <h3 class="text-sm font-bold uppercase tracking-widest text-white">How it works</h3>
                                 <p class="text-base text-gray-300 leading-relaxed">When your cinema spot is played, a digital voucher can be delivered directly to people in the audience.</p>
                             </div>
                             <div class="space-y-3">
-                                <h3 class="text-xs font-bold uppercase tracking-widest text-white">Who receives it?</h3>
+                                <h3 class="text-sm font-bold uppercase tracking-widest text-white">Who receives it?</h3>
                                 <p class="text-base text-gray-300 leading-relaxed">Vouchers go to audience members who took part in the CineGame just before the preshow begins.</p>
                             </div>
                             <div class="space-y-3">
-                                <h3 class="text-xs font-bold uppercase tracking-widest text-white">Delivery</h3>
+                                <h3 class="text-sm font-bold uppercase tracking-widest text-white">Delivery</h3>
                                 <p class="text-base text-gray-300 leading-relaxed">Vouchers are stored in the <span class="text-white font-bold">CineGame app wallet</span>, so they’re easy to find and redeem.</p>
                             </div>
                         </div>
                         <p class="text-xl sm:text-2xl font-bold text-white leading-snug max-w-3xl">This bridges cinema advertising with direct audience engagement, and opens up new conversion opportunities.</p>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="p-8 rounded-2xl bg-brand-card border border-brand-border space-y-5">
-                                <h3 class="text-xs font-bold uppercase tracking-widest text-white">Voucher content options</h3>
+                                <h3 class="text-sm font-bold uppercase tracking-widest text-white">Voucher content options</h3>
                                 <ul class="space-y-3 text-sm text-gray-300">
                                     <li class="flex gap-3"><i class="fa-solid fa-tag text-brand-cyan pt-1"></i>Discount codes (unique or generic)</li>
                                     <li class="flex gap-3"><i class="fa-solid fa-mobile-screen text-brand-cyan pt-1"></i>Deep links to the advertiser’s app</li>
@@ -342,7 +350,7 @@
                                 </ul>
                             </div>
                             <div class="p-8 rounded-2xl bg-brand-card border border-brand-border space-y-5">
-                                <h3 class="text-xs font-bold uppercase tracking-widest text-white">Drives results across</h3>
+                                <h3 class="text-sm font-bold uppercase tracking-widest text-white">Drives results across</h3>
                                 <div class="flex flex-wrap gap-2 text-[11px] font-bold uppercase tracking-wider">
                                     <span class="px-3 py-1.5 rounded-full bg-brand-cyan text-black">Retail sales</span>
                                     <span class="px-3 py-1.5 rounded-full bg-brand-mint text-black">Concession sales</span>
@@ -405,7 +413,7 @@
                     </aside>
                     <div class="lg:col-span-9 space-y-10">
                         <div class="space-y-4">
-                            <h3 class="text-xs font-bold uppercase tracking-widest text-white">Metrics tracked</h3>
+                            <h3 class="text-sm font-bold uppercase tracking-widest text-white">Metrics tracked</h3>
                             <ul class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                                 <li class="p-6 rounded-2xl bg-brand-card border border-brand-border space-y-4"><i class="fa-solid fa-eye text-2xl text-brand-cyan"></i><span class="block text-lg font-bold text-white leading-tight">Impressions delivered</span></li>
                                 <li class="p-6 rounded-2xl bg-brand-card border border-brand-border space-y-4"><i class="fa-solid fa-ticket text-2xl text-brand-mint"></i><span class="block text-lg font-bold text-white leading-tight">Vouchers delivered</span></li>

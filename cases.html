@@ -62,6 +62,14 @@
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* Screens with ordinary pixels (like most external monitors): the thin, grey body text gets hard to read
+           there, so text is drawn with normal smoothing, paragraphs a little heavier and the grey a little
+           lighter. Retina screens are unchanged */
+        @media (max-resolution: 1.5dppx), (-webkit-max-device-pixel-ratio: 1.5) {
+            body.antialiased { -webkit-font-smoothing: auto; -moz-osx-font-smoothing: auto; }
+            body p, body li { font-weight: 500; }
+            body .text-gray-400 { color: #d1d5db; }
+        }
         /* Card grids: more cards across on big screens so the cards stop growing. Products and cases get 4 from
            1700px; cases get 5 from 2300px. Two classes, so they win over the xl:grid-cols-3 in site.css */
         @media (min-width: 1700px) { .grid.card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }

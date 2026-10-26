@@ -62,6 +62,14 @@
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* Screens with ordinary pixels (like most external monitors): the thin, grey body text gets hard to read
+           there, so text is drawn with normal smoothing, paragraphs a little heavier and the grey a little
+           lighter. Retina screens are unchanged */
+        @media (max-resolution: 1.5dppx), (-webkit-max-device-pixel-ratio: 1.5) {
+            body.antialiased { -webkit-font-smoothing: auto; -moz-osx-font-smoothing: auto; }
+            body p, body li { font-weight: 500; }
+            body .text-gray-400 { color: #d1d5db; }
+        }
         /* Hero text beside the big heading: 16px up to about 1500px wide, then it grows with the screen (to 24px)
            so it doesn't look tiny on big screens. The small second paragraph keeps its size relative to it */
         .hero-copy.text-base { font-size: clamp(1rem, 0.4rem + 0.6vw, 1.5rem); }
@@ -339,13 +347,13 @@
                         <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">What we do</span>
                         <h1 class="section-title font-black uppercase !leading-none">Products</h1>
                         <div class="space-y-2">
-                            <h3 class="text-xs font-bold uppercase tracking-widest text-white">Engage the cinema core audience</h3>
+                            <h3 class="text-sm font-bold uppercase tracking-widest text-white">Engage the cinema core audience</h3>
                             <p class="text-sm text-gray-400 leading-relaxed">
                                 Bringing interactivity to the cinema preshow with a range of engaging advertising formats for the cinema core audience.
                             </p>
                         </div>
                         <div class="space-y-2">
-                            <h3 class="text-xs font-bold uppercase tracking-widest text-white">New ways to digitize cinema advertising</h3>
+                            <h3 class="text-sm font-bold uppercase tracking-widest text-white">New ways to digitize cinema advertising</h3>
                             <p class="text-sm text-gray-400 leading-relaxed">
                                 Cinemataztic has launched the new Digital Cinema Hub (DCH) – a platform for interactivity and display of digital advertising content on the cinema screen. The platform offers cinemas five new digital revenue streams.
                             </p>
