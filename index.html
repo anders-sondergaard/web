@@ -272,7 +272,7 @@
                             <!-- Country buttons populated by JS -->
                         </div>
                         <div class="hidden lg:block">
-                            <span id="partnerCount" class="block text-6xl font-black text-brand-pink">6</span>
+                            <span id="partnerCount" class="block text-6xl font-black text-brand-pink">1</span>
                             <span class="text-xs uppercase tracking-wider text-gray-400">Countries</span>
                         </div>
                     </aside>
@@ -1400,7 +1400,16 @@ const MAX_FEATURED = 9;
                 el.addEventListener('click', () => setActive(id));
             }
 
-            document.getElementById('partnerCount').textContent = partners.length;
+            // The country count rolls from 1 up to the number of countries when it scrolls into view,
+            // like the Brands count
+            const partnerCountEl = document.getElementById('partnerCount');
+            partnerCountEl.dataset.value = '1';
+            const partnerCountObserver = new IntersectionObserver(entries => {
+                if (!entries.some(e => e.isIntersecting)) return;
+                partnerCountObserver.disconnect();
+                rollNumber(partnerCountEl, partners.length);
+            }, { threshold: 0.6 });
+            partnerCountObserver.observe(partnerCountEl);
 
             // Country buttons: same switch for keyboard and touch
             const chips = document.getElementById('partnerChips');
