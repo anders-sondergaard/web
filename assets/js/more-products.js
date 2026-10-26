@@ -118,7 +118,8 @@
                     </a>
                 </aside>
                 <div class="lg:col-span-9">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <!-- card-grid: 4 across from 1700px, so the cards match the other product cards (rule in each page) -->
+                    <div class="grid card-grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                         ${Object.keys(cards).filter(k => k !== current).map(k => cards[k]).join('')}
                     </div>
                 </div>
