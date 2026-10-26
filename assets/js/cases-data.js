@@ -338,9 +338,15 @@ function initCaseNav(getList) {
         if (b) step(Number(b.dataset.caseStep));
     });
     document.addEventListener('keydown', (e) => {
-        if (modal.classList.contains('hidden') || modal.querySelector('.pitch-slider')) return;
+        if (modal.classList.contains('hidden')) return;
+        if (e.key === 'Escape') return window.closeCaseDetailModal();
+        if (modal.querySelector('.pitch-slider')) return;
         if (e.key === 'ArrowLeft') step(-1);
         if (e.key === 'ArrowRight') step(1);
+    });
+    // A click on the dark area around the case closes it
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal || e.target === wrap) window.closeCaseDetailModal();
     });
 }
 
