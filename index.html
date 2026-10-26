@@ -6,8 +6,10 @@
     <title>Cinemataztic — Digital Cinema Advertising</title>
     <!-- Page transition (same as the old site): loads first, so arriving pages start covered -->
     <script src="assets/js/page-transition.js?v=3"></script>
+    <!-- Splash intro: pink, blue and yellow panels rise once per visit -->
+    <script src="assets/js/intro.js?v=2"></script>
     <!-- Menu logo turns into the round mark when scrolling -->
-    <script src="assets/js/site-header.js?v=8" defer></script>
+    <script src="assets/js/site-header.js?v=10" defer></script>
     <style>
         /* Premium buttons: light from above, a soft drop shadow, and a light sweep on hover */
         .btn-shine {
@@ -236,7 +238,7 @@
                         <span id="todayLabel" class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow"></span>
                         <h2 class="section-title font-black uppercase !leading-none">Featured<br>Cases</h2>
                         <p class="text-sm text-gray-400 leading-relaxed">
-                            A handpicked selection of campaigns. See the <a href="cases.html" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">work section</a> for more case studies.
+                            A selection of campaigns. See the <a href="cases.html" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">Cases section</a> for more case studies.
                         </p>
                         <div class="flex flex-wrap lg:flex-col lg:items-start gap-2" id="filterContainer">
                             <!-- Filter buttons populated by JS -->
@@ -306,7 +308,7 @@
                             — on the biggest screen in town.
                         </p>
                         <div class="hidden lg:block">
-                            <span id="brandCount" class="block text-6xl font-black text-brand-pink tabular-nums transition-opacity duration-300">1</span>
+                            <span id="brandCount" class="block text-6xl font-black text-brand-pink tabular-nums transition-opacity duration-300">0</span>
                             <span id="brandCountLabel" class="text-xs uppercase tracking-wider text-gray-400 transition-opacity duration-300">Brands</span>
                         </div>
                     </aside>
@@ -316,6 +318,53 @@
                             <!-- Filled from assets/js/brands.js -->
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CINEMA JOURNEY: sticky sidebar + the touch points of a cinema visit and the formats at each -->
+        <section id="journey" class="border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <aside class="lg:col-span-3 lg:sticky lg:top-28 lg:self-start space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Touch points</span>
+                        <h2 class="section-title font-black uppercase !leading-none">Cinema journey</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            The cinema experience is not only about the movie. It is made up of all the different touch points of the cinema journey. Cinemataztic's interactive advertising formats are designed to engage the audience at different touch points throughout the entire cinema journey to enhance the cinema experience.
+                        </p>
+                    </aside>
+
+                    <ol class="lg:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-6 self-start">
+                        <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                            <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">01</span>
+                            <i class="fa-solid fa-house text-2xl text-brand-yellow"></i>
+                            <h3 class="text-xl font-black uppercase !leading-none">At home</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">Before the visit, the audience plays sponsored casual games and quizzes in the CineGame app.</p>
+                            <div class="flex flex-wrap gap-2 pt-2 text-[10px] font-bold uppercase tracking-widest">
+                                    <a href="cinefun.html" class="px-2 py-0.5 rounded hover:text-white transition" style="background-color: #6ceec440; color: #6ceec4">CineFun</a>
+                            </div>
+                        </li>
+                        <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                            <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">02</span>
+                            <i class="fa-solid fa-film text-2xl text-brand-yellow"></i>
+                            <h3 class="text-xl font-black uppercase !leading-none">In the auditorium</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">In the preshow, the advertiser's spot plays on the big screen and the whole auditorium plays a branded game together.</p>
+                            <div class="flex flex-wrap gap-2 pt-2 text-[10px] font-bold uppercase tracking-widest">
+                                    <a href="programmatic.html" class="px-2 py-0.5 rounded hover:text-white transition" style="background-color: #3dc0c840; color: #3dc0c8">Programmatic</a>
+                                    <a href="cinegame.html" class="px-2 py-0.5 rounded hover:text-white transition" style="background-color: #f869b940; color: #f869b9">CineGame</a>
+                            </div>
+                        </li>
+                        <li class="relative p-8 rounded-2xl bg-brand-card border border-brand-border space-y-3">
+                            <span class="absolute top-6 right-8 text-6xl font-black text-white/10 tabular-nums">03</span>
+                            <i class="fa-solid fa-gift text-2xl text-brand-yellow"></i>
+                            <h3 class="text-xl font-black uppercase !leading-none">After the film</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">Prizes and vouchers bring the audience back to the concession, and the lead site turns players into leads for the advertiser.</p>
+                            <div class="flex flex-wrap gap-2 pt-2 text-[10px] font-bold uppercase tracking-widest">
+                                    <a href="leadsite.html" class="px-2 py-0.5 rounded hover:text-white transition" style="background-color: #fea91740; color: #fea917">Leadsite</a>
+                                    <a href="cinefun.html" class="px-2 py-0.5 rounded hover:text-white transition" style="background-color: #6ceec440; color: #6ceec4">CineFun</a>
+                            </div>
+                        </li>
+                    </ol>
                 </div>
             </div>
         </section>
@@ -453,7 +502,7 @@
 
     <script src="assets/js/cases.js?v=7"></script>
     <script src="assets/js/brands.js?v=2"></script>
-    <script src="assets/js/cases-data.js?v=36"></script>
+    <script src="assets/js/cases-data.js?v=37"></script>
     <script>
 // Cases come from assets/js/cases.js and the brand wall from assets/js/brands.js
 const MAX_FEATURED = 9;
@@ -584,7 +633,7 @@ const MAX_FEATURED = 9;
             const grid = document.getElementById('casesGrid');
             const featured = frontPageCases();
             const filtered = currentFilter === 'All' ? featured : featured.filter(c => c.category === currentFilter);
-            document.getElementById('workCount').innerText = filtered.length;
+            rollNumber(document.getElementById('workCount'), filtered.length);
 
             if (filtered.length === 0) {
                 grid.innerHTML = `<div class="col-span-full py-12 text-gray-500 font-bold uppercase">No cases found in this category.</div>`;
@@ -1232,7 +1281,7 @@ const MAX_FEATURED = 9;
         })();
 
         // --- BRANDS: COUNT-UP ---
-        // When the counter scrolls into view it counts 1 → 346 and stays there; the label below then
+        // When the counter scrolls into view it rolls up to 346 like a mechanical counter; the label below then
         // changes to a pulsing "And counting".
         (function initBrandCounter() {
             const countEl = document.getElementById('brandCount');
@@ -1258,14 +1307,9 @@ const MAX_FEATURED = 9;
             const observer = new IntersectionObserver(entries => {
                 if (!entries.some(e => e.isIntersecting)) return;
                 observer.disconnect();
-                const start = performance.now();
-                (function frame(now) {
-                    const t = Math.min(1, (now - start) / COUNT_MS);
-                    const eased = 1 - Math.pow(1 - t, 3);
-                    countEl.textContent = String(Math.max(1, Math.round(eased * TARGET)));
-                    if (t < 1) requestAnimationFrame(frame);
-                    else setTimeout(finish, HOLD_MS);
-                })(start);
+                // Rolls up like a mechanical counter (the same as the other pink counts)
+                rollNumber(countEl, TARGET);
+                setTimeout(finish, COUNT_MS + HOLD_MS);
             }, { threshold: 0.6 });
             observer.observe(countEl);
         })();

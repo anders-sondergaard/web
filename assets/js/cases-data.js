@@ -414,3 +414,36 @@ async function downloadCase(c) {
     files.forEach((f, i) => zip.file(`${String(i + 1).padStart(2, '0')}-${f.name}`, f.blob));
     saveBlob(await zip.generateAsync({ type: 'blob' }), `${c.id}.zip`);
 }
+
+// --- ROLLING NUMBERS: A MECHANICAL COUNTER ---
+// Each digit is a strip of 0–9 behind a one-digit window. On a new value every strip rolls down (a full
+// turn and a bit, left digit first) and stops on the new digit. Used for the pink counts on the front
+// page and the cases page. The element keeps its own display; the digits sit in an inline row inside it.
+(function () {
+    const style = document.createElement('style');
+    style.textContent = `
+        .roll { display: inline-flex; line-height: 1; }
+        .roll-col { display: inline-block; height: 1em; overflow: hidden; }
+        .roll-strip { display: block; will-change: transform; }
+        .roll-strip > span { display: block; height: 1em; line-height: 1em; text-align: center; }
+    `;
+    document.head.appendChild(style);
+})();
+function rollNumber(el, value) {
+    const next = String(value), prev = el.dataset.value || '';
+    el.dataset.value = next;
+    el.setAttribute('aria-label', next);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = next; return; }
+    const digits = Array.from({ length: 30 }, (_, k) => `<span>${k % 10}</span>`).join('');
+    el.innerHTML = `<span class="roll" aria-hidden="true">${[...next].map(() => `<span class="roll-col"><span class="roll-strip">${digits}</span></span>`).join('')}</span>`;
+    [...el.querySelectorAll('.roll-strip')].forEach((strip, i) => {
+        // Start on the digit that was in the same place (counted from the right), or on 0
+        const old = prev[prev.length - (next.length - i)];
+        const from = old === undefined ? 0 : Number(old);
+        const to = 10 + Number(next[i]) + (Number(next[i]) <= from ? 10 : 0);
+        strip.style.transform = `translateY(${-from}em)`;
+        void strip.offsetWidth;
+        strip.style.transition = `transform ${900 + i * 150}ms cubic-bezier(0.2, 0.8, 0.2, 1) ${i * 90}ms`;
+        strip.style.transform = `translateY(${-to}em)`;
+    });
+}

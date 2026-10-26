@@ -223,3 +223,67 @@
         observer.observe(s);
     });
 })();
+
+// Menu frame: a square frame (3px, in the text colour, over a soft blurred tint) sits around the link of
+// the page you are on, slides to whichever link the pointer is over, and slides back when the pointer
+// leaves the menu (on a page with no link of its own, the front page, it fades out instead). The text
+// never changes colour. The white Guide button has its own look and is left out.
+(function () {
+    const nav = document.querySelector('header nav');
+    if (!nav) return;
+    const links = [...nav.querySelectorAll(':scope > a')].filter(a => !a.classList.contains('btn-shine'));
+    if (!links.length) return;
+    // The page you are on was marked by colouring its link; the frame marks it now
+    const current = links.find(a => a.classList.contains('text-brand-cyan')) || null;
+    if (current) { current.classList.remove('text-brand-cyan'); current.setAttribute('aria-current', 'page'); }
+    const EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
+    const style = document.createElement('style');
+    style.textContent = `
+        header nav { position: relative; isolation: isolate; }
+        .nav-hover {
+            position: absolute; z-index: -1; pointer-events: none; opacity: 0;
+            border: 3px solid currentColor; background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(40px); backdrop-filter: blur(40px);
+            transition: opacity 350ms ease-out, left 450ms ${EASE}, top 450ms ${EASE}, width 450ms ${EASE}, height 450ms ${EASE};
+        }
+        header nav > a:not(.btn-shine):hover { color: inherit; }
+    `;
+    document.head.appendChild(style);
+    const box = document.createElement('span');
+    box.className = 'nav-hover';
+    box.setAttribute('aria-hidden', 'true');
+    nav.prepend(box);
+    const PAD_X = 10, PAD_Y = 7;
+    const moveTo = (a) => {
+        const n = nav.getBoundingClientRect(), r = a.getBoundingClientRect();
+        const place = () => Object.assign(box.style, {
+            left: `${r.left - n.left - PAD_X}px`, top: `${r.top - n.top - PAD_Y}px`,
+            width: `${r.width + PAD_X * 2}px`, height: `${r.height + PAD_Y * 2}px`,
+        });
+        if (box.style.opacity !== '1') {
+            // Appearing: show up on the link instead of sliding over from wherever it last was
+            box.style.transition = 'opacity 350ms ease-out';
+            place();
+            void box.offsetWidth;
+            box.style.transition = '';
+        } else {
+            place();
+        }
+        box.style.opacity = '1';
+    };
+    const rest = () => { if (current) moveTo(current); else box.style.opacity = '0'; };
+    links.forEach(a => {
+        a.addEventListener('mouseenter', () => moveTo(a));
+        a.addEventListener('focus', () => moveTo(a));
+        a.addEventListener('blur', rest);
+    });
+    nav.addEventListener('mouseleave', rest);
+    // On the page's own link from the start, and kept in place when the layout or fonts change
+    if (current) {
+        const settle = () => { if (!nav.matches(':hover')) moveTo(current); };
+        settle();
+        document.fonts && document.fonts.ready.then(settle);
+        window.addEventListener('resize', settle);
+        window.addEventListener('load', settle);
+    }
+})();
