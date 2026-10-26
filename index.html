@@ -635,6 +635,10 @@ const MAX_FEATURED = 9;
             currentFilter = category;
             renderFilters();
             renderCasesGrid();
+            // Back to the top of Featured Cases when further down: with fewer cases the section gets shorter,
+            // and the new cases could end up above the screen
+            const section = document.getElementById('work');
+            if (section.getBoundingClientRect().top < 0) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function renderCasesGrid() {
