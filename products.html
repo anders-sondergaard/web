@@ -62,6 +62,10 @@
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* Card grids: more cards across on big screens so the cards stop growing. Products and cases get 4 from
+           1700px; cases get 5 from 2300px. Two classes, so they win over the xl:grid-cols-3 in site.css */
+        @media (min-width: 1700px) { .grid.card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (min-width: 2300px) { .grid.card-grid--wide { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
         /* Hero colour cycles blue → pink → green; the menu bar takes the same colour while the hero is in view */
         :root { --hero-bg: #3dc0c8; }
         #hero { background-color: var(--hero-bg); transition: background-color 1200ms ease-in-out; }
@@ -345,7 +349,7 @@
                     </aside>
 
                     <div class="lg:col-span-9">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <div class="grid card-grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                             <a href="programmatic.html" class="group block">
                                 <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-card border border-brand-border group-hover:border-brand-cyan transition-colors">
                                     <!-- Programmatic: cells are cinema screens, the cursor is the targeting -->

@@ -75,6 +75,10 @@
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* Card grids: more cards across on big screens so the cards stop growing. Products and cases get 4 from
+           1700px; cases get 5 from 2300px. Two classes, so they win over the xl:grid-cols-3 in site.css */
+        @media (min-width: 1700px) { .grid.card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (min-width: 2300px) { .grid.card-grid--wide { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
     </style>
     <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
     <link rel="preconnect" href="https://api.fontshare.com">
@@ -210,7 +214,7 @@
                     </aside>
 
                     <div class="lg:col-span-9">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6" id="progCasesGrid">
+                        <div class="grid card-grid card-grid--wide grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6" id="progCasesGrid">
                             <!-- Filled by JS: the 3 newest Programmatic cases -->
                         </div>
                     </div>
