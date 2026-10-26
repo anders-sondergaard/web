@@ -58,7 +58,7 @@
         <div class="case-blur"></div>
         <div class="absolute inset-x-0 bottom-0 p-5 space-y-2 pointer-events-none">
             <h3 class="text-xl font-black uppercase !leading-none text-white group-hover:text-brand-pink transition">CineGame</h3>
-            <p class="text-sm text-white/80 leading-relaxed">Whole auditoriums play branded games on the big screen, using their phones as controllers.</p>
+            <p class="text-sm text-white/80 leading-relaxed">The audience engage in branded games on the big screen, using their phones as controllers.</p>
             <span class="block text-[10px] font-bold uppercase tracking-widest text-white/80 group-hover:text-brand-pink transition">Learn more <i class="fa-solid fa-arrow-right ml-1"></i></span>
         </div>
     </div>
