@@ -2,7 +2,7 @@
 // Receives the contact form on contact.html and emails it to Cinemataztic. Answers in JSON:
 // {"ok": true} when the mail was handed to the server, otherwise {"ok": false, "error": "..."}.
 
-$to = 'info@cinemataztic.com';
+$to = 'mikkel@cinemataztic.com';
 
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
