@@ -75,6 +75,10 @@
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* Hero text beside the big heading: 16px up to about 1500px wide, then it grows with the screen (to 24px)
+           so it doesn't look tiny on big screens. The small second paragraph keeps its size relative to it */
+        .hero-copy.text-base { font-size: clamp(1rem, 0.4rem + 0.6vw, 1.5rem); }
+        .hero-copy .text-sm { font-size: 0.875em; }
         /* Contact form: two columns of fields from 640px, dark fields with a cyan focus line */
         .cf-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
         @media (min-width: 640px) { .cf-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cf-wide { grid-column: 1 / -1; } }
@@ -156,7 +160,7 @@
                             Let’s work<br>together
                         </h1>
                     </div>
-                    <div class="lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
+                    <div class="hero-copy lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
                         <p>
                             See what the big screen can do for your brand. Tell us a little about you, and we will get back to you.
                         </p>

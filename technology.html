@@ -75,6 +75,10 @@
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* Hero text beside the big heading: 16px up to about 1500px wide, then it grows with the screen (to 24px)
+           so it doesn't look tiny on big screens. The small second paragraph keeps its size relative to it */
+        .hero-copy.text-base { font-size: clamp(1rem, 0.4rem + 0.6vw, 1.5rem); }
+        .hero-copy .text-sm { font-size: 0.875em; }
         /* Platform diagram: app ⇄ cloud server ⇄ DCH | screen-server ⇄ screen ⇄ audience, with the trading desk
            under the cloud server and the TMS under the screen-server feeding it. Left to right from 1024px, compact up to 1280px (top to bottom below 1024px); a dot runs along
            each link to show the data moving. The yellow line splits the new platform from the existing setup. */
@@ -216,7 +220,7 @@
                             What’s next?
                         </h1>
                     </div>
-                    <div class="lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
+                    <div class="hero-copy lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
                         <p>
                             The future success of the cinema media depends on a successful digital transformation of the cinema experience and the creation of new digital revenue streams.
                         </p>

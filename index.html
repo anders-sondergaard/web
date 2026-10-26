@@ -64,6 +64,10 @@
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* Hero text beside the big heading: 16px up to about 1500px wide, then it grows with the screen (to 24px)
+           so it doesn't look tiny on big screens. The small second paragraph keeps its size relative to it */
+        .hero-copy.text-base { font-size: clamp(1rem, 0.4rem + 0.6vw, 1.5rem); }
+        .hero-copy .text-sm { font-size: 0.875em; }
         /* Card grids: more cards across on big screens so the cards stop growing. Products and cases get 4 from
            1700px; cases get 5 from 2300px. Two classes, so they win over the xl:grid-cols-3 in site.css */
         @media (min-width: 1700px) { .grid.card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
@@ -158,7 +162,7 @@
                             We do<br>digital cinema<br>advertising.
                         </h1>
                     </div>
-                    <div class="lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
+                    <div class="hero-copy lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
                         <p>
                             We help cinema companies create enduring and lasting value through digital advertising formats.
                         </p>

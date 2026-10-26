@@ -75,6 +75,10 @@
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* Hero text beside the big heading: 16px up to about 1500px wide, then it grows with the screen (to 24px)
+           so it doesn't look tiny on big screens. The small second paragraph keeps its size relative to it */
+        .hero-copy.text-base { font-size: clamp(1rem, 0.4rem + 0.6vw, 1.5rem); }
+        .hero-copy .text-sm { font-size: 0.875em; }
     </style>
     <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
     <link rel="preconnect" href="https://api.fontshare.com">
@@ -133,7 +137,7 @@
                             Spin to win.
                         </h1>
                     </div>
-                    <div class="lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
+                    <div class="hero-copy lg:col-span-4 space-y-5 text-brand-dark text-base leading-relaxed lg:pb-3">
                         <p>
                             A branded wheel of fortune: the audience spins for a prize and signs up for the advertiser's news.
                         </p>
