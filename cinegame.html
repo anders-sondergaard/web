@@ -75,6 +75,11 @@
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* Quote under Why CineGame: round portrait with a soft pink glow, the quote large and in italics */
+        .quote-glow { background: radial-gradient(ellipse 60% 80% at 15% 50%, rgba(248, 105, 185, 0.16), rgba(248, 105, 185, 0) 70%); }
+        .quote-photo { display: block; width: clamp(150px, 15vw, 220px); aspect-ratio: 1; border-radius: 50%; object-fit: cover;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 24px 70px rgba(248, 105, 185, 0.35); }
+        .quote-text { font-style: italic; font-weight: 500; font-size: clamp(1.6rem, 3vw, 3.25rem); line-height: 1.18; letter-spacing: -0.01em; }
         /* Screens with ordinary pixels (like most external monitors): the thin, grey body text gets hard to read
            there, so text is drawn with normal smoothing, paragraphs a little heavier and the grey a little
            lighter. Retina screens are unchanged */
@@ -269,6 +274,25 @@
                         <h3 class="text-xl font-black uppercase !leading-none">CineGame in your preshow?</h3>
                         <p class="text-sm text-gray-400 leading-relaxed">No cinemas are the same – and the Cinemataztic platform allow you to place the CineGame wherever you see fit. It can be before the regular preshow starts – as it is done in cinemas in Denmark &amp; Finland. It can be a combination of starting before the announce start-time and in the beginning of the preshow – as it is done in Germany.</p>
                     </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUOTE: what a cinema chain says about the CineGame -->
+        <section id="quote" class="quote-glow border-b border-brand-border scroll-mt-20">
+            <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+                    <div class="lg:col-span-3">
+                        <img src="assets/images/asger-beeh-thomsen.jpg" alt="Asger Beeh-Thomsen" class="quote-photo" loading="lazy">
+                    </div>
+                    <figure class="lg:col-span-9 space-y-6">
+                        <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">What cinemas say</span>
+                        <blockquote class="quote-text">“The CineGame is not just another commercial during the pre-show – it is a part of the cinema experience”</blockquote>
+                        <figcaption class="text-sm text-gray-400 leading-relaxed">
+                            <span class="block font-bold text-white">Asger Beeh-Thomsen</span>
+                            CEO, Nordic Film Cinemas
+                        </figcaption>
+                    </figure>
                 </div>
             </div>
         </section>
