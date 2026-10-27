@@ -182,17 +182,17 @@ const categoryColor = cat => categoryColors[cat] || '#3dc0c8';
 // --- IMAGE SLIDER IN THE CASE POPUP ---
 // Cases with `images` (all pitches, and e.g. Hummel) show them one at a time with arrows instead of a video (also the arrow keys and
 // swiping), a counter and dots.
-function mountImageSlider(box, images, color = '#fece00') {
+function mountImageSlider(box, images, color = '#fece00', title = '') {
     // A single image is just shown: no arrows, dots or counter
     if (images.length === 1) {
-        box.innerHTML = `<img src="${escapeCoverText(images[0])}" alt="" class="absolute inset-0 w-full h-full object-contain bg-black">`;
+        box.innerHTML = `<img src="${escapeCoverText(images[0])}" alt="${escapeCoverText(title)}" class="absolute inset-0 w-full h-full object-contain bg-black">`;
         return;
     }
     let index = 0;
     box.innerHTML = `
         <div class="pitch-slider absolute inset-0 overflow-hidden select-none">
             <div class="pitch-track flex h-full transition-transform duration-500 ease-out">
-                ${images.map((src, i) => `<img src="${escapeCoverText(src)}" alt="Slide ${i + 1}" class="w-full h-full shrink-0 object-contain bg-black" draggable="false">`).join('')}
+                ${images.map((src, i) => `<img src="${escapeCoverText(src)}" alt="${escapeCoverText(title ? `${title}, image ${i + 1} of ${images.length}` : `Image ${i + 1} of ${images.length}`)}" class="w-full h-full shrink-0 object-contain bg-black" draggable="false">`).join('')}
             </div>
             <button type="button" data-step="-1" aria-label="Previous image" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/70 border border-white/20 text-white flex items-center justify-center hover:bg-brand-yellow hover:text-black transition disabled:opacity-30 disabled:pointer-events-none"><i class="fa-solid fa-arrow-left"></i></button>
             <button type="button" data-step="1" aria-label="Next image" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/70 border border-white/20 text-white flex items-center justify-center hover:bg-brand-yellow hover:text-black transition disabled:opacity-30 disabled:pointer-events-none"><i class="fa-solid fa-arrow-right"></i></button>

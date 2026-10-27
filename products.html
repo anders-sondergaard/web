@@ -11,9 +11,12 @@
     <link rel="icon" href="favicon.ico" sizes="32x32">
     <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NSK27WGTDK"></script>
+    <!-- Google Analytics 4 (not on a local preview, so testing doesn't count as visits) -->
     <script>
+        if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+            const ga = Object.assign(document.createElement('script'), { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-NSK27WGTDK' });
+            document.head.appendChild(ga);
+        }
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());

@@ -11,9 +11,12 @@
     <link rel="icon" href="favicon.ico" sizes="32x32">
     <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NSK27WGTDK"></script>
+    <!-- Google Analytics 4 (not on a local preview, so testing doesn't count as visits) -->
     <script>
+        if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+            const ga = Object.assign(document.createElement('script'), { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-NSK27WGTDK' });
+            document.head.appendChild(ga);
+        }
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
@@ -286,9 +289,9 @@
                     <div id="plusImages" class="lg:col-span-7 order-2 grid" aria-hidden="true">
                         <div class="plus-slide [grid-area:1/1] flex items-center justify-center p-6 sm:p-10 transition-opacity duration-500" style="background: radial-gradient(ellipse at center, rgba(108, 238, 196, 0.35) 0%, rgba(108, 238, 196, 0) 70%)">
                             <div class="flex w-full justify-center gap-3 sm:gap-5">
-                                <div class="game-phone"><img src="assets/cinefun/games/screens/sprite-word-game-1.jpg" alt="Sprite Sprite Word Game: start screen" loading="lazy"></div>
-                                <div class="game-phone"><img src="assets/cinefun/games/screens/sprite-word-game-2.jpg" alt="Sprite Sprite Word Game: gameplay" loading="lazy"></div>
-                                <div class="game-phone"><img src="assets/cinefun/games/screens/sprite-word-game-3.jpg" alt="Sprite Sprite Word Game: score screen" loading="lazy"></div>
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/sprite-word-game-1.jpg" alt="Sprite Word Game: start screen" loading="lazy"></div>
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/sprite-word-game-2.jpg" alt="Sprite Word Game: gameplay" loading="lazy"></div>
+                                <div class="game-phone"><img src="assets/cinefun/games/screens/sprite-word-game-3.jpg" alt="Sprite Word Game: score screen" loading="lazy"></div>
                             </div>
                         </div>
                         <div class="plus-slide [grid-area:1/1] flex items-center justify-center p-6 sm:p-10 transition-opacity duration-500" style="background: radial-gradient(ellipse at center, rgba(248, 105, 185, 0.35) 0%, rgba(248, 105, 185, 0) 70%); opacity: 0" aria-hidden="true">
@@ -453,7 +456,7 @@
     </footer>
 
     <script src="assets/js/cases.js?v=7"></script>
-    <script src="assets/js/cases-data.js?v=40"></script>
+    <script src="assets/js/cases-data.js?v=41"></script>
     <script>
         // --- LATEST GAMES ---
         // From assets/js/cases.js, where the newest cases come first.

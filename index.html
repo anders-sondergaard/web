@@ -11,9 +11,12 @@
     <link rel="icon" href="favicon.ico" sizes="32x32">
     <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NSK27WGTDK"></script>
+    <!-- Google Analytics 4 (not on a local preview, so testing doesn't count as visits) -->
     <script>
+        if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+            const ga = Object.assign(document.createElement('script'), { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-NSK27WGTDK' });
+            document.head.appendChild(ga);
+        }
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
@@ -407,7 +410,7 @@
 
         <!-- STUDIO: full-bleed image band with headline + stats -->
         <section id="about" class="relative overflow-hidden border-b border-brand-border scroll-mt-20">
-            <img src="assets/images/cinema-theater.jpg" alt="Cinema theater" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover">
+            <img src="assets/images/cinema-theater.jpg" alt="A full cinema auditorium: the audience in red seats watching the big screen" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/85 to-brand-dark/40"></div>
             <div class="relative w-full px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
                 <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow mb-10">Who we are</span>
@@ -538,7 +541,7 @@
 
     <script src="assets/js/cases.js?v=7"></script>
     <script src="assets/js/brands.js?v=2"></script>
-    <script src="assets/js/cases-data.js?v=40"></script>
+    <script src="assets/js/cases-data.js?v=41"></script>
     <script>
 // Cases come from assets/js/cases.js and the brand wall from assets/js/brands.js
 const MAX_FEATURED = 9;
@@ -728,14 +731,14 @@ const MAX_FEATURED = 9;
 
             const mediaBox = document.getElementById('caseModalMediaContainer');
             if (item.images && item.images.length) {
-                mountImageSlider(mediaBox, item.images, categoryColor(item.category)); // images with arrows instead of a video
+                mountImageSlider(mediaBox, item.images, categoryColor(item.category), item.title.includes(item.client) ? item.title : `${item.client}: ${item.title}`); // images with arrows instead of a video
             } else if (item.mediaType === 'video' && item.video) {
                 mediaBox.innerHTML = `
                     <video src="${item.video}" controls autoplay class="w-full h-full object-contain bg-black"></video>
                 `;
             } else {
                 mediaBox.innerHTML = `
-                    <img src="${item.cover}" class="w-full h-full object-cover">
+                    <img src="${item.cover}" alt="${escapeCoverText(item.title.includes(item.client) ? item.title : `${item.client}: ${item.title}`)}" class="w-full h-full object-cover">
                 `;
             }
 
@@ -1426,7 +1429,7 @@ const MAX_FEATURED = 9;
                         const img = document.getElementById('partnerImage');
                         img.onerror = () => link.classList.add('hidden');
                         img.src = p.image;
-                        img.alt = `Get the app`;
+                        img.alt = `Get the ${p.partner} app`;
                         link.href = p.link;
                     }
                     // Optional list of cinemas under the app icon
