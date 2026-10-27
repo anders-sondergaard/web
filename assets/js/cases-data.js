@@ -59,6 +59,9 @@ const caseLogos = {
     "Santander": { src: "assets/logos/santander.svg" }, // Wikimedia Commons, File:Banco Santander Logotipo.svg
     "ODEON": { src: "assets/logos/odeon.svg" }, // Wikimedia Commons, File:Odeon logo.svg
     "Kirppu": { src: "assets/logos/kirppu.svg" }, // logo from kirppu.dk (the version for dark backgrounds)
+    "Magasin": { src: "assets/logos/magasin.png" }, // supplied by the user, made transparent
+    "TV2 Play": { src: "assets/logos/tv2play.png" }, // supplied by the user (the TV2 circle is cut out, see KNOCKOUT_LOGOS)
+    "Tuborg": { src: "assets/logos/tuborg.png" }, // supplied by the user
     "REDyPLAY": { src: "assets/logos/redyplay.png" }, // supplied by the client: a white R on a red square (cut out, see KNOCKOUT_LOGOS)
     // White on transparent, made from the logo images supplied for these cases
     "Sonic": { src: "assets/logos/sonic.png" },
@@ -107,7 +110,7 @@ const NAME_INSTEAD_OF_LOGO = new Set(['assets/cases/pitch/logo_kims.png']);
 const KNOCKOUT_LOGOS = new Set([
     'assets/logos/ase.svg',
     'assets/logos/lego.svg', 'assets/logos/specsavers.svg', 'assets/logos/arla.svg', 'assets/logos/fanta.svg', 'assets/logos/ikea.svg',
-    'assets/logos/redyplay.png',
+    'assets/logos/redyplay.png', 'assets/logos/tv2play.png',
     'assets/logos/fazer.svg', 'assets/logos/benjerry.svg', 'assets/logos/mentos.svg', 'assets/logos/droetker.svg', 'assets/logos/oister.svg', 'assets/logos/tryg.svg',
     'assets/cases/pitch/marvel_logo_trans.png', 'assets/cases/pitch/oreo_logo.png', 'assets/cases/pitch/kfc-logo.png', 'assets/cases/pitch/hj_logo.png',
     'assets/cases/pitch/lego_city_logo.png', 'assets/cases/pitch/cocio_logo.png', 'assets/cases/pitch/stimorol_logo.png',
