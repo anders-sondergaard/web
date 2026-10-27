@@ -178,6 +178,17 @@ const siteCases = [
         description: "Collector, a CineGame for IKEA from 2026."
     },
     {
+        id: "kirppu",
+        title: "Collector",
+        client: "Kirppu",
+        category: "CineGame",
+        gameType: "Collector",
+        mediaType: "video",
+        cover: "",
+        video: "https://storage.googleapis.com/cinemataztic-public/video/Kirppu_Collector_CutDown.mp4",
+        description: "Collector, a CineGame for Kirppu."
+    },
+    {
         id: "santander",
         featured: true,
         title: "Swipe Hero",
@@ -730,7 +741,7 @@ const siteCases = [
         title: "Oister – Follow the Oister",
         client: "Oister",
         category: "CineGame",
-        gameType: "Shuffle",
+        gameType: "Simon",
         mediaType: "video",
         cover: "assets/cases/oister.jpg",
         video: "https://storage.googleapis.com/cinemataztic-public/video/Oister_2023_dk_9.mp4",
