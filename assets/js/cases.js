@@ -537,7 +537,7 @@ const siteCases = [
         title: "The Coke maze game",
         client: "Coca-Cola",
         category: "CineGame",
-        gameType: "Miscellaneous",
+        gameType: "Collector",
         mediaType: "video",
         cover: "assets/cases/coke-maze-game.jpg",
         video: "https://storage.googleapis.com/cinemataztic-public/video/Cokepackman_nologo.mp4",
