@@ -200,6 +200,17 @@ const siteCases = [
         description: "Collector, a CineGame for REDyPLAY."
     },
     {
+        id: "mcd-swipehero",
+        title: "Swipe Hero",
+        client: "McDonald's",
+        category: "CineGame",
+        gameType: "Swipe Hero",
+        mediaType: "video",
+        cover: "",
+        video: "https://storage.googleapis.com/cinemataztic-public/video/McDonalds_SwipeHero_SE2024_cutdown.mp4",
+        description: "Swipe Hero, a CineGame for McDonald's in Swedish cinemas in 2024."
+    },
+    {
         id: "santander",
         featured: true,
         title: "Swipe Hero",
