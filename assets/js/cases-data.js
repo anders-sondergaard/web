@@ -275,6 +275,10 @@ function initCaseNav(getList) {
             + iconBtn('data-case-share', 'fa-regular fa-copy', 'Copy link to this case')
             + iconBtn('data-case-download', 'fa-solid fa-download', 'Download')
             + `</span>`);
+        // On phones there is no room for the client name beside the buttons (it is in the title anyway)
+        const hideClient = document.createElement('style');
+        hideClient.textContent = '@media (max-width: 639px) { #caseModalClient { display: none; } }';
+        document.head.appendChild(hideClient);
     }
     const copy = (text) => navigator.clipboard && window.isSecureContext
         ? navigator.clipboard.writeText(text)
