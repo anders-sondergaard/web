@@ -227,9 +227,9 @@ const siteCases = [
         client: "The Home Guard (DK)",
         category: "CineGame",
         gameType: "Quizshow",
-        mediaType: "image", // the video comes later: then set "video" and add the link
+        mediaType: "video",
         cover: "",
-        video: "",
+        video: "https://storage.googleapis.com/cinemataztic-public/video/QuizShow_Hjemmev%C3%A6rnet_DK2025_CutDown.mp4",
         description: "Quizshow, a CineGame for the Danish Home Guard (Hjemmeværnet)."
     },
     {
