@@ -82,15 +82,6 @@
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
-        /* Articles: one row across the whole page that scrolls sideways, cards snap into place */
-        .article-row { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 1rem 0.75rem; scroll-padding: 0 1rem; scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.2) transparent; }
-        @media (min-width: 640px) { .article-row { padding: 0 1.5rem 0.75rem; scroll-padding: 0 1.5rem; } }
-        @media (min-width: 1024px) { .article-row { padding: 0 2rem 0.75rem; scroll-padding: 0 2rem; } }
-        .article-row > .article-card { flex: 1 0 80%; scroll-snap-align: start; } /* grow to fill the row while there are few cards */
-        @media (min-width: 640px) { .article-row > .article-card { flex-basis: 300px; } }
-        @media (min-width: 1280px) { .article-row > .article-card { flex-basis: 340px; } }
-        .article-card { background-color: #141416; border: 1px solid rgba(255, 255, 255, 0.08); transition: border-color 0.2s, transform 0.2s; }
-        .article-card:hover { border-color: #fece00; transform: translateY(-2px); }
         /* Screens with ordinary pixels (like most external monitors): the thin, grey body text gets hard to read
            there, so text is drawn with normal smoothing, paragraphs a little heavier and the grey a little
            lighter. Retina screens are unchanged */
@@ -499,17 +490,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- ARTICLES: a full-width row of small cards that scrolls sideways; each opens the article on LinkedIn
-             (articles in assets/js/articles.js) -->
-        <section id="articles" class="border-b border-brand-border scroll-mt-20">
-            <div class="w-full py-20 lg:py-28 space-y-6">
-                <span class="block px-4 sm:px-6 lg:px-8 text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Articles</span>
-                <div id="articleGrid" class="article-row">
-                    <!-- Filled from assets/js/articles.js -->
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- CASE PUBLIC DETAIL MODAL -->
@@ -564,21 +544,6 @@
     <script src="assets/js/cases.js?v=22"></script>
     <script src="assets/js/brands.js?v=7"></script>
     <script src="assets/js/cases-data.js?v=47"></script>
-    <script src="assets/js/articles.js?v=1"></script>
-    <script>
-        // --- ARTICLES ---
-        // (runs before the brand wall script, so it has its own escaping)
-        const escapeArticle = value => String(value).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
-        document.getElementById('articleGrid').innerHTML = siteArticles.map(a => `
-            <a href="${escapeArticle(a.url)}" target="_blank" rel="noopener" class="article-card group flex flex-col justify-between gap-6 rounded-xl p-5">
-                <span class="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                    <span><i class="fa-brands fa-linkedin mr-1.5"></i>${escapeArticle(a.date)}</span>
-                    <i class="fa-solid fa-arrow-right fa-rotate-by text-gray-500 group-hover:text-brand-yellow transition" style="--fa-rotate-angle: -45deg"></i>
-                </span>
-                <span class="text-sm font-bold leading-snug text-white">${escapeArticle(a.title)}</span>
-                <span class="text-xs text-gray-400">${escapeArticle(a.author)}</span>
-            </a>`).join('');
-    </script>
     <script>
 // Cases come from assets/js/cases.js and the brand wall from assets/js/brands.js
 const MAX_FEATURED = 9;
