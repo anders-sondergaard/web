@@ -455,7 +455,7 @@
         </div>
     </footer>
 
-    <script src="assets/js/cases.js?v=7"></script>
+    <script src="assets/js/cases.js?v=11"></script>
     <script src="assets/js/cases-data.js?v=41"></script>
     <script>
         // --- LATEST GAMES ---
@@ -494,6 +494,7 @@
                             <p class="text-sm text-white/80 line-clamp-2 leading-relaxed">${c.description}</p>
                             <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/70">
                                 <span class="px-2 py-0.5 rounded" style="background-color: ${categoryColor(c.category)}40; color: ${categoryColor(c.category)}">${c.category}</span>
+                                ${c.gameType ? `<span class="px-2 py-0.5 rounded" style="background-color: rgba(255, 255, 255, 0.2); color: #ffffff">${c.gameType}</span>` : ''}
                             </div>
                         </div>
                     </div>

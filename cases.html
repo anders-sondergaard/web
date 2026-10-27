@@ -80,6 +80,13 @@
            fits the narrow sidebar column; it scales with the screen width */
         .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
         @media (min-width: 1024px) { .section-title { font-size: 2.1vw; } }
+        /* CineGame game types: small buttons under the CineGame filter, pink like CineGame */
+        .game-types { padding: 0.25rem 0 0.5rem 0.75rem; border-left: 2px solid #f869b9; }
+        .game-type { border: 1px solid #2a2a33; color: #d1d5db; }
+        .game-type span { color: #6b7280; }
+        .game-type:hover { border-color: #f869b9; color: #ffffff; }
+        .game-type.is-on { background: #f869b9; border-color: #f869b9; color: #0a0a0c; }
+        .game-type.is-on span { color: rgba(10, 10, 12, 0.6); }
         /* Screens with ordinary pixels (like most external monitors): the thin, grey body text gets hard to read
            there, so text is drawn with normal smoothing, paragraphs a little heavier and the grey a little
            lighter. Retina screens are unchanged */
@@ -218,6 +225,8 @@
             <div class="p-8 space-y-6">
                 <div class="flex items-center space-x-3">
                     <span id="caseModalCategory" class="px-3 py-1 rounded text-xs font-bold uppercase">Category</span>
+                    <!-- CineGame cases: the kind of game, in white -->
+                    <span id="caseModalGameType" class="hidden px-3 py-1 rounded text-xs font-bold uppercase" style="background-color: rgba(255, 255, 255, 0.2); color: #ffffff"></span>
                     <span id="caseModalClient" class="text-xs font-bold uppercase tracking-wider text-gray-400">Client Name</span>
                 </div>
                 <h2 id="caseModalTitle" class="text-3xl sm:text-4xl font-black uppercase">Case Title</h2>
@@ -252,7 +261,7 @@
         </div>
     </footer>
 
-    <script src="assets/js/cases.js?v=7"></script>
+    <script src="assets/js/cases.js?v=11"></script>
     <script src="assets/js/cases-data.js?v=41"></script>
     <script>
         // --- CASE DATA ---
@@ -264,11 +273,21 @@
         // ?category=CineGame (from the Product section on the front page) opens pre-filtered
         const requestedCategory = new URLSearchParams(window.location.search).get('category');
         let currentFilter = categories.includes(requestedCategory) ? requestedCategory : 'All';
+        // Under CineGame a second row narrows the list to one kind of game (gameType in cases.js)
+        const gameTypes = ['Quizshow', 'Quiz', 'Shuffle', 'Word game', 'Experience', 'Collector', 'Swipe Hero', 'Simon', 'Jumper', 'SportsBall', 'Find object', 'AR', 'Wheel of Fortune', 'Build', 'Arcade', 'Catch', 'Miscellaneous'];
+        let currentGameType = 'All';
+        // The cases the grid and the popup's arrows go through
+        function listedCases() {
+            if (currentFilter === 'All') return allCases.filter(inAll);
+            const inCategory = allCases.filter(c => c.category === currentFilter);
+            return currentFilter === 'CineGame' && currentGameType !== 'All' ? inCategory.filter(c => c.gameType === currentGameType) : inCategory;
+        }
         let cardStates = [];
 
         // --- FILTERS ---
         function renderFilters() {
-            document.getElementById('gridHeading').innerText = currentFilter === 'All' ? 'All Cases' : currentFilter;
+            document.getElementById('gridHeading').innerText = currentFilter === 'All' ? 'All Cases'
+                : currentFilter === 'CineGame' && currentGameType !== 'All' ? `CineGame: ${currentGameType}` : currentFilter;
             const container = document.getElementById('filterContainer');
             container.innerHTML = categories.map(cat => {
                 const count = cat === 'All' ? allCases.filter(inAll).length : allCases.filter(c => c.category === cat).length;
@@ -281,12 +300,31 @@
                     <button onclick="filterCases('${cat}')" class="px-4 py-2 text-xs font-bold uppercase tracking-wider transition ${active ? 'bg-brand-cyan text-black' : 'border border-brand-border text-gray-300 hover:border-brand-cyan hover:text-white'}">
                         ${cat} <span class="${active ? 'text-black/60' : 'text-gray-500'} ml-1">${count}</span>
                     </button>
+                    ${cat === 'CineGame' && active ? gameTypeFilters() : ''}
                 `;
             }).join('');
         }
 
+        // The kinds of CineGame with cases, as small pink buttons under the CineGame button
+        function gameTypeFilters() {
+            const games = allCases.filter(c => c.category === 'CineGame');
+            const types = [['All', games.length], ...gameTypes.map(t => [t, games.filter(c => c.gameType === t).length]).filter(([, n]) => n)];
+            return `<div class="game-types basis-full w-full flex flex-wrap gap-2">${types.map(([t, n]) => {
+                const on = t === currentGameType;
+                return `<button onclick="filterGameType('${t}')" aria-pressed="${on}" class="game-type px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider transition${on ? ' is-on' : ''}">${t} <span class="ml-0.5">${n}</span></button>`;
+            }).join('')}</div>`;
+        }
+
+        function filterGameType(type) {
+            currentGameType = type;
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            renderFilters();
+            renderCasesGrid();
+        }
+
         function filterCases(category) {
             currentFilter = category;
+            currentGameType = 'All';
             // Back to the top first: with fewer cases the page gets shorter, and from further down the
             // conveyor could have moved the new cases out of view
             window.scrollTo({ top: 0, behavior: 'instant' });
@@ -297,7 +335,7 @@
         // --- GRID ---
         function renderCasesGrid() {
             const grid = document.getElementById('casesGrid');
-            const filtered = currentFilter === 'All' ? allCases.filter(inAll) : allCases.filter(c => c.category === currentFilter);
+            const filtered = listedCases();
             rollNumber(document.getElementById('caseCount'), filtered.length);
 
             if (filtered.length === 0) {
@@ -330,6 +368,7 @@
                             <p class="text-sm text-white/80 line-clamp-2 leading-relaxed">${c.description}</p>
                             <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/70">
                                 <span class="px-2 py-0.5 rounded" style="background-color: ${categoryColor(c.category)}40; color: ${categoryColor(c.category)}">${c.category}</span>
+                                ${c.gameType ? `<span class="px-2 py-0.5 rounded" style="background-color: rgba(255, 255, 255, 0.2); color: #ffffff">${c.gameType}</span>` : ''}
                                 <span>${String(i + 1).padStart(2, '0')}</span>
                             </div>
                         </div>
@@ -485,6 +524,9 @@
             categoryEl.innerText = item.category;
             categoryEl.style.backgroundColor = `${categoryColor(item.category)}40`; // the colour, tinted
             categoryEl.style.color = categoryColor(item.category);
+            const gameTypeEl = document.getElementById('caseModalGameType');
+            gameTypeEl.innerText = item.gameType || '';
+            gameTypeEl.classList.toggle('hidden', !item.gameType);
             document.getElementById('caseModalDescription').innerText = item.description;
 
             const mediaBox = document.getElementById('caseModalMediaContainer');
@@ -513,7 +555,7 @@
         // Arrows beside the open case step through the cases in the current filter
         initCaseNav((category) => category
             ? allCases.filter(c => c.category === category)
-            : (currentFilter === 'All' ? allCases.filter(inAll) : allCases.filter(c => c.category === currentFilter)));
+            : listedCases());
 
         // Mobile Menu Toggle
         document.getElementById('mobileMenuBtn').addEventListener('click', () => {
