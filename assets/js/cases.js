@@ -222,6 +222,17 @@ const siteCases = [
         description: "Swipe Hero, a CineGame for Danone."
     },
     {
+        id: "homeguard",
+        title: "Quizshow",
+        client: "The Home Guard (DK)",
+        category: "CineGame",
+        gameType: "Quizshow",
+        mediaType: "image", // the video comes later: then set "video" and add the link
+        cover: "",
+        video: "",
+        description: "Quizshow, a CineGame for the Danish Home Guard (Hjemmeværnet)."
+    },
+    {
         id: "santander",
         featured: true,
         title: "Swipe Hero",
