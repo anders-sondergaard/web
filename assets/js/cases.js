@@ -848,7 +848,7 @@ const siteCases = [
         title: "Karriereberatung",
         client: "Bundeswehr",
         category: "CineGame",
-        gameType: "Quiz",
+        gameType: "Quizshow",
         mediaType: "video",
         cover: "assets/cases/bundeswehr.jpg",
         video: "https://storage.googleapis.com/cinemataztic-public/video/GermanMinistryOfDefence_Quiz_build6.mp4",
