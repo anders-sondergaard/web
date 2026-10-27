@@ -63,6 +63,7 @@ const caseLogos = {
     "TV2 Play": { src: "assets/logos/tv2play.png" }, // supplied by the user (the TV2 circle is cut out, see KNOCKOUT_LOGOS)
     "Tuborg": { src: "assets/logos/tuborg.png" }, // supplied by the user
     "REDyPLAY": { src: "assets/logos/redyplay.png" }, // supplied by the client: a white R on a red square (cut out, see KNOCKOUT_LOGOS)
+    "Danone": { src: "assets/logos/danone.png", white: true }, // Wikimedia Commons, File:Danone Logo.png
     // White on transparent, made from the logo images supplied for these cases
     "Sonic": { src: "assets/logos/sonic.png" },
     "Scream VI": { src: "assets/logos/scream.png", scale: 1.4 },

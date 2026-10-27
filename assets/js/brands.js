@@ -42,6 +42,7 @@ const siteBrands = [
     { name: "ODEON", logo: "assets/logos/odeon.svg" },
     { name: "Kirppu", logo: "assets/logos/kirppu.svg" },
     { name: "REDyPLAY", logo: "assets/logos/redyplay.png", badge: true },
+    { name: "Danone", logo: "assets/logos/danone.png" },
     { name: "Tryg", logo: "assets/logos/tryg.svg", badge: true },
     { name: "Allianz", logo: "assets/logos/allianz.svg" },
     { name: "Royal Copenhagen", logo: "assets/logos/royal-copenhagen.svg" },

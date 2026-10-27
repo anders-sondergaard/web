@@ -211,6 +211,17 @@ const siteCases = [
         description: "Swipe Hero, a CineGame for McDonald's in Swedish cinemas in 2024."
     },
     {
+        id: "danone-swipehero",
+        title: "Swipe Hero",
+        client: "Danone",
+        category: "CineGame",
+        gameType: "Swipe Hero",
+        mediaType: "video",
+        cover: "",
+        video: "https://storage.googleapis.com/cinemataztic-public/video/danone_swipehero_FinishedGame.mp4",
+        description: "Swipe Hero, a CineGame for Danone."
+    },
+    {
         id: "santander",
         featured: true,
         title: "Swipe Hero",
