@@ -189,6 +189,17 @@ const siteCases = [
         description: "Collector, a CineGame for Kirppu."
     },
     {
+        id: "redyplay",
+        title: "Collector",
+        client: "REDyPLAY",
+        category: "CineGame",
+        gameType: "Collector",
+        mediaType: "video",
+        cover: "",
+        video: "https://storage.googleapis.com/cinemataztic-public/video/CineGame_Collector_DE_Recording_1.mov",
+        description: "Collector, a CineGame for REDyPLAY."
+    },
+    {
         id: "santander",
         featured: true,
         title: "Swipe Hero",

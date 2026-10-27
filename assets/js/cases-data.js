@@ -59,6 +59,7 @@ const caseLogos = {
     "Santander": { src: "assets/logos/santander.svg" }, // Wikimedia Commons, File:Banco Santander Logotipo.svg
     "ODEON": { src: "assets/logos/odeon.svg" }, // Wikimedia Commons, File:Odeon logo.svg
     "Kirppu": { src: "assets/logos/kirppu.svg" }, // logo from kirppu.dk (the version for dark backgrounds)
+    "REDyPLAY": { src: "assets/logos/redyplay.png" }, // supplied by the client: a white R on a red square (cut out, see KNOCKOUT_LOGOS)
     // White on transparent, made from the logo images supplied for these cases
     "Sonic": { src: "assets/logos/sonic.png" },
     "Scream VI": { src: "assets/logos/scream.png", scale: 1.4 },
@@ -85,6 +86,8 @@ const caseLogos = {
         .case-logo img.is-knockout-light { filter: url(#caseLogoKnockoutLight); }
         .case-logo span { display: block; text-align: center; font-weight: 900; text-transform: uppercase; line-height: 0.95; letter-spacing: -0.01em; color: #ffffff; font-size: clamp(1.4rem, 9cqw, 2.6rem); transition: transform 500ms; overflow-wrap: anywhere; }
         :has(> .case-logo) { container-type: inline-size; }
+        /* The logo in the case popup (cases without a video or picture yet): centred in the frame */
+        .case-modal-logo .case-logo { top: 20%; }
     `;
     document.head.appendChild(style);
     // The cut-out filter: white, with dark parts solid and light parts see-through
@@ -104,6 +107,7 @@ const NAME_INSTEAD_OF_LOGO = new Set(['assets/cases/pitch/logo_kims.png']);
 const KNOCKOUT_LOGOS = new Set([
     'assets/logos/ase.svg',
     'assets/logos/lego.svg', 'assets/logos/specsavers.svg', 'assets/logos/arla.svg', 'assets/logos/fanta.svg', 'assets/logos/ikea.svg',
+    'assets/logos/redyplay.png',
     'assets/logos/fazer.svg', 'assets/logos/benjerry.svg', 'assets/logos/mentos.svg', 'assets/logos/droetker.svg', 'assets/logos/oister.svg', 'assets/logos/tryg.svg',
     'assets/cases/pitch/marvel_logo_trans.png', 'assets/cases/pitch/oreo_logo.png', 'assets/cases/pitch/kfc-logo.png', 'assets/cases/pitch/hj_logo.png',
     'assets/cases/pitch/lego_city_logo.png', 'assets/cases/pitch/cocio_logo.png', 'assets/cases/pitch/stimorol_logo.png',
@@ -145,8 +149,9 @@ const caseLogoSizer = new ResizeObserver(entries => entries.forEach(e => fitCase
 function fitCaseLogo(media) {
     const area = media.querySelector(':scope > .case-logo');
     const title = media.querySelector(':scope > .bottom-0 h3');
-    if (!area || !title) return;
-    const top = title.getBoundingClientRect().top - media.getBoundingClientRect().top;
+    if (!area) return;
+    // On a card the logo area ends at the title; in the popup (no title) it keeps its own height
+    const top = title ? title.getBoundingClientRect().top - media.getBoundingClientRect().top : 0;
     if (top > 0) area.style.height = `${top / (media.getBoundingClientRect().height / media.offsetHeight || 1)}px`;
     const img = area.querySelector('img');
     const crop = area.querySelector('.case-logo-crop');

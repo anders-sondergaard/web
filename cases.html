@@ -263,8 +263,8 @@
         </div>
     </footer>
 
-    <script src="assets/js/cases.js?v=14"></script>
-    <script src="assets/js/cases-data.js?v=42"></script>
+    <script src="assets/js/cases.js?v=17"></script>
+    <script src="assets/js/cases-data.js?v=44"></script>
     <script>
         // --- CASE DATA ---
         // Every case, in the order of assets/js/cases.js
@@ -538,6 +538,9 @@
                 mediaBox.innerHTML = `
                     <video src="${item.video}" controls autoplay class="w-full h-full object-contain bg-black"></video>
                 `;
+            } else if (!item.cover) {
+                // No video or picture yet: the logo, as on the card, in the middle
+                mediaBox.innerHTML = `<div class="case-modal-logo absolute inset-0">${caseCover(item)}</div>`;
             } else {
                 mediaBox.innerHTML = `
                     <img src="${item.cover}" alt="${escapeCoverText(item.title.includes(item.client) ? item.title : `${item.client}: ${item.title}`)}" class="w-full h-full object-cover">
