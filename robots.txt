@@ -1,0 +1,13 @@
+# robots.txt for www.cinemataztic.com
+# All pages may be crawled. The folders and files below are working files that are in the repository
+# (and so on GitHub Pages) but are not part of the site.
+User-agent: *
+Allow: /
+Disallow: /design/
+Disallow: /tools/
+Disallow: /index-v1.html
+Disallow: /index-v3.html
+Disallow: /cases-overview.html
+Disallow: /deploy.sh
+
+Sitemap: https://www.cinemataztic.com/sitemap.xml
