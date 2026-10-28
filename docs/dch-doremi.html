@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Doremi — Cinemataztic Docs</title>
+    <meta name="description" content="This guide describes how to automate a Cinemataztic show in a Doremi setup in a 3 step process:">
+    <!-- The one address search engines should use for this page (same as in sitemap.xml) -->
+    <!-- The docs are not to be shown in Google or other search engines -->
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://www.cinemataztic.com/docs/dch-doremi.html">
+    <!-- Favicon: the Cinemataztic mark (SVG for modern browsers, ICO as fallback, PNG for the iPhone home screen) -->
+    <link rel="icon" href="../favicon.ico" sizes="32x32">
+    <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+    <!-- Google Analytics 4 (not on a local preview, so testing doesn't count as visits) -->
+    <script>
+        if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+            const ga = Object.assign(document.createElement('script'), { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-NSK27WGTDK' });
+            document.head.appendChild(ga);
+        }
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NSK27WGTDK');
+    </script>
+    <!-- Menu logo turns into the round mark when scrolling -->
+    <script src="../assets/js/site-header.js?v=13" defer></script>
+    <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS, built once for the whole site (classes from all pages and scripts) -->
+    <link rel="stylesheet" href="../assets/css/site.css?v=1">
+    <!-- Docs layout: left menu and page text -->
+    <link rel="stylesheet" href="docs.css?v=46">
+</head>
+<body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
+    <!-- HEADER / NAVIGATION: the same top menu as the rest of the site -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
+        <div class="w-full px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="../index.html" class="flex items-center space-x-2 group">
+                <span class="text-2xl sm:text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white group-hover:opacity-90 transition">
+                    CINEMATAZTIC / DOCS
+                </span>
+            </a>
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-widest uppercase">
+                <a href="../cases.html" class="hover:text-brand-cyan transition">Cases</a>
+                <a href="../products.html" class="hover:text-brand-cyan transition">Products</a>
+                <a href="../technology.html" class="hover:text-brand-cyan transition">Technology</a>
+                <a href="../contact.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Contact</a>
+            </nav>
+            <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
+            <a href="../cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
+            <a href="../products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
+            <a href="../technology.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Technology</a>
+            <a href="../contact.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Contact</a>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+        <div class="docs-layout">
+            <!-- LEFT MENU: filled from docs-nav.js -->
+            <aside class="docs-side px-4 sm:px-6 lg:px-8">
+                <div class="docs-side-inner lg:py-10">
+                    <details>
+                        <summary><span>Docs: <span id="docsNavLabel" class="text-gray-400">Menu</span></span><i class="fa-solid fa-chevron-down"></i></summary>
+                        <nav id="docsNav" aria-label="Docs"></nav>
+                    </details>
+                </div>
+            </aside>
+
+            <!-- PAGE TEXT -->
+            <article class="docs-content docs-home">
+                <!-- Built like the docs front page: label, heading and short text on the left, cards on the right -->
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">DCH</span>
+                            <h1 id="setup-doremi" class="section-title font-black uppercase !leading-none">Setup Doremi</h1>
+                            <p class="text-sm text-gray-400 leading-relaxed">This guide describes how to automate a Cinemataztic show in a Doremi setup in a 3 step process:</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--one">
+                                <div class="docs-topic" style="--topic: #3dc0c8">
+                                    <div class="docs-topic-body">
+                                        <ol>
+                                            <li>Doremi setup</li>
+                                            <li>Macro setup</li>
+                                            <li>Testing</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">DCH</span>
+                            <h2 id="1-device-setup" class="section-title font-black uppercase !leading-none">1. Device setup</h2>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--one">
+                                <div class="docs-topic" style="--topic: #f869b9">
+                                    <div class="docs-topic-body">
+                                        <ol>
+                                            <li>Open Device Manager</li>
+                                            <li>Add new device of type “Raw”</li>
+                                            <li>Add device information</li>
+                                            <li>Input the (fixed) IP address the device will receive cues on.</li>
+                                            <li>Port (defaults to 3120), unless otherwise specified in the cloud admin interface</li>
+                                            <li>Device is now ready to receive cues</li>
+                                        </ol>
+                                        <p><em>It is a good idea to have set up the machine to have a reserved IP address on the networks DHCP server, to ensure it has the same address between reboots.</em>
+                                            <img loading="lazy" src="images/add-device.jpg" alt="doremi-device-setup" /></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">DCH</span>
+                            <h2 id="2-macro-setup" class="section-title font-black uppercase !leading-none">2. Macro setup</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">The content playlists on the Cinemataztic machines can have several “targets” e.g. “adults” or “family”, which can be used to trigger different content types in front of different shows. This is achieved by including a target in the cue to the Cinemataztic machine in the macro.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--one">
+                                <div class="docs-topic" style="--topic: #6ceec4">
+                                    <div class="docs-topic-body">
+                                        <ol>
+                                            <li>Open Macro Editor: (Menu → Doremi Labs, Inc. → Macro Editor)</li>
+                                            <li>Click the Add button (+)</li>
+                                            <li>Give the cue a name (e.g. Start_cinemataztic)</li>
+                                            <li>Description (e.g. start Cinemataztic show on CinemaTaztic DCH-P)</li>
+                                            <li>Click OK</li>
+                                        </ol>
+                                        <p><img loading="lazy" src="images/define-action.jpg" alt="start_show" /></p>
+                                        <ol>
+                                            <li>Select the newly created Automation Cue and click Insert a new Action</li>
+                                        </ol>
+                                        <p><img loading="lazy" src="images/add-action.jpg" alt="macro_editor_cinemataztic" /></p>
+                                        <ol>
+                                            <li>Choose <strong>Send Message</strong></li>
+                                        </ol>
+                                        <p><img loading="lazy" src="images/action-type.png" alt="macro_editor_cinemataztic" /></p>
+                                        <ol>
+                                            <li>Set <strong>Message label</strong> to e.g. “showStart”</li>
+                                            <li>Choose <strong>Cinemataztic</strong> in the <strong>Device name</strong> dropdown</li>
+                                            <li>Set <strong>Message type</strong> to <strong>Text</strong></li>
+                                            <li>Use Doremi’s virtual keyboard to create the curly braces { } used in the message and be sure the <code class="language-plaintext highlighter-rouge">" "</code> are formatted correctly (not as <code class="language-plaintext highlighter-rouge">“ “</code>).</li>
+                                        </ol>
+                                        <p><img loading="lazy" src="images/send-message.jpg" alt="send-message" />
+                                            <img loading="lazy" src="images/doremi-keyboard.png" alt="doremi_keyboard" /></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </article>
+        </div>
+    </main>
+
+    <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
+        <!-- LET'S TALK: same sidebar layout as the page sections -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-b border-brand-border">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                <aside class="lg:col-span-3 space-y-6">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Contact</span>
+                    <h2 class="section-title font-black uppercase !leading-none text-white">Let’s Talk</h2>
+                    <a href="../contact.html" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">Contact</a>
+                    <div class="space-y-1">
+                        <a href="tel:+4531667341" class="block text-lg font-bold text-white hover:text-brand-cyan transition">+45 31 66 73 41</a>
+                        <span class="block text-xs text-gray-400">(Not for support related inquiries)</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">All support requests should be made <a href="http://support.cinegame.com/" target="_blank" rel="noopener" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">here</a></p>
+                </aside>
+                <!-- RESOURCES: links that are not in the top menu -->
+                <nav class="lg:col-span-3 space-y-6" aria-label="Resources">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Resources</span>
+                    <ul class="space-y-2">
+                        <li><a href="../order.html" class="text-sm text-gray-400 hover:text-white transition">Order</a></li>
+                        <li><a href="index.html" class="text-sm text-gray-400 hover:text-white transition">Docs</a></li>
+                        <li><a href="https://legal.cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">Trust Center</a></li>
+                    </ul>
+                </nav>
+                <!-- THE APP: the CineGame app in each market (external sites) -->
+                <nav class="lg:col-span-3 space-y-6" aria-label="The App">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">The App</span>
+                    <ul class="space-y-2">
+                        <li><a href="https://cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame</a></li>
+                        <li><a href="https://biospil.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">Biospil DK</a></li>
+                        <li><a href="https://leffapeli.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">LeffaPeli FI</a></li>
+                        <li><a href="https://cinegame.se" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame SE</a></li>
+                        <li><a href="https://redyplay.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">REDyPLAY DE</a></li>
+                        <li><a href="https://ie.cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame IE</a></li>
+                        <li><a href="https://cinegame.pt" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame PT</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-gray-500">
+            <span>© 2026 Cinemataztic ApS. All rights reserved.</span>
+            <span class="md:text-center">Hellerupvej 46 - 2900 Hellerup - Denmark - VAT: 37207187</span>
+            <div class="flex items-center md:justify-end gap-5 text-lg">
+                <a href="https://www.facebook.com/CinemaTaztic" target="_blank" rel="noopener" aria-label="Cinemataztic on Facebook" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" aria-label="Cinemataztic on LinkedIn" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="docs-nav.js?v=5"></script>
+    <script src="lightbox.js?v=3"></script>
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileDrawer').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

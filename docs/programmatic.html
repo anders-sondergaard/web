@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programmatic — Cinemataztic Docs</title>
+    <meta name="description" content="Programmatic: book cinema advertising against a profiled cinema audience, like any other digital channel, with real-time impression reporting.">
+    <!-- The one address search engines should use for this page (same as in sitemap.xml) -->
+    <!-- The docs are not to be shown in Google or other search engines -->
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://www.cinemataztic.com/docs/programmatic.html">
+    <!-- Favicon: the Cinemataztic mark (SVG for modern browsers, ICO as fallback, PNG for the iPhone home screen) -->
+    <link rel="icon" href="../favicon.ico" sizes="32x32">
+    <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+    <!-- Google Analytics 4 (not on a local preview, so testing doesn't count as visits) -->
+    <script>
+        if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+            const ga = Object.assign(document.createElement('script'), { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-NSK27WGTDK' });
+            document.head.appendChild(ga);
+        }
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NSK27WGTDK');
+    </script>
+    <!-- Menu logo turns into the round mark when scrolling -->
+    <script src="../assets/js/site-header.js?v=13" defer></script>
+    <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS, built once for the whole site (classes from all pages and scripts) -->
+    <link rel="stylesheet" href="../assets/css/site.css?v=1">
+    <!-- Docs layout: left menu and page text -->
+    <link rel="stylesheet" href="docs.css?v=46">
+</head>
+<body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
+    <!-- HEADER / NAVIGATION: the same top menu as the rest of the site -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
+        <div class="w-full px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="../index.html" class="flex items-center space-x-2 group">
+                <span class="text-2xl sm:text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white group-hover:opacity-90 transition">
+                    CINEMATAZTIC / DOCS
+                </span>
+            </a>
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-widest uppercase">
+                <a href="../cases.html" class="hover:text-brand-cyan transition">Cases</a>
+                <a href="../products.html" class="hover:text-brand-cyan transition">Products</a>
+                <a href="../technology.html" class="hover:text-brand-cyan transition">Technology</a>
+                <a href="../contact.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Contact</a>
+            </nav>
+            <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
+            <a href="../cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
+            <a href="../products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
+            <a href="../technology.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Technology</a>
+            <a href="../contact.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Contact</a>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+        <div class="docs-layout">
+            <!-- LEFT MENU: filled from docs-nav.js -->
+            <aside class="docs-side px-4 sm:px-6 lg:px-8">
+                <div class="docs-side-inner lg:py-10">
+                    <details>
+                        <summary><span>Docs: <span id="docsNavLabel" class="text-gray-400">Menu</span></span><i class="fa-solid fa-chevron-down"></i></summary>
+                        <nav id="docsNav" aria-label="Docs"></nav>
+                    </details>
+                </div>
+            </aside>
+
+            <!-- PAGE TEXT -->
+            <article class="docs-content docs-home">
+                <!-- PROGRAMMATIC: built like the docs front page - label, heading and intro on the left, a drawing of how it works on the right -->
+                <section class="docs-home-section">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Products</span>
+                            <h1 id="programmatic" class="section-title font-black uppercase !leading-none">Programmatic</h1>
+                            <p class="text-sm text-gray-400 leading-relaxed">Programmatic is an advertising platform, offering advertisers and agencies to target digital campaigns against a profiled cinema audience. Today the cinema’s share of the digital marketing budget is non-existing. The new cinema trade desk will allow for advertisers and agencies to allocate digital spend to cinemas on a programmatic audience-by-audience basis.</p>
+                        </aside>
+                        <div class="lg:col-span-9 docs-topics docs-topics--one">
+                            <div class="docs-topic" id="how-it-works" style="--topic: #3dc0c8">
+                                <div class="docs-topic-body">
+                                    <!-- Programmatic, step by step: drawn with HTML in the same style as the CineFun and TrailerQuiz screens -->
+                                    <ol class="tq-flow" aria-label="How programmatic cinema advertising works, step by step">
+                                        <li class="tq-step">
+                                            <div class="tq-screen">
+                                                <div class="tq-phone">
+                                                    <p class="tq-result">Profile</p>
+                                                    <i class="fa-solid fa-circle-user tq-gift pg-user" aria-hidden="true"></i>
+                                                    <span class="pg-chip">Age 25–34</span>
+                                                    <span class="pg-chip">Loves action</span>
+                                                    <span class="pg-chip">Copenhagen</span>
+                                                </div>
+                                            </div>
+                                            <span class="tq-caption"><b>1</b> The CineGame app profiles the audience</span>
+                                        </li>
+                                        <li class="tq-step tq-step--wide">
+                                            <div class="tq-screen">
+                                                <div class="tq-phone pg-panel">
+                                                    <p class="tq-result">Trade desk</p>
+                                                    <div class="pg-chips">
+                                                        <span class="pg-chip pg-chip--on">18–34</span>
+                                                        <span class="pg-chip pg-chip--on">Action</span>
+                                                        <span class="pg-chip">Family</span>
+                                                        <span class="pg-chip pg-chip--on">Copenhagen</span>
+                                                    </div>
+                                                    <span class="tq-btn">Book campaign</span>
+                                                </div>
+                                            </div>
+                                            <span class="tq-caption"><b>2</b> Advertisers book by audience</span>
+                                        </li>
+                                        <li class="tq-step tq-step--wide">
+                                            <div class="tq-screen">
+                                                <div class="tq-phone pg-panel pg-cinema">
+                                                    <div class="pg-screen">Your ad</div>
+                                                    <div class="pg-seats" aria-hidden="true">
+                                                        <i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span class="tq-caption"><b>3</b> The right ad on the right cinema screen</span>
+                                        </li>
+                                        <li class="tq-step">
+                                            <div class="tq-screen">
+                                                <div class="tq-phone">
+                                                    <p class="tq-result">Report</p>
+                                                    <div class="pg-bars" aria-hidden="true"><i style="height: 35%"></i><i style="height: 55%"></i><i style="height: 45%"></i><i style="height: 80%"></i><i style="height: 100%"></i></div>
+                                                    <span class="pg-number">12 480</span>
+                                                    <span class="pg-label">impressions</span>
+                                                </div>
+                                            </div>
+                                            <span class="tq-caption"><b>4</b> Real-time impression reporting</span>
+                                        </li>
+                                    </ol>
+                                    <p>With Programmatic, the chance of showing irrelevant advertising is reduced, making advertisers and moviegoers happier. It is estimated to uplift advertising revenue by 15–20%.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </article>
+        </div>
+    </main>
+
+    <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
+        <!-- LET'S TALK: same sidebar layout as the page sections -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-b border-brand-border">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                <aside class="lg:col-span-3 space-y-6">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Contact</span>
+                    <h2 class="section-title font-black uppercase !leading-none text-white">Let’s Talk</h2>
+                    <a href="../contact.html" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">Contact</a>
+                    <div class="space-y-1">
+                        <a href="tel:+4531667341" class="block text-lg font-bold text-white hover:text-brand-cyan transition">+45 31 66 73 41</a>
+                        <span class="block text-xs text-gray-400">(Not for support related inquiries)</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">All support requests should be made <a href="http://support.cinegame.com/" target="_blank" rel="noopener" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">here</a></p>
+                </aside>
+                <!-- RESOURCES: links that are not in the top menu -->
+                <nav class="lg:col-span-3 space-y-6" aria-label="Resources">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Resources</span>
+                    <ul class="space-y-2">
+                        <li><a href="../order.html" class="text-sm text-gray-400 hover:text-white transition">Order</a></li>
+                        <li><a href="index.html" class="text-sm text-gray-400 hover:text-white transition">Docs</a></li>
+                        <li><a href="https://legal.cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">Trust Center</a></li>
+                    </ul>
+                </nav>
+                <!-- THE APP: the CineGame app in each market (external sites) -->
+                <nav class="lg:col-span-3 space-y-6" aria-label="The App">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">The App</span>
+                    <ul class="space-y-2">
+                        <li><a href="https://cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame</a></li>
+                        <li><a href="https://biospil.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">Biospil DK</a></li>
+                        <li><a href="https://leffapeli.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">LeffaPeli FI</a></li>
+                        <li><a href="https://cinegame.se" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame SE</a></li>
+                        <li><a href="https://redyplay.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">REDyPLAY DE</a></li>
+                        <li><a href="https://ie.cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame IE</a></li>
+                        <li><a href="https://cinegame.pt" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame PT</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-gray-500">
+            <span>© 2026 Cinemataztic ApS. All rights reserved.</span>
+            <span class="md:text-center">Hellerupvej 46 - 2900 Hellerup - Denmark - VAT: 37207187</span>
+            <div class="flex items-center md:justify-end gap-5 text-lg">
+                <a href="https://www.facebook.com/CinemaTaztic" target="_blank" rel="noopener" aria-label="Cinemataztic on Facebook" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" aria-label="Cinemataztic on LinkedIn" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="docs-nav.js?v=5"></script>
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileDrawer').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

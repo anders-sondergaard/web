@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to use the Cloud — Cinemataztic Docs</title>
+    <meta name="description" content="On your Cinemataztic dashboard, you can, with the help of a few widgets, get an overview of the status of your machines and how your campaigns perform">
+    <!-- The one address search engines should use for this page (same as in sitemap.xml) -->
+    <!-- The docs are not to be shown in Google or other search engines -->
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://www.cinemataztic.com/docs/cloud-how.html">
+    <!-- Favicon: the Cinemataztic mark (SVG for modern browsers, ICO as fallback, PNG for the iPhone home screen) -->
+    <link rel="icon" href="../favicon.ico" sizes="32x32">
+    <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+    <!-- Google Analytics 4 (not on a local preview, so testing doesn't count as visits) -->
+    <script>
+        if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+            const ga = Object.assign(document.createElement('script'), { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-NSK27WGTDK' });
+            document.head.appendChild(ga);
+        }
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NSK27WGTDK');
+    </script>
+    <!-- Menu logo turns into the round mark when scrolling -->
+    <script src="../assets/js/site-header.js?v=13" defer></script>
+    <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS, built once for the whole site (classes from all pages and scripts) -->
+    <link rel="stylesheet" href="../assets/css/site.css?v=1">
+    <!-- Docs layout: left menu and page text -->
+    <link rel="stylesheet" href="docs.css?v=46">
+</head>
+<body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
+    <!-- HEADER / NAVIGATION: the same top menu as the rest of the site -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
+        <div class="w-full px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="../index.html" class="flex items-center space-x-2 group">
+                <span class="text-2xl sm:text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white group-hover:opacity-90 transition">
+                    CINEMATAZTIC / DOCS
+                </span>
+            </a>
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-widest uppercase">
+                <a href="../cases.html" class="hover:text-brand-cyan transition">Cases</a>
+                <a href="../products.html" class="hover:text-brand-cyan transition">Products</a>
+                <a href="../technology.html" class="hover:text-brand-cyan transition">Technology</a>
+                <a href="../contact.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Contact</a>
+            </nav>
+            <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
+            <a href="../cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
+            <a href="../products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
+            <a href="../technology.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Technology</a>
+            <a href="../contact.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Contact</a>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+        <div class="docs-layout">
+            <!-- LEFT MENU: filled from docs-nav.js -->
+            <aside class="docs-side px-4 sm:px-6 lg:px-8">
+                <div class="docs-side-inner lg:py-10">
+                    <details>
+                        <summary><span>Docs: <span id="docsNavLabel" class="text-gray-400">Menu</span></span><i class="fa-solid fa-chevron-down"></i></summary>
+                        <nav id="docsNav" aria-label="Docs"></nav>
+                    </details>
+                </div>
+            </aside>
+
+            <!-- PAGE TEXT -->
+            <article class="docs-content docs-home">
+                <!-- HOW TO USE THE CLOUD: built like the docs front page - one section per part of the cloud, label and heading on the left, cards on the right -->
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Cloud</span>
+                            <h1 id="how-to-use-the-cloud" class="section-title font-black uppercase !leading-none">How to use the Cloud</h1>
+                            <p class="text-sm text-gray-400 leading-relaxed">A tour of the Cinemataztic Cloud, from the dashboard to the settings.</p>
+                            <h2 id="dashboard" class="docs-sub docs-sub--left">Dashboard</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">On your dashboard, a few widgets give you an overview of the status of your machines and how your campaigns perform.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics">
+                                <div class="docs-topic" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-tv" aria-hidden="true"></i>
+                                    <strong>Screen status</strong>
+                                    <div class="docs-topic-body">
+                                        <p>A list of all your machines. A red circle next to a machine means no reel has run on it in the last 24 hours. This may be due to:</p><ul><li>No internet connection</li><li>The machine is switched off</li><li>The machine gets no signal from the TMS</li></ul>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-users" aria-hidden="true"></i>
+                                    <strong>Total use</strong>
+                                    <div class="docs-topic-body">
+                                        <p>How many attendees there have been across all campaigns in a given period.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #fece00">
+                                    <i class="fa-solid fa-circle-question" aria-hidden="true"></i>
+                                    <strong>Active quizzes</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Which Trailer Quizzes are live in your app.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #6ceec4">
+                                    <i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>
+                                    <strong>App version</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Which apps are live in the App Store and Google Play. Useful to know in support cases.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #fea917">
+                                    <i class="fa-solid fa-newspaper" aria-hidden="true"></i>
+                                    <strong>News from Cinemataztic</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Changes and additions to the Cloud are described here.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
+                                    <strong>Game Center statistics</strong>
+                                    <div class="docs-topic-body">
+                                        <p>How many people take part in your CineGame+ games (in-app games).</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-desktop" aria-hidden="true"></i>
+                                    <strong>Desktop app</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Download Cinemataztic’s desktop app. It must be used to run a game from an unauthorised computer.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Cloud</span>
+                            <h2 id="statistics" class="section-title font-black uppercase !leading-none">Statistics</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">Statistics you can see in real time: how the individual cinema halls, on-screen games and CineGame+ games perform.</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">You can download the data for a selected period as a CSV file.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--two">
+                                <div class="docs-topic" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-chart-column" aria-hidden="true"></i>
+                                    <strong>Screen performance</strong>
+                                    <div class="docs-topic-body">
+                                        <p>See how each hall and all halls together have performed. Hover over a hall to see its numbers.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                                    <strong>Game performance</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Pick a game and a period to see how it performed day by day, with an overview of the whole period.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #6ceec4">
+                                    <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
+                                    <strong>Game Center performance</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Pick a game and a period to see how a CineGame+ game performed day by day, with an overview of the whole period.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #fece00">
+                                    <i class="fa-solid fa-book" aria-hidden="true"></i>
+                                    <strong>What the numbers mean</strong>
+                                    <div class="docs-topic-body">
+                                        <ul><li><strong>Views:</strong> how many games have been started</li><li><strong>Games:</strong> how many games have been started with at least 1 participant</li><li><strong>Players:</strong> how many unique participants there have been</li></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Cloud</span>
+                            <h2 id="menu" class="section-title font-black uppercase !leading-none">Cinemas, games &amp; more</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">The other pages in the Cloud menu, and what you use them for.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics">
+                                <div class="docs-topic" id="cinemas" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-building" aria-hidden="true"></i>
+                                    <strong>Cinemas</strong>
+                                    <div class="docs-topic-body">
+                                        <p>A complete list of your cinemas. Open each cinema’s and hall’s settings from here.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" id="players" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-server" aria-hidden="true"></i>
+                                    <strong>Players</strong>
+                                    <div class="docs-topic-body">
+                                        <p>A complete list of your machines. Open each machine’s settings from here.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" id="playlist" style="--topic: #fece00">
+                                    <i class="fa-solid fa-list" aria-hidden="true"></i>
+                                    <strong>Playlist</strong>
+                                    <div class="docs-topic-body">
+                                        <p>The playlists decide what is played in each cinema. Most markets have a “LIVE” playlist that is constantly updated with new games. In markets with several cinema chains, each chain typically has its own playlist.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" id="games" style="--topic: #6ceec4">
+                                    <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
+                                    <strong>Games</strong>
+                                    <div class="docs-topic-body">
+                                        <p>All games developed for your market. Only games with a green tick are ready for settlement; games without one may be affected by updates or other issues.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" id="logs" style="--topic: #fea917">
+                                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+                                    <strong>Logs</strong>
+                                    <div class="docs-topic-body">
+                                        <p>If something goes wrong, you need fast access to the log files. All log files are saved here.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" id="support" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-life-ring" aria-hidden="true"></i>
+                                    <strong>Support</strong>
+                                    <div class="docs-topic-body">
+                                        <p>When a user has problems with their app, prizes or other parts of the platform, they can contact the app’s administrator via a support form. The inquiries appear here, and you can assign them to someone on your team or send them on to Cinemataztic support.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" id="prizes" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-gift" aria-hidden="true"></i>
+                                    <strong>Prizes</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Which prizes are live (can be won right now), how many have been handed out and redeemed, and how many codes a prize has left.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" id="cinefun" style="--topic: #fece00">
+                                    <i class="fa-solid fa-star" aria-hidden="true"></i>
+                                    <strong>CineFun</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Which games are live in CineFun.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" id="users" style="--topic: #6ceec4">
+                                    <i class="fa-solid fa-user" aria-hidden="true"></i>
+                                    <strong>Users</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Look up a single user and see which games they have played, the prizes they have won and redeemed, and other info they have chosen to share with CineGame.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" id="promo" style="--topic: #fea917">
+                                    <i class="fa-solid fa-tag" aria-hidden="true"></i>
+                                    <strong>Promo</strong>
+                                    <div class="docs-topic-body">
+                                        <p>In markets with CineCard: create discount codes that can be used when a user creates a CineCard.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" id="aptly" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-microchip" aria-hidden="true"></i>
+                                    <strong>Aptly</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Used only by Cinemataztic to monitor machines and player software versions.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" id="movie-quizzes" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-film" aria-hidden="true"></i>
+                                    <strong>Movie quizzes</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Not in use right now.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Cloud</span>
+                            <h2 id="message-center" class="section-title font-black uppercase !leading-none">Message center</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">Send messages to your users: to everyone, to a target group or to individual users.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--one">
+                                <div class="docs-topic" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+                                    <strong>How to send a message</strong>
+                                    <div class="docs-topic-body">
+                                        <ol><li>Press New message (the pencil icon)</li><li>Select the recipient(s). For a single user you need the support ID from the app, which the user must give when contacting you via the support form</li><li>Write the message</li><li>Optionally link to a place in the app</li><li>Select the expiration date, when the message disappears from the app</li><li>Press Send</li></ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Cloud</span>
+                            <h2 id="profanity" class="section-title font-black uppercase !leading-none">Profanity</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">Our profanity filter makes sure no swear words are shown on the big screen.</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">There are two lists: a global one, updated by Cinemataztic, and a local one, which the app provider is responsible for. Please add words to the global list when they work across countries and languages, so all markets help each other.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--two">
+                                <div class="docs-topic" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                                    <strong>How to add a word</strong>
+                                    <div class="docs-topic-body">
+                                        <ol><li>Select Global or Local</li><li>Write the word in the input field</li><li>Not already on the list? Press +</li></ol>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #fece00">
+                                    <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                                    <strong>Be creative</strong>
+                                    <div class="docs-topic-body">
+                                        <p>If you add the word “Boobs”, you may also need to add “Booobs”.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Cloud</span>
+                            <h2 id="trailer-quiz" class="section-title font-black uppercase !leading-none">Trailer Quiz</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">View and create Trailer Quizzes. A small green light on a Trailer Quiz means it is live.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--one">
+                                <div class="docs-topic" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-clapperboard" aria-hidden="true"></i>
+                                    <strong>How to create a Trailer Quiz</strong>
+                                    <div class="docs-topic-body">
+                                        <ol>
+                                        <li>Press New Trailer Quiz (the small + symbol)</li>
+                                        <li>Select the collection</li>
+                                        <li>Select the priority (no. 1 appears first in the app, no. 2 second, etc.)</li>
+                                        <li>Campaign ID (e.g. MovieName_July_2022)</li>
+                                        <li>Title (e.g. MovieName), shown in the app</li>
+                                        <li>Subtitle (e.g. Guess and win)</li>
+                                        <li>Details (e.g. Watch the trailer for the fantastic MovieName and win cool prizes)</li>
+                                        <li>Poster: upload the movie poster</li>
+                                        <li>Background poster: upload the movie poster</li>
+                                        <li>Video: upload the trailer</li>
+                                        <li>Share URL (e.g. www.buytickets.com)</li>
+                                        <li>Questions: create 3 questions, each with 3 answer options, and enter the correct answer</li>
+                                        <li>Prize type: hand out gold coins or prizes for 1, 2 or 3 correct answers</li>
+                                        <li>Press Save</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Cloud</span>
+                            <h2 id="settings" class="section-title font-black uppercase !leading-none">Settings</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">Your own account, your market and the people who can use the Cloud.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics">
+                                <div class="docs-topic" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-user-gear" aria-hidden="true"></i>
+                                    <strong>Account settings</strong>
+                                    <div class="docs-topic-body">
+                                        <p>See your own account information.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                                    <strong>Market settings</strong>
+                                    <div class="docs-topic-body">
+                                        <ul><li>See your market information</li><li>Define the primary playlist</li><li>Define the fallback game</li><li>View and create the call to action on the app front page</li></ul>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #6ceec4">
+                                    <i class="fa-solid fa-users-gear" aria-hidden="true"></i>
+                                    <strong>Dashboard users</strong>
+                                    <div class="docs-topic-body">
+                                        <p>View and manage Cloud users.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </article>
+        </div>
+    </main>
+
+    <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
+        <!-- LET'S TALK: same sidebar layout as the page sections -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-b border-brand-border">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                <aside class="lg:col-span-3 space-y-6">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Contact</span>
+                    <h2 class="section-title font-black uppercase !leading-none text-white">Let’s Talk</h2>
+                    <a href="../contact.html" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">Contact</a>
+                    <div class="space-y-1">
+                        <a href="tel:+4531667341" class="block text-lg font-bold text-white hover:text-brand-cyan transition">+45 31 66 73 41</a>
+                        <span class="block text-xs text-gray-400">(Not for support related inquiries)</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">All support requests should be made <a href="http://support.cinegame.com/" target="_blank" rel="noopener" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">here</a></p>
+                </aside>
+                <!-- RESOURCES: links that are not in the top menu -->
+                <nav class="lg:col-span-3 space-y-6" aria-label="Resources">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Resources</span>
+                    <ul class="space-y-2">
+                        <li><a href="../order.html" class="text-sm text-gray-400 hover:text-white transition">Order</a></li>
+                        <li><a href="index.html" class="text-sm text-gray-400 hover:text-white transition">Docs</a></li>
+                        <li><a href="https://legal.cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">Trust Center</a></li>
+                    </ul>
+                </nav>
+                <!-- THE APP: the CineGame app in each market (external sites) -->
+                <nav class="lg:col-span-3 space-y-6" aria-label="The App">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">The App</span>
+                    <ul class="space-y-2">
+                        <li><a href="https://cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame</a></li>
+                        <li><a href="https://biospil.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">Biospil DK</a></li>
+                        <li><a href="https://leffapeli.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">LeffaPeli FI</a></li>
+                        <li><a href="https://cinegame.se" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame SE</a></li>
+                        <li><a href="https://redyplay.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">REDyPLAY DE</a></li>
+                        <li><a href="https://ie.cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame IE</a></li>
+                        <li><a href="https://cinegame.pt" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame PT</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-gray-500">
+            <span>© 2026 Cinemataztic ApS. All rights reserved.</span>
+            <span class="md:text-center">Hellerupvej 46 - 2900 Hellerup - Denmark - VAT: 37207187</span>
+            <div class="flex items-center md:justify-end gap-5 text-lg">
+                <a href="https://www.facebook.com/CinemaTaztic" target="_blank" rel="noopener" aria-label="Cinemataztic on Facebook" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" aria-label="Cinemataztic on LinkedIn" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="docs-nav.js?v=5"></script>
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileDrawer').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

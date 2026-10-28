@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup the DCH — Cinemataztic Docs</title>
+    <meta name="description" content="The DCH, The Digital Cinema Hub, is a powerful computer with Cinemataztiz’s custom built software that make interactive experiences in the cinema…">
+    <!-- The one address search engines should use for this page (same as in sitemap.xml) -->
+    <!-- The docs are not to be shown in Google or other search engines -->
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://www.cinemataztic.com/docs/dch.html">
+    <!-- Favicon: the Cinemataztic mark (SVG for modern browsers, ICO as fallback, PNG for the iPhone home screen) -->
+    <link rel="icon" href="../favicon.ico" sizes="32x32">
+    <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+    <!-- Google Analytics 4 (not on a local preview, so testing doesn't count as visits) -->
+    <script>
+        if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+            const ga = Object.assign(document.createElement('script'), { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-NSK27WGTDK' });
+            document.head.appendChild(ga);
+        }
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NSK27WGTDK');
+    </script>
+    <!-- Menu logo turns into the round mark when scrolling -->
+    <script src="../assets/js/site-header.js?v=13" defer></script>
+    <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS, built once for the whole site (classes from all pages and scripts) -->
+    <link rel="stylesheet" href="../assets/css/site.css?v=1">
+    <!-- Docs layout: left menu and page text -->
+    <link rel="stylesheet" href="docs.css?v=46">
+</head>
+<body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
+    <!-- HEADER / NAVIGATION: the same top menu as the rest of the site -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
+        <div class="w-full px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="../index.html" class="flex items-center space-x-2 group">
+                <span class="text-2xl sm:text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white group-hover:opacity-90 transition">
+                    CINEMATAZTIC / DOCS
+                </span>
+            </a>
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-widest uppercase">
+                <a href="../cases.html" class="hover:text-brand-cyan transition">Cases</a>
+                <a href="../products.html" class="hover:text-brand-cyan transition">Products</a>
+                <a href="../technology.html" class="hover:text-brand-cyan transition">Technology</a>
+                <a href="../contact.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Contact</a>
+            </nav>
+            <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
+            <a href="../cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
+            <a href="../products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
+            <a href="../technology.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Technology</a>
+            <a href="../contact.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Contact</a>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+        <div class="docs-layout">
+            <!-- LEFT MENU: filled from docs-nav.js -->
+            <aside class="docs-side px-4 sm:px-6 lg:px-8">
+                <div class="docs-side-inner lg:py-10">
+                    <details>
+                        <summary><span>Docs: <span id="docsNavLabel" class="text-gray-400">Menu</span></span><i class="fa-solid fa-chevron-down"></i></summary>
+                        <nav id="docsNav" aria-label="Docs"></nav>
+                    </details>
+                </div>
+            </aside>
+
+            <!-- PAGE TEXT -->
+            <article class="docs-content docs-home">
+                <!-- SETUP THE DCH: built like the docs front page - one section per step, label and heading on the left, cards and drawings on the right -->
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">DCH</span>
+                            <h1 id="setup-the-dch" class="section-title font-black uppercase !leading-none">Setup the DCH</h1>
+                            <p class="text-sm text-gray-400 leading-relaxed">The DCH, the Digital Cinema Hub, is a powerful computer with Cinemataztic’s custom-built software that makes interactive experiences in the cinema possible.</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">The DCH is placed next to the film projector, is connected to the Cinemataztic Cloud and works smoothly with the cinema’s existing setup.</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">Just received your box? Then this is where you want to be: here you get help setting up the DCH so your guests can enjoy CineGame.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <figure class="docs-figure"><div class="docs-diagram"><svg viewBox="0 0 900 390" role="img" aria-label="How the DCH is connected: the Cinemataztic Cloud server and the DCH on one side, the cinema's screen server, TMS, projector and screen on the other" style="min-width: 648px"><defs><marker id="dg-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9ca3af"/></marker><filter id="dg-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><text x="40" y="44" class="dg-g" fill="#f869b9">CINEMATAZTIC PLATFORM</text><text x="420" y="44" class="dg-g" fill="#9ca3af">EXISTING CINEMA SETUP</text><line x1="395" y1="26" x2="395" y2="250" stroke="#fece00" stroke-width="2" stroke-dasharray="6 6"/><rect x="40" y="70" width="130" height="90" rx="10" fill="#1f1f26" stroke="#3dc0c8" stroke-width="2" filter="url(#dg-glow)"/><text x="54" y="120" class="dg-t">Cloud server</text><rect x="230" y="70" width="130" height="90" rx="10" fill="#1f1f26" stroke="#f869b9" stroke-width="2" filter="url(#dg-glow)"/><text x="244" y="120" class="dg-t">DCH</text><rect x="420" y="70" width="130" height="90" rx="10" fill="#1f1f26" stroke="#6b7280" stroke-width="2" filter="url(#dg-glow)"/><text x="434" y="120" class="dg-t">Screen server</text><rect x="590" y="70" width="120" height="90" rx="10" fill="#1f1f26" stroke="#6b7280" stroke-width="2" filter="url(#dg-glow)"/><text x="604" y="120" class="dg-t">Projector</text><rect x="750" y="70" width="110" height="90" rx="10" fill="#1f1f26" stroke="#6b7280" stroke-width="2" filter="url(#dg-glow)"/><text x="764" y="120" class="dg-t">Screen</text><line x1="172" y1="115" x2="228" y2="115" stroke="#9ca3af" stroke-width="2" marker-end="url(#dg-head)" marker-start="url(#dg-head)"/><line x1="362" y1="115" x2="418" y2="115" stroke="#9ca3af" stroke-width="2" marker-end="url(#dg-head)" marker-start="url(#dg-head)"/><line x1="552" y1="115" x2="588" y2="115" stroke="#9ca3af" stroke-width="2" marker-end="url(#dg-head)"/><line x1="712" y1="115" x2="748" y2="115" stroke="#9ca3af" stroke-width="2" marker-end="url(#dg-head)"/><rect x="445" y="205" width="80" height="44" rx="10" fill="#1f1f26" stroke="#6b7280" stroke-width="2" filter="url(#dg-glow)"/><text x="459" y="232" class="dg-t">TMS</text><line x1="485" y1="162" x2="485" y2="203" stroke="#9ca3af" stroke-width="2" marker-end="url(#dg-head)" marker-start="url(#dg-head)"/><rect x="40" y="280" width="195" height="96" rx="10" fill="#16161a" stroke="#2c2c36"/><text x="54" y="304" class="dg-n dg-n--t">AUTOMATION</text><text x="54" y="322" class="dg-n">Via network</text><text x="54" y="340" class="dg-n">Via 24V Digital Input Unit</text><rect x="255" y="280" width="195" height="96" rx="10" fill="#16161a" stroke="#2c2c36"/><text x="269" y="304" class="dg-n dg-n--t">REQUIREMENTS</text><text x="269" y="322" class="dg-n">Wired internet</text><text x="269" y="340" class="dg-n">Power</text><rect x="470" y="280" width="195" height="96" rx="10" fill="#16161a" stroke="#2c2c36"/><text x="484" y="304" class="dg-n dg-n--t">VIDEO</text><text x="484" y="322" class="dg-n">HDMI</text><text x="484" y="340" class="dg-n">DisplayPort</text><rect x="685" y="280" width="195" height="96" rx="10" fill="#16161a" stroke="#2c2c36"/><text x="699" y="304" class="dg-n dg-n--t">AUDIO</text><text x="699" y="322" class="dg-n">HDMI, DisplayPort</text><text x="699" y="340" class="dg-n">Toslink / S/PDIF over</text><text x="699" y="358" class="dg-n">external optical sound card (USB)</text></svg></div></figure>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Installation</span>
+                            <h2 id="installation" class="section-title font-black uppercase !leading-none">What you need</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">Before you install your DCH, make sure you have everything listed here.</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">There are 2 ways to set up the automation: the DCH can receive the signal from the TMS via the network, or as an analog signal. An analog signal must go through a 24V Digital Input Unit connected to the DCH.</p>
+                            <div class="docs-note"><p><strong>Troubleshooting:</strong> if you can’t connect the DCH to your screen server because of missing plugs, try using an adapter.</p></div>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics">
+                                <div class="docs-topic" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                                    <strong>Network automation</strong>
+                                    <div class="docs-topic-body">
+                                        <ul><li>Cinemataztic DCH</li><li>Power cable</li><li>HDMI cable</li><li>Network cable</li></ul>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                                    <strong>Analog automation</strong>
+                                    <div class="docs-topic-body">
+                                        <ul><li>24V Digital Input Unit</li><li>USB cable</li></ul>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #fece00">
+                                    <i class="fa-solid fa-volume-high" aria-hidden="true"></i>
+                                    <strong>If audio is not to go via HDMI</strong>
+                                    <div class="docs-topic-body">
+                                        <ul><li>External audio interface</li></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Installation</span>
+                            <h2 id="output" class="section-title font-black uppercase !leading-none">Output</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">The CineGame player outputs a video signal of 1920 × 1080 px at 60 Hz.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--two">
+                                <div class="docs-topic" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-display" aria-hidden="true"></i>
+                                    <strong>Video (1920 × 1080 @ 60 Hz)</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Two video output options:</p><ul><li>HDMI</li><li>DisplayPort</li></ul>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-volume-high" aria-hidden="true"></i>
+                                    <strong>Audio</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Three audio output options:</p><ul><li>HDMI</li><li>DisplayPort</li><li>Toslink / S/PDIF over an external optical sound card (USB)</li></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Installation</span>
+                            <h2 id="network" class="section-title font-black uppercase !leading-none">Network</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">A few requirements for the machine’s network connection.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--one">
+                                <div class="docs-topic" style="--topic: #6ceec4">
+                                    <i class="fa-solid fa-ethernet" aria-hidden="true"></i>
+                                    <strong>Requirements</strong>
+                                    <div class="docs-topic-body">
+                                        <ul><li>Connected to the internet over ethernet (RJ45)</li><li>The firewall must allow the machines to connect to our servers via ports 9933 (TCP/UDP), 80, 3024 and 443</li></ul><p>More about setting up the network in <a href="dch-internal-settings.html#network-setup">Internal settings</a>.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Installation</span>
+                            <h2 id="automation" class="section-title font-black uppercase !leading-none">Automation</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">Cues/macros: the Cinemataztic machines can be configured to start games from two types of cues: ethernet or 24V.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--one">
+                                <div class="docs-topic" id="ethernet" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-network-wired" aria-hidden="true"></i>
+                                    <strong>Ethernet</strong>
+                                    <div class="docs-topic-body">
+                                        <div class="docs-diagram"><svg viewBox="0 0 900 320" role="img" aria-label="Automation over the network: Cloud server, firewall, DCH with audio and video, the cinema's internal network, firewall, and the Doremi sending the start cue" style="min-width: 648px"><defs><marker id="dg-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9ca3af"/></marker><filter id="dg-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><line x1="210" y1="40" x2="210" y2="205" stroke="#fece00" stroke-width="2" stroke-dasharray="6 6"/><line x1="660" y1="40" x2="660" y2="205" stroke="#fece00" stroke-width="2" stroke-dasharray="6 6"/><rect x="30" y="95" width="150" height="90" rx="10" fill="#1f1f26" stroke="#3dc0c8" stroke-width="2" filter="url(#dg-glow)"/><text x="44" y="145" class="dg-t">Cloud server</text><rect x="300" y="36" width="60" height="34" rx="10" fill="#1f1f26" stroke="#6b7280" stroke-width="2" filter="url(#dg-glow)"/><text x="314" y="58" class="dg-t">A/V</text><line x1="330" y1="70" x2="330" y2="95" stroke="#9ca3af" stroke-width="2"/><rect x="255" y="95" width="150" height="90" rx="10" fill="#1f1f26" stroke="#f869b9" stroke-width="2" filter="url(#dg-glow)"/><text x="269" y="145" class="dg-t">DCH</text><rect x="470" y="95" width="150" height="90" rx="10" fill="#1f1f26" stroke="#6b7280" stroke-width="2" filter="url(#dg-glow)"/><text x="484" y="138" class="dg-t">Internal network</text><text x="484" y="156" class="dg-s">Cinema</text><rect x="720" y="95" width="150" height="90" rx="10" fill="#1f1f26" stroke="#6b7280" stroke-width="2" filter="url(#dg-glow)"/><text x="734" y="138" class="dg-t">Doremi</text><text x="734" y="156" class="dg-s">Start cue</text><line x1="182" y1="140" x2="253" y2="140" stroke="#9ca3af" stroke-width="2" marker-end="url(#dg-head)" marker-start="url(#dg-head)"/><line x1="407" y1="140" x2="468" y2="140" stroke="#9ca3af" stroke-width="2" marker-end="url(#dg-head)" marker-start="url(#dg-head)"/><line x1="622" y1="140" x2="718" y2="140" stroke="#9ca3af" stroke-width="2" marker-end="url(#dg-head)" marker-start="url(#dg-head)"/><text x="195" y="240" class="dg-n dg-n--t">FIREWALL</text><text x="195" y="258" class="dg-n">Allow outbound connections</text><text x="195" y="276" class="dg-n">on ports 80, 443 and 9933</text><text x="645" y="240" class="dg-n dg-n--t">FIREWALL</text><text x="645" y="258" class="dg-n">Allow only TCP on port 3120</text><text x="645" y="276" class="dg-n">from the Doremi to the</text><text x="645" y="294" class="dg-n">DCH’s static IP</text></svg></div><p>Cues over ethernet need the least setup and no extra hardware. The machines listen for short messages over TCP that say which playlist/game to start. The machine must be on the same network/subnet as the screen server sending the cues.</p><p>Examples for <a href="dch-doremi.html#setup-doremi">Doremi</a> and <a href="dch-gdc.html">GDC</a>.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" id="24v-io" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                                    <strong>24V I/O</strong>
+                                    <div class="docs-topic-body">
+                                        <div class="docs-diagram"><svg viewBox="0 0 900 320" role="img" aria-label="Automation over 24V: Cloud server, firewall, DCH with a 24V box, relay, automation server such as JNIOR, and the Doremi sending the start cue" style="min-width: 648px"><defs><marker id="dg-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9ca3af"/></marker><filter id="dg-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><line x1="210" y1="40" x2="210" y2="205" stroke="#fece00" stroke-width="2" stroke-dasharray="6 6"/><line x1="440" y1="40" x2="440" y2="205" stroke="#fece00" stroke-width="2" stroke-dasharray="6 6"/><rect x="30" y="95" width="150" height="90" rx="10" fill="#1f1f26" stroke="#3dc0c8" stroke-width="2" filter="url(#dg-glow)"/><text x="44" y="145" class="dg-t">Cloud server</text><rect x="300" y="36" width="60" height="34" rx="10" fill="#1f1f26" stroke="#6b7280" stroke-width="2" filter="url(#dg-glow)"/><text x="314" y="58" class="dg-t">A/V</text><line x1="330" y1="70" x2="330" y2="95" stroke="#9ca3af" stroke-width="2"/><rect x="255" y="95" width="150" height="90" rx="10" fill="#1f1f26" stroke="#f869b9" stroke-width="2" filter="url(#dg-glow)"/><text x="269" y="138" class="dg-t">DCH</text><text x="269" y="156" class="dg-s">+ 24V box</text><rect x="480" y="95" width="160" height="90" rx="10" fill="#1f1f26" stroke="#6b7280" stroke-width="2" filter="url(#dg-glow)"/><text x="494" y="138" class="dg-t">Automation server</text><text x="494" y="156" class="dg-s">e.g. JNIOR</text><rect x="720" y="95" width="150" height="90" rx="10" fill="#1f1f26" stroke="#6b7280" stroke-width="2" filter="url(#dg-glow)"/><text x="734" y="138" class="dg-t">Doremi</text><text x="734" y="156" class="dg-s">Start cue</text><line x1="182" y1="140" x2="253" y2="140" stroke="#9ca3af" stroke-width="2" marker-end="url(#dg-head)" marker-start="url(#dg-head)"/><line x1="407" y1="140" x2="478" y2="140" stroke="#9ca3af" stroke-width="2" marker-end="url(#dg-head)" marker-start="url(#dg-head)"/><line x1="642" y1="140" x2="718" y2="140" stroke="#9ca3af" stroke-width="2" marker-end="url(#dg-head)" marker-start="url(#dg-head)"/><text x="195" y="240" class="dg-n dg-n--t">FIREWALL</text><text x="195" y="258" class="dg-n">Allow outbound connections</text><text x="195" y="276" class="dg-n">on ports 80, 443 and 9933</text><text x="425" y="240" class="dg-n dg-n--t">RELAY</text><text x="425" y="258" class="dg-n">Cues via 24V relay: no network</text><text x="425" y="276" class="dg-n">traffic on the internal</text><text x="425" y="294" class="dg-n">cinema network</text></svg></div><p>Needs 2 extra pieces of hardware per Cinemataztic player:</p><ul><li><a href="https://www.lucid-control.com/wp-content/uploads/Documentation/Current/User-Manual-LucidControl-DI4.pdf" target="_blank" rel="noopener">LucidControl DI4</a> listens for 24V cues to trigger a playlist/game.</li><li>Some cinema playlist software needs a 24V pulse back to resume the playlist after the CineGame. <a href="https://www.lucid-control.com/wp-content/uploads/Documentation/Current/User-Manual-LucidControl-DO4.pdf" target="_blank" rel="noopener">LucidControl DO4</a> sends this cue back to the cinema’s 24V automation equipment.</li></ul><div class="docs-diagram docs-diagram--small"><svg viewBox="0 0 600 290" role="img" aria-label="Wiring the relay: one wire from the relay out (e.g. JNIOR) to minus on the 24V supply, plus on the supply to plus on the LucidControl DI4, and the relay's other wire to minus on the DI4" style="min-width: 432px"><defs><marker id="dg-head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9ca3af"/></marker><filter id="dg-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><polyline points="212,140 232,140 232,36 300,36 300,58" fill="none" stroke="#fece00" stroke-width="2.5" stroke-linejoin="round" filter="url(#dg-glow)"/><polyline points="250,82 250,192 388,192" fill="none" stroke="#fece00" stroke-width="2.5" stroke-linejoin="round" filter="url(#dg-glow)"/><polyline points="212,195 222,195 222,252 450,252 450,204" fill="none" stroke="#fece00" stroke-width="2.5" stroke-linejoin="round" filter="url(#dg-glow)"/><rect x="60" y="110" width="152" height="115" rx="10" fill="#1f1f26" stroke="#6b7280" stroke-width="2" filter="url(#dg-glow)"/><text x="74" y="165" class="dg-t">Relay out</text><text x="74" y="183" class="dg-s">e.g. JNIOR</text><rect x="355" y="110" width="175" height="115" rx="10" fill="#1f1f26" stroke="#6ceec4" stroke-width="2" filter="url(#dg-glow)"/><text x="369" y="140" class="dg-t">LucidControl DI4</text><circle cx="250" cy="70" r="12" fill="#0a0a0c" stroke="#ffffff" stroke-width="1.5"/><text x="250" y="75" text-anchor="middle" class="dg-t">+</text><circle cx="300" cy="70" r="12" fill="#0a0a0c" stroke="#ffffff" stroke-width="1.5"/><text x="300" y="75" text-anchor="middle" class="dg-t">−</text><text x="322" y="75" class="dg-s">24V</text><circle cx="400" cy="192" r="12" fill="#0a0a0c" stroke="#ffffff" stroke-width="1.5"/><text x="400" y="197" text-anchor="middle" class="dg-t">+</text><circle cx="450" cy="192" r="12" fill="#0a0a0c" stroke="#ffffff" stroke-width="1.5"/><text x="450" y="197" text-anchor="middle" class="dg-t">−</text></svg></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Software</span>
+                            <h2 id="software-installation" class="section-title font-black uppercase !leading-none">Software installation</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">Boot the player from the inserted USB stick.</p>
+                            <div class="docs-note"><p><strong>Troubleshooting:</strong> if you can’t boot from the USB stick and booted with the HWE kernel (recommended), try without HWE, and vice versa.</p></div>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--two">
+                                <div class="docs-topic" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-server" aria-hidden="true"></i>
+                                    <strong>On a Shark</strong>
+                                    <div class="docs-topic-body">
+                                        <ol><li>Download the <em>20.04 live-server-amd64.iso</em> and flash it onto a USB stick (we recommend <a href="https://www.balena.io/etcher/" target="_blank" rel="noopener">balenaEtcher</a>)</li><li>Insert the USB stick in the machine you want to install</li><li>Power on the machine and immediately tap F8 or Delete repeatedly until a BIOS screen appears</li><li>In the BIOS menu, press F8 to open the boot select menu</li><li>Select UEFI USB</li><li>The install may look stuck, but please be patient. When it is finished, the PC powers off. If an error occurs, check the network cable and try again</li><li>Remove the USB stick and power on the PC</li></ol>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-desktop" aria-hidden="true"></i>
+                                    <strong>On a Dell</strong>
+                                    <div class="docs-topic-body">
+                                        <p>By default the machine boots from the internal hard disk. To boot from the USB stick:</p><ol><li>Connect a keyboard to the machine and find the F12 key</li><li>Power on the machine</li><li>Press and release F12 repeatedly until a boot select menu appears</li><li>Select “Boot from UEFI USB” and press Enter</li></ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Configuration</span>
+                            <h2 id="configuration" class="section-title font-black uppercase !leading-none">Authorize</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">Make sure the player is powered on and connected to the internet. The player shows an “Authorize player” screen with its ID.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--one">
+                                <div class="docs-topic" style="--topic: #fece00">
+                                    <i class="fa-solid fa-key" aria-hidden="true"></i>
+                                    <strong>Authorize the player</strong>
+                                    <div class="docs-topic-body">
+                                        <img loading="lazy" src="images/157870849-6a9fd845-d1c4-4f2d-ba2a-eaf1e918c2aa.svg" alt="The Authorize player screen" />
+                                        <div class="docs-note"><p><strong>Troubleshooting:</strong> if the DCH does not show ‘Authorize player’ after booting: is it connected to a network with internet access? Does the network need manual settings (static IP, name servers etc.)?</p></div>
+                                        <ol>
+                                        <li>Go to your admin panel at cloud.cinemataztic.com and log in<img loading="lazy" src="images/157682867-faf800ae-f5fe-4b81-bbac-ea02b8cd4307.svg" alt="Logging in to the Cloud" /><div class="docs-note"><p><strong>Troubleshooting:</strong> can’t log in? Try the reset password option, or contact Cinemataztic for help.</p></div></li>
+                                        <li>Select “Players” in the left menu<img loading="lazy" src="images/157685525-bedd4f87-88c5-483c-8389-bbb7542663fc.svg" alt="Players in the left menu" /></li>
+                                        <li>Look up the player by the ID shown on the screen and click “Authorize”<img loading="lazy" src="images/157687430-5ff364ea-a3b4-43f8-bd5b-f05811c6c0af.svg" alt="Authorizing the player" /></li>
+                                        <li>Wait for the machine to pick up the authorization. This may take a while</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Configuration</span>
+                            <h2 id="connect-to-screen" class="section-title font-black uppercase !leading-none">Connect to screen</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">Make sure the player is powered on. It now asks you to assign it to a screen.</p>
+                            <div class="docs-note"><p><strong>Troubleshooting:</strong> if the DCH does not show “Connect player to screen” after authorizing, give it time: it can take at least 10 minutes to detect its authorization.</p></div>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--one">
+                                <div class="docs-topic" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-plug" aria-hidden="true"></i>
+                                    <strong>Connect the player to a screen</strong>
+                                    <div class="docs-topic-body">
+                                        <img loading="lazy" src="images/157898885-edc6b0a8-6b63-4090-b957-822ea172b262.svg" alt="The Connect player to screen message" />
+                                        <ol>
+                                        <li>In your admin panel at cloud.cinemataztic.com, choose “Cinemas” in the left menu<img loading="lazy" src="images/157694877-435ecdca-9f87-415b-b56e-ebe33403f1d4.svg" alt="Cinemas in the left menu" /></li>
+                                        <li>Choose your cinema in the left column and the screen you want in the rightmost column. You can create a new screen or connect to an existing one<img loading="lazy" src="images/157690971-2164ecea-43b6-4ad3-96df-3c6054babff6.svg" alt="Choosing the cinema and screen" /></li>
+                                        <li>Only for a new screen: choose a name (e.g. 01 for auditorium 01), write a short description (optional) and select a hostname. The system suggests one in the format CIT-CIN-SCREEN (city-cinema-screen), first in the dropdown<img loading="lazy" src="images/157693898-914141c6-2106-48ef-948d-78d11d17a0cb.svg" alt="Setting up a new screen" /></li>
+                                        <li>Find the “Player” card, click “Assign player” and choose the player by the ID shown on the cinema screen<img loading="lazy" src="images/157693342-a517df9b-ee75-41b5-ac6f-c0b1179d5430.svg" alt="Assigning the player" /></li>
+                                        <li>Wait for the machine to pick up the new configuration (5–10 minutes). When the “Connect player to screen” message disappears, the machine is ready</li>
+                                        </ol>
+                                        <p><strong>The player is now connected to the screen. Congratulations!</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </article>
+        </div>
+    </main>
+
+    <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
+        <!-- LET'S TALK: same sidebar layout as the page sections -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-b border-brand-border">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                <aside class="lg:col-span-3 space-y-6">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Contact</span>
+                    <h2 class="section-title font-black uppercase !leading-none text-white">Let’s Talk</h2>
+                    <a href="../contact.html" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">Contact</a>
+                    <div class="space-y-1">
+                        <a href="tel:+4531667341" class="block text-lg font-bold text-white hover:text-brand-cyan transition">+45 31 66 73 41</a>
+                        <span class="block text-xs text-gray-400">(Not for support related inquiries)</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">All support requests should be made <a href="http://support.cinegame.com/" target="_blank" rel="noopener" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">here</a></p>
+                </aside>
+                <!-- RESOURCES: links that are not in the top menu -->
+                <nav class="lg:col-span-3 space-y-6" aria-label="Resources">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Resources</span>
+                    <ul class="space-y-2">
+                        <li><a href="../order.html" class="text-sm text-gray-400 hover:text-white transition">Order</a></li>
+                        <li><a href="index.html" class="text-sm text-gray-400 hover:text-white transition">Docs</a></li>
+                        <li><a href="https://legal.cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">Trust Center</a></li>
+                    </ul>
+                </nav>
+                <!-- THE APP: the CineGame app in each market (external sites) -->
+                <nav class="lg:col-span-3 space-y-6" aria-label="The App">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">The App</span>
+                    <ul class="space-y-2">
+                        <li><a href="https://cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame</a></li>
+                        <li><a href="https://biospil.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">Biospil DK</a></li>
+                        <li><a href="https://leffapeli.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">LeffaPeli FI</a></li>
+                        <li><a href="https://cinegame.se" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame SE</a></li>
+                        <li><a href="https://redyplay.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">REDyPLAY DE</a></li>
+                        <li><a href="https://ie.cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame IE</a></li>
+                        <li><a href="https://cinegame.pt" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame PT</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-gray-500">
+            <span>© 2026 Cinemataztic ApS. All rights reserved.</span>
+            <span class="md:text-center">Hellerupvej 46 - 2900 Hellerup - Denmark - VAT: 37207187</span>
+            <div class="flex items-center md:justify-end gap-5 text-lg">
+                <a href="https://www.facebook.com/CinemaTaztic" target="_blank" rel="noopener" aria-label="Cinemataztic on Facebook" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" aria-label="Cinemataztic on LinkedIn" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="docs-nav.js?v=5"></script>
+    <script src="lightbox.js?v=3"></script>
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileDrawer').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

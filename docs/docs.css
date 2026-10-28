@@ -1,0 +1,315 @@
+/* DOCS AREA: the site's top menu, a left menu and the page text beside it */
+
+/* Contact button in the top menu (same as .btn-shine on the other pages) */
+.btn-shine {
+    position: relative; overflow: hidden; isolation: isolate;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.08) 45%, rgba(0, 0, 0, 0.06) 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 -1px 0 rgba(0, 0, 0, 0.18), 0 1px 2px rgba(0, 0, 0, 0.25), 0 8px 20px -6px rgba(0, 0, 0, 0.45);
+}
+.btn-shine::after {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+    transform: translateX(-120%); transition: transform 600ms ease;
+}
+.btn-shine:hover { transform: translateY(-1px); }
+.btn-shine:hover::after { transform: translateX(120%); }
+@media (prefers-reduced-motion: reduce) { .btn-shine:hover { transform: none; } .btn-shine::after { display: none; } }
+
+/* Thin grey text is hard to read on screens with ordinary pixels: same fix as the other pages */
+@media (max-resolution: 1.5dppx), (-webkit-max-device-pixel-ratio: 1.5) {
+    body.antialiased { -webkit-font-smoothing: auto; -moz-osx-font-smoothing: auto; }
+    body p, body li { font-weight: 500; }
+    body .text-gray-400 { color: #d1d5db; }
+}
+
+/* Layout: left menu (sticky under the top menu) and the page text. On phones the menu is a fold-out */
+.docs-layout { display: grid; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 1024px) { .docs-layout { grid-template-columns: 17rem minmax(0, 1fr); } }
+.docs-side { border-bottom: 1px solid #1f1f26; }
+@media (min-width: 1024px) {
+    .docs-side { border-bottom: 0; border-right: 1px solid #1f1f26; }
+    .docs-side-inner { position: sticky; top: 5rem; max-height: calc(100vh - 5rem); overflow-y: auto; }
+    .docs-side details > summary { display: none; }
+}
+.docs-side summary { display: flex; align-items: center; justify-content: space-between; cursor: pointer; list-style: none;
+    padding: 1rem 0; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+.docs-side summary::-webkit-details-marker { display: none; }
+.docs-side summary i { transition: transform 200ms; }
+.docs-side details[open] summary i { transform: rotate(180deg); }
+.docs-nav-group { padding: 0.5rem 0 1rem; }
+.docs-nav-heading { display: block; margin-bottom: 0.5rem; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: #fece00; }
+.docs-nav-link { display: block; padding: 0.25rem 0.75rem; margin-left: -0.75rem; border-left: 2px solid transparent; font-size: 0.9rem; color: #9ca3af; transition: color 150ms, border-color 150ms; }
+.docs-nav-link:hover { color: #ffffff; }
+.docs-nav-link.is-current { color: #ffffff; font-weight: 700; border-left-color: #3dc0c8; }
+
+/* Page text */
+.docs-content { min-width: 0; }
+.docs-content h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; text-transform: uppercase; line-height: 1; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+.docs-content h2 { font-size: 1.5rem; font-weight: 800; margin: 3rem 0 1rem; scroll-margin-top: 6rem; }
+.docs-content h3 { font-size: 1.1rem; font-weight: 700; margin: 2rem 0 0.75rem; }
+.docs-content p, .docs-content li { color: #9ca3af; line-height: 1.75; }
+.docs-content p { margin-bottom: 1rem; }
+.docs-content .docs-lead { font-size: 1.15rem; color: #d1d5db; }
+.docs-content ul, .docs-content ol { margin: 0 0 1rem 1.25rem; }
+.docs-content ul { list-style: disc; }
+.docs-content ol { list-style: decimal; }
+.docs-content li { margin-bottom: 0.15rem; line-height: 1.6; }
+.docs-content strong { color: #ffffff; }
+.docs-content a { color: #ffffff; text-decoration: underline; text-decoration-color: #fea917; text-underline-offset: 4px; }
+.docs-content a:hover { color: #3dc0c8; }
+.docs-content code { padding: 0.1rem 0.35rem; border-radius: 0.25rem; background: #1f1f26; color: #6ceec4; font-size: 0.9em; }
+.docs-content table { width: 100%; margin: 0 0 1.5rem; border-collapse: collapse; font-size: 0.9rem; }
+.docs-content th, .docs-content td { padding: 0.7rem 0.75rem; border-bottom: 1px solid #1f1f26; text-align: left; vertical-align: top; }
+.docs-content th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #ffffff; }
+.docs-content td { color: #9ca3af; }
+.docs-table-wrap { overflow-x: auto; }
+.docs-note { margin: 1.5rem 0; padding: 1rem 1.25rem; border-left: 3px solid #fece00; background: rgba(254, 206, 0, 0.06); border-radius: 0 0.5rem 0.5rem 0; }
+.docs-note p:last-child { margin-bottom: 0; }
+
+/* Content from the old docs site */
+.docs-content img { max-width: 100%; height: auto; margin: 1rem 0; border-radius: 0.5rem; }
+.docs-content h4 { font-size: 1rem; font-weight: 700; margin: 1.5rem 0 0.5rem; }
+.docs-content hr { margin: 2.5rem 0; border-color: #1f1f26; }
+.docs-content blockquote { margin: 1.5rem 0; padding: 1rem 1.25rem; border-left: 3px solid #3dc0c8; background: rgba(61, 192, 200, 0.06); border-radius: 0 0.5rem 0.5rem 0; }
+.docs-content blockquote p:last-child { margin-bottom: 0; }
+.docs-content pre { margin: 0 0 1.5rem; padding: 1rem 1.25rem; overflow-x: auto; border-radius: 0.5rem; background: #121216; border: 1px solid #1f1f26; }
+.docs-content pre code { padding: 0; background: none; }
+.docs-video { position: relative; margin: 1.5rem 0; aspect-ratio: 16 / 9; border-radius: 0.75rem; overflow: hidden; background: #000; }
+.docs-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+/* Buttons (links with class btn): white like the buttons on the rest of the site */
+.docs-content a.btn { display: inline-flex; align-items: center; margin: 0.25rem 0.5rem 0.25rem 0; padding: 0.6rem 1.1rem; background: #ffffff; color: #000000; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; text-decoration: none; transition: background-color 150ms; }
+.docs-content a.btn:hover { background: #3dc0c8; color: #000000; }
+
+/* Links box (docs front page, under the Topics text) */
+.docs-links { padding: 1.25rem; border: 1px solid #2c2c36; border-radius: 0.75rem; background: #1f1f26; }
+.docs-links-title { display: block; margin-bottom: 0.75rem; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: #fece00; }
+.docs-content .docs-links a { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.85rem 0; border-top: 1px solid #2c2c36; font-size: 0.9rem; font-weight: 700; text-decoration: none; }
+.docs-content .docs-links a i { color: #6b7280; transition: color 150ms; }
+.docs-content .docs-links a:hover i { color: #3dc0c8; }
+
+/* "How to play" on the CineGame page: the journey animation from cinegame.html, in the same card */
+.docs-journey { position: relative; max-width: 36rem; min-height: 480px; margin: 1.5rem 0; overflow: hidden; border-radius: 1rem; background: #121216; border: 1px solid #1f1f26; }
+.docs-journey canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* "CineGame flow" on the CineGame page: three stage cards in a row (stacked on phones), joined by
+   arrows, with the prize going back to the audience underneath. Each card has its own colour (--flow) */
+.docs-flow { margin: 2rem 0 2.5rem; }
+.docs-flow ol { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem; margin: 0; list-style: none; }
+@media (min-width: 768px) { .docs-flow ol { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; } }
+.docs-content .docs-flow-step { position: relative; margin: 0; padding: 1.75rem; border-radius: 1rem; background: #121216; border: 1px solid #1f1f26; border-top: 3px solid var(--flow); }
+.docs-flow-num { position: absolute; top: 1.25rem; right: 1.5rem; font-size: 3rem; font-weight: 900; line-height: 1; color: rgba(255, 255, 255, 0.08); }
+.docs-flow-icon { display: block; margin-bottom: 1rem; font-size: 1.6rem; color: var(--flow); filter: drop-shadow(0 0 10px var(--flow)); }
+.docs-flow-title { display: block; font-size: 1.25rem; font-weight: 900; text-transform: uppercase; line-height: 1; }
+.docs-flow-sub { display: block; margin: 0.4rem 0 0.9rem; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--flow); }
+.docs-content .docs-flow-step p { margin: 0; font-size: 0.9rem; }
+/* Arrow to the next card: right on wide screens, down on phones */
+.docs-flow-step:not(:last-child)::after {
+    content: '\f063'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 50%; bottom: -1.95rem;
+    transform: translateX(-50%); font-size: 1rem; color: #4b5563;
+}
+@media (min-width: 768px) {
+    .docs-flow-step:not(:last-child)::after { content: '\f061'; left: auto; right: -1.55rem; bottom: auto; top: 50%; transform: translateY(-50%); }
+}
+.docs-flow-loop { display: flex; align-items: center; gap: 0.9rem; margin-top: 1.5rem; padding: 1rem 1.25rem; border-radius: 0.75rem; border: 1px dashed #fece00; background: rgba(254, 206, 0, 0.05); font-size: 0.9rem; color: #d1d5db; }
+.docs-flow-loop i { font-size: 1.25rem; color: #fece00; }
+
+/* "Timing" on the CineGame page: one preshow timeline per market (grey blocks), the CineGame on top in pink
+   and the announced start time as a dashed yellow line through every row. Positions are % of the timeline;
+   the start time is at 15% (--start). On phones the market name sits above its timeline */
+.docs-timing { --start: 15%; --label: 11rem; margin: 2rem 0 2.5rem; padding: 1.5rem; border-radius: 1rem; background: #121216; border: 1px solid #1f1f26; }
+.docs-timing-legend { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-bottom: 1.5rem; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #d1d5db; }
+.docs-timing-legend span { display: inline-flex; align-items: center; gap: 0.5rem; }
+.docs-timing-key { display: inline-block; width: 1.25rem; height: 0.75rem; border-radius: 0.2rem; }
+.docs-timing-key--game { background: #f869b9; box-shadow: 0 0 10px rgba(248, 105, 185, 0.7); }
+.docs-timing-key--start { height: 0; border-top: 2px dashed #fece00; border-radius: 0; }
+.docs-timing-rows { position: relative; display: grid; gap: 1rem; }
+.docs-timing-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.4rem; }
+@media (min-width: 768px) { .docs-timing-row { grid-template-columns: var(--label) minmax(0, 1fr); align-items: center; gap: 1rem; } }
+.docs-timing-market { font-size: 0.9rem; font-weight: 700; color: #ffffff; }
+.docs-timing-track { position: relative; height: 3rem; }
+.docs-timing-seg { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; padding: 0 0.25rem; overflow: hidden; border-radius: 0.35rem; border: 2px solid #121216;
+    background: #2a2a33; font-size: 11px; font-weight: 600; color: #9ca3af; white-space: nowrap; text-overflow: ellipsis; }
+.docs-timing-seg:nth-child(2) { background: #33333e; }
+.docs-timing-seg:nth-child(3) { background: #3d3d4a; }
+.docs-timing-seg:nth-child(4) { background: #484856; color: #d1d5db; }
+.docs-timing-game { position: absolute; top: -0.2rem; bottom: -0.2rem; border-radius: 0.35rem; background: #f869b9; box-shadow: 0 0 16px rgba(248, 105, 185, 0.6); }
+/* The start time line through each timeline, reaching into the gap above and below so the rows join up */
+.docs-timing-track::after { content: ""; position: absolute; top: -0.6rem; bottom: -0.6rem; left: var(--start); border-left: 2px dashed #fece00; pointer-events: none; }
+@media (max-width: 639px) { .docs-timing { padding: 1rem; } .docs-timing-seg { font-size: 9px; } }
+
+/* "How to play" on the CineGame page: the heading and text with the animation to the right, below them on phones */
+.docs-howto { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem 2.5rem; align-items: start; margin: 2rem 0 1rem; }
+@media (min-width: 900px) { .docs-howto { grid-template-columns: minmax(0, 1fr) minmax(0, 36rem); } }
+.docs-howto .docs-journey { margin: 0; }
+.docs-content .docs-howto h3 { margin-top: 0; }
+
+/* FAQ (Commercial Q&A): questions in a list with lines between them, like the FAQ on the front page;
+   click a question to open its answer, and the plus turns into a cross */
+.docs-faq { margin: 2rem 0; border-top: 1px solid #1f1f26; }
+.docs-faq-item { border-bottom: 1px solid #1f1f26; }
+.docs-faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.25rem 0; cursor: pointer; list-style: none;
+    font-size: 1.05rem; font-weight: 700; color: #ffffff; transition: color 150ms; }
+.docs-faq-item summary::-webkit-details-marker { display: none; }
+.docs-faq-item summary:hover { color: #3dc0c8; }
+.docs-faq-item summary i { flex: none; color: #3dc0c8; transition: transform 200ms; }
+.docs-faq-item[open] summary i { transform: rotate(45deg); }
+.docs-faq-answer { max-width: 48rem; padding: 0 0 1.25rem; }
+.docs-faq-answer > :last-child { margin-bottom: 0; }
+
+/* DOCS FRONT PAGE: built like a section of the site's front page - a small yellow label and a big heading on the
+   left, the content on the right */
+.docs-content.docs-home { padding: 0; }
+.docs-home .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
+@media (min-width: 1024px) { .docs-home .section-title { font-size: 2.1vw; } }
+.docs-content.docs-home h1 { margin: 0; letter-spacing: normal; }
+.docs-home-section { padding: 4rem 1rem; }
+@media (min-width: 640px) { .docs-home-section { padding: 4rem 1.5rem; } }
+@media (min-width: 1024px) { .docs-home-section { padding: 5rem 3rem; } }
+/* Topic cards: coloured icon, title, text and a "Read more" link, like the product cards */
+.docs-topics { display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 640px) { .docs-topics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1280px) { .docs-topics { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.docs-content a.docs-topic { display: flex; flex-direction: column; gap: 0.75rem; padding: 1.75rem; border-radius: 1rem; background: #121216; border: 1px solid #1f1f26; text-decoration: none; transition: border-color 150ms; }
+.docs-content a.docs-topic:hover { border-color: var(--topic); color: inherit; }
+.docs-topic > i { font-size: 1.5rem; color: var(--topic); filter: drop-shadow(0 0 10px var(--topic)); }
+.docs-topic > strong { font-size: 1.25rem; font-weight: 900; text-transform: uppercase; line-height: 1; }
+a.docs-topic > span { flex: 1; font-size: 0.9rem; line-height: 1.6; color: #9ca3af; }
+a.docs-topic > em { font-style: normal; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255, 255, 255, 0.8); transition: color 150ms; }
+a.docs-topic:hover > em { color: var(--topic); }
+/* The same cards holding more text (Get support): two side by side, the button at the bottom */
+@media (min-width: 1280px) { .docs-topics.docs-topics--two { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+div.docs-topic { display: flex; flex-direction: column; gap: 0.75rem; padding: 1.75rem; border-radius: 1rem; background: #121216; border: 1px solid #1f1f26; }
+.docs-topic-body { flex: 1; font-size: 0.9rem; }
+.docs-content .docs-topic-body p, .docs-content .docs-topic-body li { font-size: 0.9rem; }
+.docs-content .docs-topic-body > :last-child { margin-bottom: 0; }
+.docs-content .docs-topic a.btn { align-self: flex-start; margin: 0.5rem 0 0; }
+/* Small headings inside a card (e.g. "How to send a push") */
+.docs-content .docs-topic-body h3 { margin: 1.25rem 0 0.5rem; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--topic); }
+/* A small heading above a row of cards (e.g. "Why CineGame…") */
+.docs-content.docs-home h2.docs-sub { margin: 0 0 1.25rem; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: #d1d5db; }
+/* Pictures inside a card's steps */
+.docs-content .docs-topic-body img { display: block; margin: 0.75rem 0 1rem; border: 1px solid #1f1f26; }
+/* The animation, flow and timing graphics sit in the right column with no extra space above */
+.docs-content.docs-home .docs-journey, .docs-content.docs-home .docs-flow, .docs-content.docs-home .docs-timing { margin-top: 0; margin-bottom: 0; }
+/* Section headings: the same space under the yellow label as on the site's front page (space-y-6), none below */
+.docs-content.docs-home aside > .section-title { margin: 1.5rem 0 0; }
+
+/* Footer: the same as on the rest of the site; its "Let's Talk" heading uses the site's section heading size */
+footer .section-title { font-size: clamp(1.75rem, 8.4vw, 3rem); }
+@media (min-width: 1024px) { footer .section-title { font-size: 2.1vw; } }
+
+/* Terms and conditions: the list of documents in the box on the left, and a note above the fold-outs */
+.docs-content ul.docs-legal-toc { margin: 0; list-style: none; }
+.docs-content .docs-legal-toc li { margin: 0; }
+.docs-legal-note { margin: 0 0 1rem; font-size: 0.85rem; color: #9ca3af; }
+.docs-content .docs-legal { max-width: none; }
+.docs-content .docs-legal p strong { display: inline-block; margin-top: 0.5rem; }
+/* A single card that uses the whole column (e.g. Push on Messages) */
+.docs-topics.docs-topics--one { grid-template-columns: minmax(0, 1fr); }
+/* Four small cards in a row (e.g. what the cloud can do on Cloud), two per row on smaller screens */
+.docs-topics.docs-topics--four { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+@media (min-width: 1280px) { .docs-topics.docs-topics--four { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+div.docs-topic.docs-topic--small { padding: 1.25rem; }
+.docs-topic--small > strong { font-size: 0.95rem; line-height: 1.2; }
+/* A links box over the whole column, links in two columns from tablet size */
+.docs-links--wide { max-width: 40rem; }
+@media (min-width: 768px) { .docs-links--wide { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2rem; } .docs-links--wide .docs-links-title { grid-column: 1 / -1; } }
+/* A small heading inside the left column (e.g. Dashboard on How to use the Cloud) */
+.docs-content.docs-home aside > h2.docs-sub--left { margin: 2.5rem 0 0; color: #fece00; }
+/* A drawing on its own in the right column (e.g. the DCH setup), on a light card so dark lines stay readable */
+.docs-figure { margin: 0; padding: 1.5rem; border-radius: 1rem; background: #121216; border: 1px solid #1f1f26; }
+.docs-content .docs-figure img { margin: 0 auto; }
+/* Troubleshooting notes inside a card's steps */
+.docs-topic-body .docs-note { margin: 0.75rem 0 1rem; padding: 0.75rem 1rem; }
+/* Keep step pictures in cards at a readable size instead of the full card width */
+.docs-content .docs-topic-body img { max-width: min(100%, 34rem); }
+
+/* Pictures that open in full size (lightbox.js): a magnifying glass in the corner, and the overlay */
+.docs-zoom { position: relative; display: block; width: min(100%, 34rem); margin: 0.75rem 0 1rem; padding: 0; border: 0; background: none; cursor: zoom-in; }
+.docs-figure .docs-zoom { width: 100%; margin: 0 auto; }
+.docs-content .docs-zoom img { display: block; width: 100%; max-width: none; height: auto; margin: 0; }
+.docs-zoom-icon { position: absolute; top: 0.5rem; right: 0.5rem; display: flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem;
+    border-radius: 999px; background: rgba(10, 10, 12, 0.8); color: #ffffff; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); transition: background-color 150ms, color 150ms, transform 150ms; }
+.docs-zoom:hover .docs-zoom-icon, .docs-zoom:focus-visible .docs-zoom-icon { background: #3dc0c8; color: #000000; transform: scale(1.08); }
+.docs-lightbox { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 4rem 1.5rem 1.5rem; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(6px); cursor: zoom-out; }
+.docs-lightbox[hidden] { display: none; }
+.docs-lightbox img { width: min(100%, 1400px); max-height: 100%; object-fit: contain; border-radius: 0.5rem; background: #121216; cursor: default; }
+.docs-lightbox-close { position: absolute; top: 1rem; right: 1rem; width: 2.75rem; height: 2.75rem; display: flex; align-items: center; justify-content: center;
+    border-radius: 999px; background: #ffffff; color: #000000; font-size: 1.2rem; transition: background-color 150ms; }
+.docs-lightbox-close:hover { background: #3dc0c8; }
+/* Small inline icons in step text keep their own size */
+.docs-content .docs-topic-body img[width] { display: inline-block; max-width: none; margin: 0 0.25rem; border: 0; vertical-align: middle; }
+/* Numbered steps with a screenshot under each (e.g. Setup GDC) */
+.docs-content ol.docs-steps > li { margin-bottom: 1.25rem; }
+.docs-content .docs-faq.docs-faq--top { margin-top: 0; }
+/* Long addresses and code in the text may break onto the next line, so phones get no sideways scroll */
+.docs-content.docs-home p, .docs-content.docs-home li { overflow-wrap: anywhere; }
+
+/* TrailerQuiz on the CineFun page: the five app screens drawn as phones, in a row joined by arrows.
+   On narrow screens the row scrolls sideways inside its card */
+.docs-content ol.tq-flow { display: flex; align-items: flex-start; gap: 1.6rem; margin: 0.5rem 0 2rem; padding: 0 0 0.75rem; list-style: none; overflow-x: auto; }
+.docs-content .tq-step { position: relative; flex: 0 0 7.5rem; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+/* Every screen sits on the same bottom line: each step has a screen area of the same height, the landscape
+   phone sits at its bottom, and the captions start on one line below it */
+.tq-screen { display: flex; align-items: flex-end; width: 100%; height: 13.5rem; }
+.docs-content .tq-step--wide { flex-basis: 11rem; }
+.tq-step:not(:last-child)::after { content: '\f061'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -1.25rem; top: 9.5rem; font-size: 0.8rem; color: #4b5563; }
+.tq-phone { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; width: 100%; height: 13.5rem; padding: 0.6rem; border: 2px solid #fece00; border-radius: 1rem; background: #1f1f26; box-shadow: 0 0 18px rgba(254, 206, 0, 0.18); }
+.tq-phone--landscape { height: 7rem; justify-content: center; background: linear-gradient(135deg, #6ceec4, #3dc0c8); }
+.tq-poster { flex: 1; width: 100%; display: flex; align-items: flex-start; padding: 0.45rem; border-radius: 0.4rem; background: linear-gradient(160deg, #f869b9, #6ceec4); font-size: 11px; font-weight: 900; line-height: 1.1; text-transform: uppercase; color: #ffffff; }
+.tq-poster--short { flex: 0 0 4.5rem; }
+.tq-pick { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #fece00; }
+.tq-pick i { font-size: 8px; margin: 0 0.2rem; }
+.docs-content .tq-flow .tq-text { flex: 1; margin: 0; font-size: 10px; line-height: 1.35; text-align: center; color: #ffffff; }
+.tq-phone--landscape .tq-text { flex: 0; font-weight: 800; text-transform: uppercase; color: #0a0a0c; }
+.tq-play { font-size: 1.4rem; color: #0a0a0c; }
+.tq-btn { width: 100%; padding: 0.3rem; border-radius: 0.3rem; background: #fea917; font-size: 9px; font-weight: 700; text-align: center; text-transform: uppercase; color: #0a0a0c; }
+.tq-btn--answer { text-transform: none; }
+.docs-content .tq-flow .tq-result { margin: 0.4rem 0 0; font-size: 12px; font-weight: 900; text-transform: uppercase; color: #ffffff; }
+.tq-gift { flex: 1; display: flex; align-items: center; font-size: 2.2rem; color: #f869b9; filter: drop-shadow(0 0 10px #f869b9); }
+.tq-caption { font-size: 11px; line-height: 1.3; text-align: center; color: #d1d5db; }
+.tq-caption b { display: block; margin-bottom: 0.15rem; color: #fece00; }
+/* CineFun on the CineFun page: the same phones as TrailerQuiz, with game tiles, a game, a prize and a voucher */
+.cf-tiles { flex: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.35rem; width: 100%; align-content: center; }
+.cf-tiles span { display: flex; align-items: center; justify-content: center; aspect-ratio: 1; border-radius: 0.45rem; background: var(--tile); color: #0a0a0c; font-size: 1rem; }
+.tq-gift.cf-play { color: #6ceec4; filter: drop-shadow(0 0 10px #6ceec4); }
+.tq-gift.cf-code { color: #ffffff; filter: none; font-size: 2.6rem; }
+.cf-time { font-size: 10px; font-weight: 700; color: #fece00; }
+/* Programmatic on the Programmatic page: the same screens as CineFun and TrailerQuiz - a profile, the trade desk,
+   the cinema screen with the targeted seats lit up, and the report */
+.tq-phone.pg-panel { height: 9rem; justify-content: space-between; }
+.pg-user { color: #3dc0c8; filter: drop-shadow(0 0 10px #3dc0c8); }
+.pg-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.3rem; }
+.pg-chip { padding: 0.15rem 0.45rem; border-radius: 999px; background: #2c2c36; font-size: 9px; font-weight: 700; color: #d1d5db; white-space: nowrap; }
+.pg-chip--on { background: #3dc0c8; color: #0a0a0c; }
+.tq-phone > .pg-chip { margin-bottom: 0.1rem; }
+.pg-cinema { justify-content: flex-end; gap: 0.6rem; }
+.pg-screen { width: 100%; padding: 0.9rem 0.5rem; border-radius: 0.3rem; background: linear-gradient(135deg, #f869b9, #fea917); font-size: 11px; font-weight: 900; text-align: center; text-transform: uppercase; color: #ffffff; box-shadow: 0 0 18px rgba(248, 105, 185, 0.5); }
+.pg-seats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.3rem; width: 100%; }
+.pg-seats i { height: 0.55rem; border-radius: 0.2rem 0.2rem 0.1rem 0.1rem; background: #3a3a46; }
+.pg-seats i.on { background: #f869b9; box-shadow: 0 0 6px #f869b9; }
+.pg-bars { flex: 1; display: flex; align-items: flex-end; gap: 0.25rem; width: 100%; padding: 0 0.3rem; }
+.pg-bars i { flex: 1; border-radius: 0.2rem 0.2rem 0 0; background: linear-gradient(180deg, #6ceec4, #3dc0c8); }
+.pg-number { font-size: 15px; font-weight: 900; color: #ffffff; }
+.pg-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #6ceec4; }
+/* Prize formats on General information: four phones side by side (not a sequence, so no arrows) */
+.tq-flow--set .tq-step::after { display: none; }
+.tq-flow--set .tq-phone { justify-content: space-between; padding-top: 1.75rem; padding-bottom: 1rem; }
+.tq-flow--set .tq-gift { flex: 0; color: #ffffff; filter: none; }
+.pz-ticket, .pz-code { font-size: 2rem; color: #f869b9; filter: drop-shadow(0 0 8px #f869b9); }
+.pz-swipe { width: 85%; height: 1.1rem; padding: 2px; border: 2px solid #fece00; border-radius: 0.35rem; }
+.pz-swipe i { display: block; width: 32%; height: 100%; border-radius: 0.2rem; background: #f869b9; box-shadow: 0 0 8px #f869b9; }
+.pz-text { font-size: 14px; font-weight: 900; letter-spacing: 0.05em; color: #f869b9; text-shadow: 0 0 8px rgba(248, 105, 185, 0.6); }
+.pz-wallet { flex: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.3rem; width: 100%; align-content: start; margin-top: 0.4rem; }
+.pz-wallet i { height: 1.6rem; border-radius: 0.3rem; background: var(--tile); }
+.tq-flow--set .tq-phone > .tq-result:first-child { margin-top: -0.9rem; }
+
+/* DCH drawings (inline SVG): dark boxes with glowing borders, scroll sideways on phones so the text stays readable */
+.docs-diagram { overflow-x: auto; margin: 0.25rem 0 1rem; }
+.docs-diagram svg { display: block; width: 100%; height: auto; font-family: "General Sans", system-ui, sans-serif; }
+.docs-diagram .dg-t { font-size: 15px; font-weight: 700; fill: #ffffff; }
+.docs-diagram .dg-s { font-size: 12px; fill: #9ca3af; }
+.docs-diagram .dg-g { font-size: 11px; font-weight: 700; letter-spacing: 0.15em; }
+.docs-diagram .dg-n { font-size: 12.5px; fill: #fea917; }
+.docs-diagram .dg-n--t { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; fill: #fece00; }
+.docs-diagram--small svg { max-width: 30rem; }

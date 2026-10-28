@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineGame — Cinemataztic Docs</title>
+    <meta name="description" content="CineGame: the interactive branded game played by the cinema audience in the preshow. How to play, the CineGame flow, timing, materials and how to run a demo.">
+    <!-- The one address search engines should use for this page (same as in sitemap.xml) -->
+    <!-- The docs are not to be shown in Google or other search engines -->
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://www.cinemataztic.com/docs/cinegame.html">
+    <!-- Favicon: the Cinemataztic mark (SVG for modern browsers, ICO as fallback, PNG for the iPhone home screen) -->
+    <link rel="icon" href="../favicon.ico" sizes="32x32">
+    <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+    <!-- Google Analytics 4 (not on a local preview, so testing doesn't count as visits) -->
+    <script>
+        if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+            const ga = Object.assign(document.createElement('script'), { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-NSK27WGTDK' });
+            document.head.appendChild(ga);
+        }
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NSK27WGTDK');
+    </script>
+    <!-- Menu logo turns into the round mark when scrolling -->
+    <script src="../assets/js/site-header.js?v=13" defer></script>
+    <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS, built once for the whole site (classes from all pages and scripts) -->
+    <link rel="stylesheet" href="../assets/css/site.css?v=1">
+    <!-- Docs layout: left menu and page text -->
+    <link rel="stylesheet" href="docs.css?v=46">
+</head>
+<body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
+    <!-- HEADER / NAVIGATION: the same top menu as the rest of the site -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
+        <div class="w-full px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="../index.html" class="flex items-center space-x-2 group">
+                <span class="text-2xl sm:text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white group-hover:opacity-90 transition">
+                    CINEMATAZTIC / DOCS
+                </span>
+            </a>
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-widest uppercase">
+                <a href="../cases.html" class="hover:text-brand-cyan transition">Cases</a>
+                <a href="../products.html" class="hover:text-brand-cyan transition">Products</a>
+                <a href="../technology.html" class="hover:text-brand-cyan transition">Technology</a>
+                <a href="../contact.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Contact</a>
+            </nav>
+            <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
+            <a href="../cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
+            <a href="../products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
+            <a href="../technology.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Technology</a>
+            <a href="../contact.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Contact</a>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+        <div class="docs-layout">
+            <!-- LEFT MENU: filled from docs-nav.js -->
+            <aside class="docs-side px-4 sm:px-6 lg:px-8">
+                <div class="docs-side-inner lg:py-10">
+                    <details>
+                        <summary><span>Docs: <span id="docsNavLabel" class="text-gray-400">Menu</span></span><i class="fa-solid fa-chevron-down"></i></summary>
+                        <nav id="docsNav" aria-label="Docs"></nav>
+                    </details>
+                </div>
+            </aside>
+
+            <!-- PAGE TEXT -->
+            <article class="docs-content docs-home">
+                <!-- CINEGAME: built like the docs front page - one section per topic, label and heading on the left, content on the right -->
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Products</span>
+                            <h1 id="cinegame" class="section-title font-black uppercase !leading-none">CineGame</h1>
+                            <p class="text-sm text-gray-400 leading-relaxed">CineGame is an interactive branded game played by the audience on the cinema screen as part of the preshow. The audience use the CineGame app to connect with the game.</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">CineGame has been running since 2013 in Odeon and Nordisk Film cinemas in the Nordics and is now also available in cinemas in Germany, Portugal, Sweden &amp; Ireland.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <h2 id="why" class="docs-sub">Why CineGame is a great solution for everyone</h2>
+                            <div class="docs-topics">
+                                <div class="docs-topic" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-film" aria-hidden="true"></i>
+                                    <strong>Cinema</strong>
+                                    <div class="docs-topic-body">
+                                        <p>CineGame offers you an opportunity to entertain your guests before the movie has even begun. That’s a great way to stand out from your competitors.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-bullhorn" aria-hidden="true"></i>
+                                    <strong>Advertiser</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Gamification is a fun and more memorable way to make a lasting effect on consumers than regular advertising.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #6ceec4">
+                                    <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                                    <strong>Brand safety</strong>
+                                    <div class="docs-topic-body">
+                                        <p>A CineGame is a closed system with complete control over everything. Nothing can get on the cinema screen or into a CineGame app without having been through Cinemataztic’s quality control.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Fundamentals</span>
+                            <h2 id="how-to-play" class="section-title font-black uppercase !leading-none">How to play</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">Cinema guests enter the 4-digit code written on the screen. Then their CineGame app is transformed into a joystick that allows them to write messages, move their avatar around the screen, answer questions or control a spaceship on the cinema screen.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                                <!-- The same animation as on cinegame.html: code on screen, code in the app, play, win (user-journey.js) -->
+                                <div class="docs-journey">
+                                    <canvas id="ujCanvas" role="img" aria-label="Animation: a code appears on the cinema screen, a guest types it into the CineGame app, the auditorium plays together, and the guest wins a prize in the app"></canvas>
+                                </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Fundamentals</span>
+                            <h2 id="cinegame-flow" class="section-title font-black uppercase !leading-none">CineGame flow</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">A CineGame is almost always built up over 3 stages: the audience logs on, the game is played, and the winner is found and a prize is awarded.</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">The length of the stages can vary from market to market and game to game.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <!-- CineGame flow: the three stages, and the prize going back to the audience's app -->
+                            <div class="docs-flow" role="group" aria-label="CineGame flow">
+                                <ol>
+                                <li class="docs-flow-step" style="--flow: #6ceec4">
+                                    <span class="docs-flow-num">01</span>
+                                    <i class="fa-solid fa-right-to-bracket docs-flow-icon" aria-hidden="true"></i>
+                                    <strong class="docs-flow-title">Lobby</strong>
+                                    <span class="docs-flow-sub">The audience logs on</span>
+                                    <p>The lobby is the first thing the audience experiences. Here they see how they take part in the game and what they can win. It can hold graphic elements, 3D animations, video, sound effects and of course music.</p>
+                                </li>
+                                <li class="docs-flow-step" style="--flow: #3dc0c8">
+                                    <span class="docs-flow-num">02</span>
+                                    <i class="fa-solid fa-gamepad docs-flow-icon" aria-hidden="true"></i>
+                                    <strong class="docs-flow-title">Game</strong>
+                                    <span class="docs-flow-sub">The game is played</span>
+                                    <p>The game can be almost anything: nearly any game can be turned into a CineGame, and every element of it can be adapted to the brand.</p>
+                                </li>
+                                <li class="docs-flow-step" style="--flow: #f869b9">
+                                    <span class="docs-flow-num">03</span>
+                                    <i class="fa-solid fa-trophy docs-flow-icon" aria-hidden="true"></i>
+                                    <strong class="docs-flow-title">Winner</strong>
+                                    <span class="docs-flow-sub">The winner is found</span>
+                                    <p>The winner is shown on the screen together with a picture of the prize and any tagline, and the prize is sent to the winner's CineGame app.</p>
+                                </li>
+                                </ol>
+                                <div class="docs-flow-loop">
+                                    <i class="fa-solid fa-gift" aria-hidden="true"></i>
+                                    <span><strong>Prizes</strong> go to the winner and / or everyone who took part, straight into their CineGame app.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Fundamentals</span>
+                            <h2 id="timing" class="section-title font-black uppercase !leading-none">Timing</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">A CineGame can last from 3 to 10 minutes and can be placed anywhere in an existing preshow.</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">Here you can see how CineGame is positioned in different markets.</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">See examples of a CineGame and learn more on <a href="../cinegame.html">cinemataztic.com</a>.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <!-- Timing: where the CineGame (pink) sits in the preshow in each market, against the announced start time -->
+                            <div class="docs-timing" role="img" aria-label="Timing of the CineGame in the preshow: in Denmark just before the announced start time, in Finland before it, and in Germany across the start time">
+                                <div class="docs-timing-legend">
+                                    <span><i class="docs-timing-key docs-timing-key--game"></i>CineGame</span>
+                                    <span><i class="docs-timing-key docs-timing-key--start"></i>Announced start time</span>
+                                </div>
+                                <div class="docs-timing-rows">
+                                    <div class="docs-timing-row">
+                                        <span class="docs-timing-market">Denmark</span>
+                                        <div class="docs-timing-track">
+                                            <span class="docs-timing-seg" style="left: 15%; width: 41%">Ad-reel</span><span class="docs-timing-seg" style="left: 56%; width: 14%">Trailer</span><span class="docs-timing-seg" style="left: 70%; width: 18%">Premium ad</span><span class="docs-timing-seg" style="left: 88%; width: 12%">Feature</span>
+                                            <span class="docs-timing-game" style="left: 5.5%; width: 9.5%" title="Just before the start time"></span>
+                                        </div>
+                                    </div>
+                                    <div class="docs-timing-row">
+                                        <span class="docs-timing-market">Finland</span>
+                                        <div class="docs-timing-track">
+                                            <span class="docs-timing-seg" style="left: 15%; width: 41%">Ad-reel</span><span class="docs-timing-seg" style="left: 56%; width: 14%">Trailer</span><span class="docs-timing-seg" style="left: 70%; width: 18%">Premium ad</span><span class="docs-timing-seg" style="left: 88%; width: 12%">Feature</span>
+                                            <span class="docs-timing-game" style="left: 1.5%; width: 13.5%" title="Before the start time"></span>
+                                        </div>
+                                    </div>
+                                    <div class="docs-timing-row">
+                                        <span class="docs-timing-market">Germany</span>
+                                        <div class="docs-timing-track">
+                                            <span class="docs-timing-seg" style="left: 15%; width: 41%">Ad-reel</span><span class="docs-timing-seg" style="left: 56%; width: 14%">Trailer</span><span class="docs-timing-seg" style="left: 70%; width: 18%">Premium ad</span><span class="docs-timing-seg" style="left: 88%; width: 12%">Feature</span>
+                                            <span class="docs-timing-game" style="left: 8.5%; width: 13%" title="Across the start time"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Production</span>
+                            <h2 id="materials" class="section-title font-black uppercase !leading-none">Materials</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">We can work with most file types, but the best results come from vector graphics or high-resolution images and video clips.</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">We can make the game without you sending any material, but we recommend sending at least a logo, font, colour codes and a product image.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--one">
+                                <div class="docs-topic" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-box-open" aria-hidden="true"></i>
+                                    <strong>Materials we would like</strong>
+                                    <div class="docs-topic-body">
+                                        <ul><li>Logo</li><li>Colour codes</li><li>Fonts</li><li>Music</li><li>Existing graphic elements</li><li>Sounds</li><li>Movies and animations</li></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Demo</span>
+                            <h2 id="how-to-run-a-demo" class="section-title font-black uppercase !leading-none">How to run a demo</h2>
+                            <p class="text-sm text-gray-400 leading-relaxed">So now you have a Cinemataztic player in your cinema, it’s connected to the backend, and you want to show it to everybody!</p>
+                            <div class="docs-note"><p><strong>Important:</strong> there are two ways to demo the Cinemataztic player, and a setting on the player MUST match the type of demo. If it is not set correctly, the demo will fail and leave a bad impression.</p></div>
+                            <p class="text-sm text-gray-400 leading-relaxed">You can show the scheduling system, OR just show the games on the player.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--two">
+                                <div class="docs-topic" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
+                                    <strong>Show the scheduling system</strong>
+                                    <div class="docs-topic-body">
+                                        <p>The Cinemataztic player works with different cinema automation systems (like Doremi). How you show your system is out of scope here, but the player must be configured as usual.</p>
+                                        <p>If you have demoed the games on the player as described in the next card, you must remove the checkmark from the <strong>“Ignore game cooldown”</strong> setting:</p>
+                                        <ol>
+                                        <li>Find the correct Cinemataztic player in the Cinemataztic Cloud<img loading="lazy" src="images/159920010-909bb9b7-1759-427a-bcf9-3522b4faaa54.png" alt="Finding the player in the Cinemataztic Cloud" /></li>
+                                        <li>Open its settings<img loading="lazy" src="images/159920435-bc9c5540-2d39-4a86-8de9-0408f6a69d77.png" alt="The player settings" /></li>
+                                        <li>Make sure “Ignore game cooldown” is not set<img loading="lazy" src="images/159920529-a4d18081-e395-4418-ac07-bc19a1e45bba.png" alt="The Ignore game cooldown setting turned off" /></li>
+                                        </ol>
+                                        <p>If it is left on while showing the backend and you start games in quick succession, the games will end before time. So this kind of demo must use full game sessions only.</p>
+                                    </div>
+                                </div>
+                                <div class="docs-topic" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
+                                    <strong>Show the games on the player</strong>
+                                    <div class="docs-topic-body">
+                                        <p>If you only want to show the different games, and perhaps skip the lobby, restart games before time, or exit games and start new ones, this method is for you.</p>
+                                        <p>To freely start, stop and skip games, the <strong>“Ignore game cooldown”</strong> checkmark must be set. Uncheck it again before going back into production and before showing the backend scheduler.</p>
+                                        <ol>
+                                        <li>Find the correct player as above and change these settings<img loading="lazy" src="images/159920103-6ce0296e-f5de-4fe3-8ecf-9a5b927fdec7.png" alt="Player settings for a demo" /></li>
+                                        <li>Make sure Show GUI is set, and consider setting the player’s playlist to “DEMO”</li>
+                                        <li>Connect a keyboard directly to the player: you can now start the games directly from the list</li>
+                                        </ol>
+                                        <h3>Keyboard shortcuts</h3>
+                                        <ul>
+                                        <li><strong>In the menu:</strong> 1–9 starts the game with that number, P makes a ping sound</li>
+                                        <li><strong>In the game:</strong> Alt + F4 ends the game running now</li>
+                                        <li><strong>In the game lobby:</strong> hold S, then hit Space to skip the lobby</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </article>
+        </div>
+    </main>
+
+    <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
+        <!-- LET'S TALK: same sidebar layout as the page sections -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-b border-brand-border">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                <aside class="lg:col-span-3 space-y-6">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Contact</span>
+                    <h2 class="section-title font-black uppercase !leading-none text-white">Let’s Talk</h2>
+                    <a href="../contact.html" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">Contact</a>
+                    <div class="space-y-1">
+                        <a href="tel:+4531667341" class="block text-lg font-bold text-white hover:text-brand-cyan transition">+45 31 66 73 41</a>
+                        <span class="block text-xs text-gray-400">(Not for support related inquiries)</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">All support requests should be made <a href="http://support.cinegame.com/" target="_blank" rel="noopener" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">here</a></p>
+                </aside>
+                <!-- RESOURCES: links that are not in the top menu -->
+                <nav class="lg:col-span-3 space-y-6" aria-label="Resources">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Resources</span>
+                    <ul class="space-y-2">
+                        <li><a href="../order.html" class="text-sm text-gray-400 hover:text-white transition">Order</a></li>
+                        <li><a href="index.html" class="text-sm text-gray-400 hover:text-white transition">Docs</a></li>
+                        <li><a href="https://legal.cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">Trust Center</a></li>
+                    </ul>
+                </nav>
+                <!-- THE APP: the CineGame app in each market (external sites) -->
+                <nav class="lg:col-span-3 space-y-6" aria-label="The App">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">The App</span>
+                    <ul class="space-y-2">
+                        <li><a href="https://cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame</a></li>
+                        <li><a href="https://biospil.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">Biospil DK</a></li>
+                        <li><a href="https://leffapeli.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">LeffaPeli FI</a></li>
+                        <li><a href="https://cinegame.se" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame SE</a></li>
+                        <li><a href="https://redyplay.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">REDyPLAY DE</a></li>
+                        <li><a href="https://ie.cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame IE</a></li>
+                        <li><a href="https://cinegame.pt" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame PT</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-gray-500">
+            <span>© 2026 Cinemataztic ApS. All rights reserved.</span>
+            <span class="md:text-center">Hellerupvej 46 - 2900 Hellerup - Denmark - VAT: 37207187</span>
+            <div class="flex items-center md:justify-end gap-5 text-lg">
+                <a href="https://www.facebook.com/CinemaTaztic" target="_blank" rel="noopener" aria-label="Cinemataztic on Facebook" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" aria-label="Cinemataztic on LinkedIn" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="docs-nav.js?v=5"></script>
+    <script src="lightbox.js?v=3"></script>
+    <script src="user-journey.js?v=1"></script>
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileDrawer').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

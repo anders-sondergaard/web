@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms and conditions — Cinemataztic Docs</title>
+    <meta name="description" content="All markets have different requirements for data security and privacy. We have therefore made it easy to implement country specific privacy terms.…">
+    <!-- The one address search engines should use for this page (same as in sitemap.xml) -->
+    <!-- The docs are not to be shown in Google or other search engines -->
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://www.cinemataztic.com/docs/app-legal.html">
+    <!-- Favicon: the Cinemataztic mark (SVG for modern browsers, ICO as fallback, PNG for the iPhone home screen) -->
+    <link rel="icon" href="../favicon.ico" sizes="32x32">
+    <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+    <!-- Google Analytics 4 (not on a local preview, so testing doesn't count as visits) -->
+    <script>
+        if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+            const ga = Object.assign(document.createElement('script'), { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-NSK27WGTDK' });
+            document.head.appendChild(ga);
+        }
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NSK27WGTDK');
+    </script>
+    <!-- Menu logo turns into the round mark when scrolling -->
+    <script src="../assets/js/site-header.js?v=13" defer></script>
+    <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS, built once for the whole site (classes from all pages and scripts) -->
+    <link rel="stylesheet" href="../assets/css/site.css?v=1">
+    <!-- Docs layout: left menu and page text -->
+    <link rel="stylesheet" href="docs.css?v=46">
+</head>
+<body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
+    <!-- HEADER / NAVIGATION: the same top menu as the rest of the site -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
+        <div class="w-full px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="../index.html" class="flex items-center space-x-2 group">
+                <span class="text-2xl sm:text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white group-hover:opacity-90 transition">
+                    CINEMATAZTIC / DOCS
+                </span>
+            </a>
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-widest uppercase">
+                <a href="../cases.html" class="hover:text-brand-cyan transition">Cases</a>
+                <a href="../products.html" class="hover:text-brand-cyan transition">Products</a>
+                <a href="../technology.html" class="hover:text-brand-cyan transition">Technology</a>
+                <a href="../contact.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Contact</a>
+            </nav>
+            <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
+            <a href="../cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
+            <a href="../products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
+            <a href="../technology.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Technology</a>
+            <a href="../contact.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Contact</a>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+        <div class="docs-layout">
+            <!-- LEFT MENU: filled from docs-nav.js -->
+            <aside class="docs-side px-4 sm:px-6 lg:px-8">
+                <div class="docs-side-inner lg:py-10">
+                    <details>
+                        <summary><span>Docs: <span id="docsNavLabel" class="text-gray-400">Menu</span></span><i class="fa-solid fa-chevron-down"></i></summary>
+                        <nav id="docsNav" aria-label="Docs"></nav>
+                    </details>
+                </div>
+            </aside>
+
+            <!-- PAGE TEXT -->
+            <article class="docs-content docs-home">
+                <!-- TERMS AND CONDITIONS: built like the docs front page - intro and contents on the left, the four
+                     documents on the right as fold-outs (click a title, or a link on the left, to open it) -->
+                <section class="docs-home-section">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">App</span>
+                            <h1 id="terms-and-conditions" class="section-title font-black uppercase !leading-none">Terms and conditions</h1>
+                            <p class="text-sm text-gray-400 leading-relaxed">All markets have different requirements for data security and privacy. We have therefore made it easy to implement country specific privacy terms.</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">Cinemataztic fully complies with the EU GDPR rules.</p>
+                            <div class="docs-links" role="group" aria-label="Documents">
+                                <span class="docs-links-title">Documents</span>
+                                <ul class="docs-legal-toc">
+                                    <li><a href="#privacy-policy" data-legal-open="privacy-policy">Privacy Policy</a></li>
+                                    <li><a href="#permission" data-legal-open="permission">Permission</a></li>
+                                    <li><a href="#competition-terms-and-conditions" data-legal-open="competition-terms-and-conditions">Competition Terms and Conditions</a></li>
+                                    <li><a href="#trade-terms" data-legal-open="trade-terms">Trade terms</a></li>
+                                </ul>
+                            </div>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <p class="docs-legal-note">Templates for each market: text in [brackets] is filled in with the market’s own details.</p>
+                            <div class="docs-faq">
+                            <details class="docs-faq-item" id="privacy-policy">
+                                <summary>Privacy Policy<i class="fa-solid fa-plus" aria-hidden="true"></i></summary>
+                                <div class="docs-faq-answer docs-legal">
+                                    <p><strong>1 Introduction</strong><br />
+                                    When using the [CineGame app], [NAME] collects personal information about you. This Privacy Policy describes how your information is collected and used.</p>
+                                    <p><strong>2 Data controller</strong><br />
+                                    [NAME, ADDRESS, COMPANY NO.], is the data controller. This means that we are responsible for your personal information.</p>
+                                    <p><strong>3 Purpose and basis for collecting of personal information</strong><br />
+                                    Given your consent, we process the following personal information about you for the following purposes:</p>
+                                    <ul>
+                                      <li>
+                                        <p>Age: You have entered your age to play the CineGame and engage in other activities in the [CineGame app]. This information is used to make sure we meet the age requirement for certain types of advertised products. Age is also used to target advertisements against the app and on the cinema screen against certain segments.</p>
+                                      </li>
+                                      <li>
+                                        <p>Gender: If you choose to share your gender, that information will be used to target advertisements in the app and on the cinema screen against certain segments.</p>
+                                      </li>
+                                      <li>
+                                        <p>Name: If you choose to share your name with us, it will be used to make it easier for your friends to find you in the app and add you to their friend-list, just like you can add them. If you have added a friend to your list and they have accepted the request, you can send a message to one or more of them after you log on to a game, asking them to cheer you on during a game. You can encourage your friends to join the game as well and win the prizes in our games.</p>
+                                      </li>
+                                      <li>
+                                        <p>Profile picture: If you choose to share your profile picture with us, we will use it for your avatar and show it on the cinema screen when you log on to a game, as well as show it in the app to other users.</p>
+                                      </li>
+                                      <li>
+                                        <p>Email: If you choose to share your email address, we will use it to make sure that we can restore your account including prizes and credits if your device logs you out or if you change your phone. We do not use your email address for marketing and promotion, and we do not share your email address with third parties.</p>
+                                      </li>
+                                      <li>
+                                        <p>We store information about which cinema hall and at what time and date you have played given CineGame, what other games you have played in our CineGame app and whether you have won a prize and redeemed it. We store this information so we can document that you have played and whether you have won. We can also recreate a prize voucher or coins redeemed by mistake or otherwise disappeared from your ‘Prizes’ in the [CineGame app].</p>
+                                      </li>
+                                      <li>
+                                        <p>When you download the [CineGame app] we collect data on your mobile device – model, brand and telco provider. The data is used to optimize app performance and for profiling for advertising purposes.</p>
+                                      </li>
+                                      <li>
+                                        <p>We also offer you to participate in in-app surveys where we collect information regarding your demographics, consumer behavior and brand relations. We use your data for audience profiling to match advertisements on the cinema screen with the audience.</p>
+                                      </li>
+                                    </ul>
+                                    <p>We use your personal information to evaluate your preferences, interests, and behaviour to target advertising (“Profiling”). The overall logic of the profiling and segmentation is to target marketing and ads to relevant recipients with content from advertisers that match users’ profiles, interests and geographical area.</p>
+                                    <p>In addition, we process your Google and Apple App push IDs to identify the mobile device and other information used to send you push notifications to inform you about:
+                                    Whether you have won or otherwise received a prize
+                                    Expiry of prizes
+                                    Invitations from your friends to connect or play along
+                                    Movie recommendations
+                                    Movie or CineGame rating
+                                    New games and other products in the CineGame app
+                                    Offers from advertisers
+                                    Surveys for profiling</p>
+                                    <p>We will send these push messages to you if you have given us consent, but you can revoke this consent at any time by editing your preference and profile in the [CineGame app].</p>
+                                    <p><strong>4 Deletion</strong><br />
+                                    The personal information concerning your cinema visit and game statistics is automatically deleted after 12 months from the time the data was collected. However, we will not delete your profile and your prizes.</p>
+                                    <p>If your CineGame profile has been inactive for 24 months, it will be deleted. (ie. we delete all the personal information we have collected - including your age, gender, profile picture, name, email, geography, device, telco provider, cinema visits and game statistics, In-app activity, prizes and coins collected).
+                                    If you want to edit or delete your data or your profile - please click here:  https://support.cinemataztic.com/opt-out</p>
+                                    <p><strong>5 Your rights</strong><br />
+                                    You have the following rights in accordance with the rules of personal data law:</p>
+                                    <ul>
+                                      <li>
+                                        <p>Right to revoke consent. You can withdraw your consent at any time for the processing of your personal data. Then we delete all the personal information we have collected in connection with your use of our CineGame app.
+                                    If you want to withdraw your consent you can do this by entering https://support.cinemataztic.com/opt-out or by writing to support@cinemataztic.com</p>
+                                      </li>
+                                      <li>
+                                        <p>Right to insight. You can get full information about all the personal information that is collected, stores and processes about you by entering https://support.cinemataztic.com/opt-out or by writing to support@cinemataztic.com</p>
+                                      </li>
+                                      <li>
+                                        <p>Right to object. You can always object to [NAME]’s processing of your personal information by writing to support@cinemataztic.com</p>
+                                      </li>
+                                      <li>
+                                        <p>Right to data portability and to data correction. You can always request to get your data disclosed and get your personal information corrected by writing to support@cinemataztic.com</p>
+                                      </li>
+                                      <li>
+                                        <p>Right to have data deleted. You can always request to have your personal information deleted by entering https://support.cinemataztic.com/opt-out by writing to support@cinemataztic.com</p>
+                                      </li>
+                                      <li>
+                                        <p>Right to limit data collection. You can always request a limitation of the processing of your personal information by to write to support@cinemataztic.com</p>
+                                      </li>
+                                    </ul>
+                                    <p>If you wish to complain about our processing of your personal data, you can contact the national authority for personal data protection.</p>
+                                    <p><strong>6 Transfer of personal data</strong><br />
+                                    Transfer of personal data to subsidiaries as well as to professional advisers is done in accordance with applicable data protection legislation.</p>
+                                    <ul>
+                                      <li>
+                                        <p>Only trusted employees, representatives and suppliers with a work-related need, will have access to your personal data and only to the extent necessary to be able to provide a service to us or when acting on our behalf. All use must be in accordance with applicable data protection law.</p>
+                                      </li>
+                                      <li>
+                                        <p>[NAME] use data processors and transfer your personal information to Cinemataztic ApS, who uses Google as a sub-processor. In connection with the use of our data processors and sub-processors, personal data are transferred to so-called third countries, including the United States. The transfer of personal data takes place in accordance with applicable data protection legislation, based on the Trans-Atlantic Data Privacy Framework.</p>
+                                      </li>
+                                    </ul>
+                                    <p><strong>7 Contact information</strong><br />
+                                    If you have any questions, you can contact:</p>
+                                    <ul>
+                                      <li>“Data protection request handler” at [NAME, ADDRESS, COMPANY NO.]</li>
+                                      <li>privacy@[NAME].com</li>
+                                    </ul>
+                                </div>
+                            </details>
+                            <details class="docs-faq-item" id="permission">
+                                <summary>Permission<i class="fa-solid fa-plus" aria-hidden="true"></i></summary>
+                                <div class="docs-faq-answer docs-legal">
+                                    <p>[NAME] ask for your permission</p>
+                                    <p>By clicking on “Accept”, you grant us your permission to process your personal data as described below as well as in our publicly available privacy policy:
+                                    https://support.cinemataztic.com/en/privacy-policy</p>
+                                    <p>Permission to use data</p>
+                                    <p><strong>Age</strong><br />
+                                    In order to participate in games and other activities in our app, we ask you to specify your age. We do this in order to comply with local laws about certain types of advertisement, and also to target advertisements in the app and on the cinema screen towards certain segments.</p>
+                                    <p><strong>Gender</strong><br />
+                                    It’s possible to specify your gender in our app, but it’s not a requirement in order to use it. If you choose to specify your gender, that information will be used to target advertisements in the app and on the cinema screen towards certain segments.</p>
+                                    <p><strong>Profile picture</strong><br />
+                                    It’s possible, but not a requirement, to upload your profile picture in the app. If you choose to share your profile picture with us, we will use it for your avatar and show it on the cinema screen when you log on to a game, as well as show it in the app to other users.</p>
+                                    <p><strong>Name</strong><br />
+                                    It’s possible to specify your name, but it’s not a requirement in order to play games and activities in our app and on the cinema screen. If you choose to share your name with us, it will be used to make it easier for your friends to find you in the app and add you to their friend-list, just like you can add them. If you have added a friend to your list and they have accepted the request, you can send a message to one or more of them after you log on to a game, asking them to cheer you on during a game. You can encourage your friends to join the game as well and win the prizes in our games.</p>
+                                    <p><strong>Email</strong><br />
+                                    It’s possible to specify your personal email address in our app, but not a requirement to participate in games and activities. If you choose to specify your email address, we will use it to make sure that we can restore your account including prizes and credits if your device logs you out or if you change your phone. We do not use your email address for marketing and promotion, and we do not share your email address with third parties.</p>
+                                    <p><strong>Cinema visit and statistics</strong><br />
+                                    We collect data about your cinema visit – ie time and date, theatre, auditorium and movie– as well as which game you have played and if you won any prizes. We use this data to collect general statistics about the number of players, for customer support (if, for example, you did not receive the prize you were promised), as well as targeting advertisements shown in the app and on the cinema screen, towards specific geographical segments.</p>
+                                    <p><strong>Device</strong><br />
+                                    When you download the CineGame app we collect data on your mobile device – model, brand and telco provider. The data is used to optimize app performance and for profiling for advertising purposes.</p>
+                                    <p><strong>In-App survey</strong><br />
+                                    We also offer you to participate in in-app surveys or surveys sent via email where we collect information regarding your demographics, consumer behavior and brand relations. We use your data for audience profiling to match advertisements on the cinema screen with the audience.</p>
+                                    <p><strong>Permission to receive push messages with marketing in our app</strong><br />
+                                    We ask your permission to send push messages in our app in order to inform you of the following:
+                                    Whether you have won or otherwise received a prize
+                                    Expiry of prizes
+                                    Invitations from your friends to connect or play along
+                                    Movie recommendations
+                                    Movie or CineGame rating
+                                    New games and other products in the CineGame app
+                                    Offers from advertisers
+                                    Surveys for profiling</p>
+                                    <p><strong>Stored data and profile</strong><br />
+                                    Personal data collected at a cinema, which we store securely on our servers, will continually be erased within 12 months of your visit to the cinema.
+                                    We do not erase your profile or your data in the app, unless you have been inactive for 24 months. At this point, we will erase the personal data in your profile (name, age, gender and email address). You can opt out of this agreement at any time, request access to your personal data and see how we process it or request that we transfer your data.</p>
+                                    <p>If you wish to opt out of this agreement or view the data we have collected about you, click here:
+                                    https://support.cinemataztic.com/opt-out</p>
+                                    <p>If you wish to complain about our processing of your data, please contact our DPO at
+                                    dpo@cinemataztic.com</p>
+                                </div>
+                            </details>
+                            <details class="docs-faq-item" id="competition-terms-and-conditions">
+                                <summary>Competition Terms and Conditions<i class="fa-solid fa-plus" aria-hidden="true"></i></summary>
+                                <div class="docs-faq-answer docs-legal">
+                                    <p><strong>1.</strong><br />
+                                    These terms and conditions (the “Rules”) apply to the games, competitions and promotions (the “Competition”) in the [CineGame app] administered by Cinemataztic on behalf of [NAME: Network, ADDRESS, COMPANY NO.] and the commercial partners sponsoring the competitions (“Competition Sponsor”).</p>
+                                    <p><strong>2.</strong><br />
+                                    Each person who enters the Competition (each an “Entrant”) unconditionally accepts and agrees to comply with and abide by these Rules and the decisions of [NAME] and the Competition Sponsor, which shall be final and binding with respect to all aspects of the Competition. Winning any Prize requires that the Entrant whose entry is selected as the potential winning entry for the Prize is, and remains, in compliance with the Rules. Until such compliance is completed and verified as solely determined by [NAME] and the Competition Sponsor, the Entrant is not a winner.</p>
+                                    <p><strong>3</strong><br />
+                                    To the extent [NAME] and the Competition Sponsor deems it appropriate and in its sole discretion, [NAME] and the Competition Sponsor shall be entitled to treat any of its rights under the Rules as having been granted for the benefit of [NAME] and the Competition Sponsor.</p>
+                                    <p><strong>Eligibility</strong><br /></p>
+                                    <ol>
+                                      <li>
+                                        <p>To participate in the Competition each Entrant must be at the time of entry:
+                                    a.       have a resident address in [NAME: country]
+                                    b.       compliant with the age limit – if any - set for the Competition
+                                    c.       able to access the internet; and
+                                    d.      compliant with any other eligibility requirements in the Rules.</p>
+                                      </li>
+                                      <li>
+                                        <p>The following are not eligible to participate:
+                                    a.       employees of [NAME], exhibitor employees and the Competition Sponsor
+                                    b.      employees of any company responsible for redemption of Prizes/vouchers or for supplying Prizes for the Competition and their respective franchisees, subsidiaries, agents and advisors;
+                                    c.       other persons assisting with this Competition or otherwise professionally connected with the Competition;
+                                    d.      any person not being an individual person;
+                                    e.      any syndicate or collection of persons acting in concert; or
+                                    f.        any person entering via an agent or using the services of an entity carrying on the business of entering (or advising on entering) Prize promotions.</p>
+                                      </li>
+                                      <li>
+                                        <p>All entries must be made directly by the person entering the Competition.  Entries made using methods such as a computer macro, a script or the use of automated devices or processes are not allowed and all such entries will be disqualified.</p>
+                                      </li>
+                                    </ol>
+                                    <p><strong>Entry</strong><br /></p>
+                                    <ol>
+                                      <li>
+                                        <p>The start and end period of a Competition can vary for each Competition. Most often a Competition starts at the first day of a month and ends at the last day of the month. All Prizes won or otherwise achieved through a Competition will be marked with an expiration date or a date for when the winner(s) of the Competition is drawn.</p>
+                                      </li>
+                                      <li>
+                                        <p>A Competition in the [CineGame app] can both be joined by entering a four digit code in the [CineGame app] shown on the cinema screen or via an In-app game.</p>
+                                      </li>
+                                      <li>
+                                        <p>To enter the Competition, Entrants must truthfully answer the age-related form prompted before the Competition, if the Competition has an age limit.</p>
+                                      </li>
+                                      <li>
+                                        <p>The Competition is free to enter. No purchase necessary to enter or win.</p>
+                                      </li>
+                                      <li>
+                                        <p>[NAME] and the Competition Sponsor accepts no responsibility for:
+                                    a.       incomplete, invalid or illegible application forms and these will be declared void in the sole discretion of [NAME] and the Competition Sponsor; or
+                                    b.      entries not successfully completed due to a technical fault, technical malfunction, computer hardware or software failure, satellite, website, network or server failure of any kind.</p>
+                                      </li>
+                                      <li>
+                                        <p>[NAME] and the Competition Sponsor reserves the right to exclude any entry which it believes to be fraudulent or based on misconduct, or if in its reasonable opinion, it considers that there is a significant risk that the Entrant may bring the Name- and/or CP brand into disrepute.</p>
+                                      </li>
+                                    </ol>
+                                    <p><strong>Prize description and conditions</strong><br /></p>
+                                    <ol>
+                                      <li>
+                                        <p>When a Prize is won or in other ways achieved through the participation of a Competition a Prize voucher will be visible in the [CineGame app] in the submenu ‘Prizes’.</p>
+                                      </li>
+                                      <li>
+                                        <p>All Prize vouchers won or otherwise achieved through a Competition will be marked with an expiration date or a date for when the winner(s) of the Competition is drawn.</p>
+                                      </li>
+                                      <li>
+                                        <p>A Prize can both be a voucher code for a discount, a charity request, a ticket for a lottery, a Prize to be redeemed in the cinema kiosk or at the online- or offline site of a Competition Sponsor or another site where the Competition Sponsor’s products are distributed.</p>
+                                      </li>
+                                      <li>
+                                        <p>A Prize can be conditioned on a number of purchases per Entrants, a minimum or maximum size of purchase, on specific dates or time slots. The conditions are solely set by the Competition Sponsor of the Prize(s).</p>
+                                      </li>
+                                      <li>
+                                        <p>The Prizes are subject to availability. If a specific Prize is unavailable a suitable alternative option will be suggested by [NAME] and the Competition Sponsor.</p>
+                                      </li>
+                                      <li>
+                                        <p>Prizes may not be exchanged for any cash or other alternative, are not transferable, divisible, permitted to be sold or resold and are not for use in conjunction with any other promotion or offer. Prizes cannot be replaced or refunded in the event of loss, theft or missed opportunity.</p>
+                                      </li>
+                                      <li>
+                                        <p>To the fullest extent permitted by applicable law, the Prizes will be awarded “AS IS” and WITHOUT WARRANTY OF ANY KIND, express or implied (including, without limitation, any implied warranty of satisfactory quality or fitness for a particular purpose).</p>
+                                      </li>
+                                      <li>
+                                        <p>It is the sole responsibility of the winner of a Prize to submit any value of a Prize won as personal income or in any other way relevant for personal taxation.</p>
+                                      </li>
+                                    </ol>
+                                    <p><strong>Conduct of Competition</strong><br /></p>
+                                    <ol>
+                                      <li>
+                                        <p>In the case of a Competition based on a lottery draw all valid voucher tickets which have fully complied with the Rules will be collected together for the draw(s). The draw(s) will be made from all valid tickets at random under independent supervision or via a computer programme producing a verifiably random draw.</p>
+                                      </li>
+                                      <li>
+                                        <p>[NAME], Cinemataztic or the Competition Sponsor will contact potential winners by SMS, email or via an In-app push message to notify those who have won. Potential winners shall have no less than 72 hours to respond to confirm receipt of notification (“Winner’s Response Message”).</p>
+                                      </li>
+                                      <li>
+                                        <p>If the Winner’s Response Message is not received, [NAME] and the Competition Sponsor reserves the right to rule the entry and related Prize-award invalid and to select another potential winner. [NAME] and the Competition Sponsor is not responsible for any changes in or wrong entry of telephone numbers, email addresses of Entrants.</p>
+                                      </li>
+                                      <li>
+                                        <p>Once the Winner’s Response Message has been received, [NAME] and the Competition Sponsor will provide fulfillment information to a potential winner.</p>
+                                      </li>
+                                      <li>
+                                        <p>In order to claim their Prize, any potential winner may be asked for further identification that matches their entry details. [NAME] and the Competition Sponsor reserves the right to validate any claim and may ask for proof of identity and/or address and/or age.</p>
+                                      </li>
+                                      <li>
+                                        <p>[NAME] and the Competition Sponsor may require such information (in addition to the information required to be given on Prize claims) as it considers necessary or desirable for the purposes of verifying any claim and an Entrant’s compliance with the Rules and any Prize may be withheld unless and until [NAME] and the Competition Sponsor of the competition is satisfied with the verification. Should [NAME] and the Competition Sponsor determine based on the evidence in its possession at any given time that an Entrant is in breach of the Rules, then it may adjudge (in its discretion) that such Entrant is ineligible to take part in any Competition and/or claim by that Entrant then in process and still to be made shall be deemed invalid and void from the outset.</p>
+                                      </li>
+                                      <li>
+                                        <p>The Competition Sponsor of the competition shall not be obliged to contact any unsuccessful Entrant unless a permission has been given by the Entrant to do so. All decisions of [NAME] and the Competition Sponsor with regard to all elements of the Competition are final and no correspondence shall be entered into.</p>
+                                      </li>
+                                      <li>
+                                        <p>All Prizes which are un-awarded, unclaimed or subject to claims which become invalid or which are adjudged void at any time, will lapse. This includes any Prizes where the Winner’s Response Message is received after the timeframe provided for response. [NAME] and the Competition Sponsor does not accept any liability for delay or non-delivery of notification via SMS, emails to winners or Winner’s Response Message.</p>
+                                      </li>
+                                      <li>
+                                        <p>Entry to a Competition amounts to acceptance of the Rules and to their interpretation under local law and by the local courts. All age limits shall be deemed to be actual age as at the time of acceptance of the Rules, unless expressly stated otherwise in these Rules.</p>
+                                      </li>
+                                      <li>
+                                        <p>Nothing in the Rules shall affect any Entrant’s statutory rights. [NAME] and the Competition Sponsor may (in its sole discretion) decline to enter into any correspondence save as otherwise stated in the Rules.</p>
+                                      </li>
+                                      <li>
+                                        <p>As an in-app engagement incentivisation the user can receive ‘Gold Coins’. [NAME] and Cinemataztic reserves the right to change the number of points and gold coins you received when participating in games or otherwise using the [CineGame app]. In addition, [NAME] and Cinemataztic reserves the right to close the Coin Shop at any time and thus cancel all points and winnings earned by users without prior notice in case this becomes necessary.</p>
+                                      </li>
+                                    </ol>
+                                    <p><strong>Responsibility</strong><br /></p>
+                                    <ol>
+                                      <li>
+                                        <p>To the fullest extent permitted by applicable law (but not otherwise) Name and its agents and the Competition Sponsor assume no responsibility and are not liable for: (i) the accuracy or otherwise of any Prize description or illustration; (ii) (where applicable) the non-availability, loss, late receipt or damage of any text, Prize-claim, Prize or notification or other communication and whether by reason of mobile-telephone network-operator error or other problem, failed or corrupted transmission, handset failure (including full or unserviceable inbox) or otherwise; (iii) (other than those warranties or conditions implied by statute and which cannot be excluded) any representation, warranty, condition or guarantee in respect of a Prize; (iv) (where applicable) any person whose mobile phone is used to make an entry without the owner’s permission; or (v) any taxes, fees, charges or other costs which winners may be required to pay at any time in connection with a Prize, (save to the extent that [NAME] and the Competition Sponsor has expressly and specifically accepted responsibility in the Rules for the same).</p>
+                                      </li>
+                                      <li>
+                                        <p>All Prizes sourced by [NAME] from other suppliers remain the property of those suppliers pending delivery to winners.</p>
+                                      </li>
+                                      <li>
+                                        <p>All prize recipients exempt [NAME], Cinemataztic and Competition Sponsors from any liability related to injuries or damage caused by or alleged to be caused by participation in the competition or the prize.</p>
+                                      </li>
+                                      <li>
+                                        <p>Should a prize be redeemed on a homepage that does not belong to [NAME] or Cinemataztic, all obligations of [NAME] and Cinemataztic will be terminated as soon as a user has left the [CineGame app]. [NAME] and Cinemataztic are not liable for any transactions outside the Cinemataztic system.</p>
+                                      </li>
+                                      <li>
+                                        <p>Typos and unintentional misunderstandings. [NAME], Cinemataztic, and Competition Sponsors are not responsible for typographical or other errors related to a competition.</p>
+                                      </li>
+                                    </ol>
+                                    <p><strong>[NAME] and the Competition Sponsor’s rights</strong><br /></p>
+                                    <ol>
+                                      <li>[NAME] and the Competition Sponsor may (i) extend any time limit or waive any of the Rules where a person might otherwise have been disqualified (without obliging [NAME] and the Competition Sponsor to relax the Rules on any further occasion for that Entrant or at all for any other person);  (ii) terminate, extend or suspend the Competition at any time where this is necessary or desirable due to supervening circumstances beyond[NAME]’s and the Competition Sponsor’s control; or (iii) substitute a product deemed to be an appropriate replacement and of equal or greater value in the place of any of the Prizes (or any part of a Prize to the extent divisible). [NAME]’s and the Competition Sponsor’s decision in the exercise or interpretation of any of its rights or discretions in connection with these Rules shall be final and binding.</li>
+                                    </ol>
+                                </div>
+                            </details>
+                            <details class="docs-faq-item" id="trade-terms">
+                                <summary>Trade terms<i class="fa-solid fa-plus" aria-hidden="true"></i></summary>
+                                <div class="docs-faq-answer docs-legal">
+                                    <p>The license provider of the CineGame app - Cinemataztic ApS, CVR 37207187 (“Cinemataztic”) offer the users of the CineGame app various interactive services - including sending a CineCard. A CineCard is a personal greeting shown on the cinema screen at a specific show.</p>
+                                    <p>Last updated: September 2022</p>
+                                    <p>Cinemataztic ApS
+                                    Hellerupvej 46
+                                    2900 Hellerup
+                                    Denmark
+                                    Company No. 37207187</p>
+                                    <p><strong>How to buy a CineCard</strong><br />
+                                    A CineCard can be purchased via the CineGame app by using a payment card, Apple, Google or Mobile-pay. The cost of a CineCard depends on the individual country. The amount is raised on the credit card/account immediately after the transaction has been completed.</p>
+                                    <p><strong>How to send a CineCard</strong><br />
+                                    When you have customized your CineCard you need to book the CineCard for the show at which you want the CineCard to be shown. You will receive a push-message in the CineGame-app with an order confirmation and receipt for the purchase.</p>
+                                    <p><strong>How to cancel an order</strong><br />
+                                    If you have made a purchase of a CineCard and want to cancel it, you must contact info@cinemataztic.com with the order number. You can cancel the order if your cancellation is sent before the show at which you have booked your CineCard has started.</p>
+                                    <p><strong>Right of return</strong><br />
+                                    When you buy a CineCard you accept the Trade Terms &amp; Conditions and accept that your right of return lapses as soon as your order is completed and your CineCard is shown. Once the CineCard is shown on the cinema screen the users right of withdrawal lapses, but in the period from the purchase of a CineCard and until the CineCard is shown on the cinema screen Cinemataztic will reimbursement any cancellation of a CineCard booking.</p>
+                                    <p><strong>Children and youth under 18 years of age</strong><br />
+                                    CineCards are not offered to children under 10 years. Children and young people between the ages of 10 and 18 can buy a CineCard.</p>
+                                    <p><strong>Data permission</strong><br />
+                                    When purchasing a CineCard you give Cinemataztic the following consent:</p>
+                                    <p>• Cinemataztic may send your order verification and receipt of your purchase via a push-message in your CineGame app</p>
+                                    <p>• Cinemataztic will store your booking information - i.e. information about which show you have booked your CineCard, the content of the CineCard, time, location and order number, to ensure that Cinemataztic can manage any, errors, cancellations and user complaints.</p>
+                                    <p>Booking information regarding your purchase of a CineCard will automatically be deleted after 2 months of your purchase.</p>
+                                    <p>Besides from the order number of your purchase no personal date, credit card or banking information is stored by Cinemataztic.</p>
+                                    <p>For every transaction you have the right to object to the collection of any personal data and to get insights to what data is collected, to erase your data or have your data transferred to you. These rights are subject to the EU’s General Data Protection Regulation (GDPR).</p>
+                                    <p>If you wish to delete your booking information before they are automatically deleted after 2 months or if you have another request regarding your personal data please contact info@cinemataztic.com.</p>
+                                </div>
+                            </details>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </article>
+        </div>
+    </main>
+
+    <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
+        <!-- LET'S TALK: same sidebar layout as the page sections -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-b border-brand-border">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                <aside class="lg:col-span-3 space-y-6">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Contact</span>
+                    <h2 class="section-title font-black uppercase !leading-none text-white">Let’s Talk</h2>
+                    <a href="../contact.html" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">Contact</a>
+                    <div class="space-y-1">
+                        <a href="tel:+4531667341" class="block text-lg font-bold text-white hover:text-brand-cyan transition">+45 31 66 73 41</a>
+                        <span class="block text-xs text-gray-400">(Not for support related inquiries)</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">All support requests should be made <a href="http://support.cinegame.com/" target="_blank" rel="noopener" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">here</a></p>
+                </aside>
+                <!-- RESOURCES: links that are not in the top menu -->
+                <nav class="lg:col-span-3 space-y-6" aria-label="Resources">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Resources</span>
+                    <ul class="space-y-2">
+                        <li><a href="../order.html" class="text-sm text-gray-400 hover:text-white transition">Order</a></li>
+                        <li><a href="index.html" class="text-sm text-gray-400 hover:text-white transition">Docs</a></li>
+                        <li><a href="https://legal.cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">Trust Center</a></li>
+                    </ul>
+                </nav>
+                <!-- THE APP: the CineGame app in each market (external sites) -->
+                <nav class="lg:col-span-3 space-y-6" aria-label="The App">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">The App</span>
+                    <ul class="space-y-2">
+                        <li><a href="https://cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame</a></li>
+                        <li><a href="https://biospil.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">Biospil DK</a></li>
+                        <li><a href="https://leffapeli.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">LeffaPeli FI</a></li>
+                        <li><a href="https://cinegame.se" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame SE</a></li>
+                        <li><a href="https://redyplay.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">REDyPLAY DE</a></li>
+                        <li><a href="https://ie.cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame IE</a></li>
+                        <li><a href="https://cinegame.pt" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame PT</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-gray-500">
+            <span>© 2026 Cinemataztic ApS. All rights reserved.</span>
+            <span class="md:text-center">Hellerupvej 46 - 2900 Hellerup - Denmark - VAT: 37207187</span>
+            <div class="flex items-center md:justify-end gap-5 text-lg">
+                <a href="https://www.facebook.com/CinemaTaztic" target="_blank" rel="noopener" aria-label="Cinemataztic on Facebook" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" aria-label="Cinemataztic on LinkedIn" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="docs-nav.js?v=5"></script>
+    <script>
+        // Open a document when its link on the left is clicked, or when the page is opened at #its-id
+        (function () {
+            const open = id => { const d = document.getElementById(id); if (d && d.tagName === 'DETAILS') d.open = true; };
+            document.querySelectorAll('[data-legal-open]').forEach(a => a.addEventListener('click', () => open(a.dataset.legalOpen)));
+            if (location.hash) open(location.hash.slice(1));
+        })();
+    </script>
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileDrawer').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

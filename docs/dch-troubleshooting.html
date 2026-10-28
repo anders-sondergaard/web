@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troubleshooting — Cinemataztic Docs</title>
+    <meta name="description" content="Machines can get stuck during game downloads, but will mostly retry and eventually recover by themselves.">
+    <!-- The one address search engines should use for this page (same as in sitemap.xml) -->
+    <!-- The docs are not to be shown in Google or other search engines -->
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://www.cinemataztic.com/docs/dch-troubleshooting.html">
+    <!-- Favicon: the Cinemataztic mark (SVG for modern browsers, ICO as fallback, PNG for the iPhone home screen) -->
+    <link rel="icon" href="../favicon.ico" sizes="32x32">
+    <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+    <!-- Google Analytics 4 (not on a local preview, so testing doesn't count as visits) -->
+    <script>
+        if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+            const ga = Object.assign(document.createElement('script'), { async: true, src: 'https://www.googletagmanager.com/gtag/js?id=G-NSK27WGTDK' });
+            document.head.appendChild(ga);
+        }
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-NSK27WGTDK');
+    </script>
+    <!-- Menu logo turns into the round mark when scrolling -->
+    <script src="../assets/js/site-header.js?v=13" defer></script>
+    <!-- General Sans (Indian Type Foundry, free via Fontshare) -->
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS, built once for the whole site (classes from all pages and scripts) -->
+    <link rel="stylesheet" href="../assets/css/site.css?v=1">
+    <!-- Docs layout: left menu and page text -->
+    <link rel="stylesheet" href="docs.css?v=46">
+</head>
+<body class="bg-brand-dark text-white font-sans antialiased selection:bg-brand-cyan selection:text-black min-h-screen flex flex-col">
+    <!-- HEADER / NAVIGATION: the same top menu as the rest of the site -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-brand-border">
+        <div class="w-full px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="../index.html" class="flex items-center space-x-2 group">
+                <span class="text-2xl sm:text-3xl font-logo font-bold tracking-[0.05em] uppercase text-white group-hover:opacity-90 transition">
+                    CINEMATAZTIC / DOCS
+                </span>
+            </a>
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-bold tracking-widest uppercase">
+                <a href="../cases.html" class="hover:text-brand-cyan transition">Cases</a>
+                <a href="../products.html" class="hover:text-brand-cyan transition">Products</a>
+                <a href="../technology.html" class="hover:text-brand-cyan transition">Technology</a>
+                <a href="../contact.html" class="btn-shine px-5 py-2.5 bg-white text-black hover:bg-brand-dark hover:text-white transition">Contact</a>
+            </nav>
+            <button id="mobileMenuBtn" class="md:hidden text-2xl text-white focus:outline-none" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <div id="mobileDrawer" class="hidden md:hidden bg-brand-dark/95 border-b border-brand-border px-6 py-6 space-y-4">
+            <a href="../cases.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Cases</a>
+            <a href="../products.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Products</a>
+            <a href="../technology.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Technology</a>
+            <a href="../contact.html" class="block text-lg font-bold uppercase hover:text-brand-cyan">Contact</a>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+        <div class="docs-layout">
+            <!-- LEFT MENU: filled from docs-nav.js -->
+            <aside class="docs-side px-4 sm:px-6 lg:px-8">
+                <div class="docs-side-inner lg:py-10">
+                    <details>
+                        <summary><span>Docs: <span id="docsNavLabel" class="text-gray-400">Menu</span></span><i class="fa-solid fa-chevron-down"></i></summary>
+                        <nav id="docsNav" aria-label="Docs"></nav>
+                    </details>
+                </div>
+            </aside>
+
+            <!-- PAGE TEXT -->
+            <article class="docs-content docs-home">
+                <!-- Built like the docs front page: label, heading and short text on the left, cards on the right -->
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">DCH</span>
+                            <h1 id="troubleshooting" class="section-title font-black uppercase !leading-none">Troubleshooting</h1>
+                            <p class="text-sm text-gray-400 leading-relaxed">Common problems with the DCH, how to recognise them and how to fix them.</p>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--two">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">DCH</span>
+                            <h2 id="game-download" class="section-title font-black uppercase !leading-none">Game download</h2>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--one">
+                                <div class="docs-topic" id="stuck-during-game-download" style="--topic: #3dc0c8">
+                                    <i class="fa-solid fa-download" aria-hidden="true"></i>
+                                    <strong>Stuck during game download</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Machines can get stuck during game downloads, but will mostly retry and eventually recover by themselves.</p>
+                                        <p><img loading="lazy" width="560" alt="Screenshot 2022-03-07 at 15 42 45" src="images/157064597-a48ab1e5-be9c-4ec5-a24c-dde34e4aba52.png" />
+                                        </p>
+                                        <p>Symptoms:</p>
+                                        <ul>
+                                            <li>Game download spinner stays on indefinitely in the cloud portal. See screenshot above.</li>
+                                            <li>Error messages in the log on the cloud portal, e.g. <code class="language-plaintext highlighter-rouge">Error reading executable dir.</code></li>
+                                            <li>Log messages in the cloud portal indicating that game download failed despite multiple retries.</li>
+                                        </ul>
+                                        <p>Common reasons:</p>
+                                        <ul>
+                                            <li>Internet unstable or interrupted during game download</li>
+                                            <li>Power outage during downloads</li>
+                                        </ul>
+                                        <p>If a machine doesn’t recover by itself, it can mostly be recovered by the following steps:</p>
+                                        <ol>
+                                            <li>Establish a terminal connection to the machine</li>
+                                            <li>Switch to the <code class="language-plaintext highlighter-rouge">player</code> user with the following command: <code class="language-plaintext highlighter-rouge">sudo su player</code></li>
+                                            <li>Switch to the players home directory: <code class="language-plaintext highlighter-rouge">cd</code></li>
+                                            <li>Remove all unfinished game downloads: <code class="language-plaintext highlighter-rouge">rm -r Assets/cinemataztic-games/*.part</code></li>
+                                            <li>Delete the players local config: <code class="language-plaintext highlighter-rouge">rm conf-db.json</code></li>
+                                            <li>Restart the player software: <code class="language-plaintext highlighter-rouge">sudo systemctl restart cinemataztic-player</code></li>
+                                            <li>Monitor the machine in the cloud to ensure the game download is restarted and succeeds. See screenshot below.
+                                                <img loading="lazy" width="543" alt="Screenshot 2022-03-07 at 16 34 04" src="images/157065564-a54304cd-bf8b-49dd-8a7d-dff45e213f3e.png" /></li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section border-b border-brand-border">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">DCH</span>
+                            <h2 id="display" class="section-title font-black uppercase !leading-none">Display</h2>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--one">
+                                <div class="docs-topic" id="wrong-screen-resolution" style="--topic: #f869b9">
+                                    <i class="fa-solid fa-display" aria-hidden="true"></i>
+                                    <strong>Wrong screen resolution</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Machines sometimes get wrong screen resolution after rebooting.
+                                            The Cinemataztic boxes should always be set to 1920x1080 @ 60Hz.</p>
+                                        <p>Symptoms:</p>
+                                        <ul>
+                                            <li>Red  warning dot next to the screen in cloud.cinemataztic.com as well as warning message in the “player” card.</li>
+                                            <li>On site: the game only fills a small part of the screen. This is due to the machine showing a 1920x1080 pixels image on a 4K display setting.</li>
+                                        </ul>
+                                        <p>Common reasons:</p>
+                                        <ul>
+                                            <li>Typically caused by the connected equipment (i.e. projector / screen server) requesting a specific resolution and frame rate e.g. default 4K.</li>
+                                        </ul>
+                                        <p>To set the correct screen resolution perform the following commands:</p>
+                                        <ol>
+                                            <li>Establish a terminal connection to the machine</li>
+                                            <li>Switch to the <code class="language-plaintext highlighter-rouge">player</code> user with the following command: <code class="language-plaintext highlighter-rouge">sudo su player</code></li>
+                                            <li>Export the display variable: <code class="language-plaintext highlighter-rouge">export DISPLAY=:0</code></li>
+                                            <li>Use the <code class="language-plaintext highlighter-rouge">xrandr</code> command to list display options</li>
+                                            <li>Set the resolution: <code class="language-plaintext highlighter-rouge">xrandr --output HDMI-0 --mode 1920x1080 --rate 60.00</code> (this sets the resolution to 1920x1080 at 60Hz for the display named HDMI-0)</li>
+                                            <li>Confirm that the correct resolution and framerate has been set: <code class="language-plaintext highlighter-rouge">xrandr</code>. The active setting will be marked with an asterix *</li>
+                                            <li>Confirm on cloud.cinemataztic.com that the resolution warning disappears.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="docs-home-section">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                        <aside class="lg:col-span-3 space-y-6">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">DCH</span>
+                            <h2 id="audio" class="section-title font-black uppercase !leading-none">Audio</h2>
+                        </aside>
+                        <div class="lg:col-span-9">
+                            <div class="docs-topics docs-topics--one">
+                                <div class="docs-topic" id="no-audio" style="--topic: #6ceec4">
+                                    <i class="fa-solid fa-volume-high" aria-hidden="true"></i>
+                                    <strong>No audio</strong>
+                                    <div class="docs-topic-body">
+                                        <p>Common cause is that the device isn’t set to output to the correct sink.</p>
+                                        <ol>
+                                            <li>Log in to the machine as <code class="language-plaintext highlighter-rouge">cinemataztic</code> user</li>
+                                            <li>Change to the <code class="language-plaintext highlighter-rouge">player</code> user</li>
+                                            <li>Export DISPLAY variable: <code class="language-plaintext highlighter-rouge">export DISPLAY=:0</code></li>
+                                            <li>List available sinks: <code class="language-plaintext highlighter-rouge">pactl list sinks</code></li>
+                                            <li>Identify the correct sink index: e.g. if using HDMI on the PCI NVIDIA graphics card look for the sink that outputs to NVIDIA (see screenshot example)</li>
+                                            <li>Set the default sink (e.g. set to index 0 if desired): <code class="language-plaintext highlighter-rouge">pactl set-default-sink 0</code></li>
+                                        </ol>
+                                        <p><img loading="lazy" width="874" alt="Screenshot 2022-06-04 at 08 39 09" src="images/171987903-6badb232-54e0-4cff-9374-6e8517f93688.png" /></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </article>
+        </div>
+    </main>
+
+    <footer class="bg-black border-t border-brand-border text-sm text-gray-500">
+        <!-- LET'S TALK: same sidebar layout as the page sections -->
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-20 lg:py-28 border-b border-brand-border">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+                <aside class="lg:col-span-3 space-y-6">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Contact</span>
+                    <h2 class="section-title font-black uppercase !leading-none text-white">Let’s Talk</h2>
+                    <a href="../contact.html" class="inline-flex items-center px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-white text-black hover:bg-brand-cyan transition">Contact</a>
+                    <div class="space-y-1">
+                        <a href="tel:+4531667341" class="block text-lg font-bold text-white hover:text-brand-cyan transition">+45 31 66 73 41</a>
+                        <span class="block text-xs text-gray-400">(Not for support related inquiries)</span>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">All support requests should be made <a href="http://support.cinegame.com/" target="_blank" rel="noopener" class="text-white underline decoration-brand-orange underline-offset-4 hover:text-brand-cyan">here</a></p>
+                </aside>
+                <!-- RESOURCES: links that are not in the top menu -->
+                <nav class="lg:col-span-3 space-y-6" aria-label="Resources">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">Resources</span>
+                    <ul class="space-y-2">
+                        <li><a href="../order.html" class="text-sm text-gray-400 hover:text-white transition">Order</a></li>
+                        <li><a href="index.html" class="text-sm text-gray-400 hover:text-white transition">Docs</a></li>
+                        <li><a href="https://legal.cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">Trust Center</a></li>
+                    </ul>
+                </nav>
+                <!-- THE APP: the CineGame app in each market (external sites) -->
+                <nav class="lg:col-span-3 space-y-6" aria-label="The App">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest text-brand-yellow">The App</span>
+                    <ul class="space-y-2">
+                        <li><a href="https://cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame</a></li>
+                        <li><a href="https://biospil.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">Biospil DK</a></li>
+                        <li><a href="https://leffapeli.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">LeffaPeli FI</a></li>
+                        <li><a href="https://cinegame.se" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame SE</a></li>
+                        <li><a href="https://redyplay.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">REDyPLAY DE</a></li>
+                        <li><a href="https://ie.cinegame.com" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame IE</a></li>
+                        <li><a href="https://cinegame.pt" target="_blank" rel="noopener" class="text-sm text-gray-400 hover:text-white transition">CineGame PT</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="w-full px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-gray-500">
+            <span>© 2026 Cinemataztic ApS. All rights reserved.</span>
+            <span class="md:text-center">Hellerupvej 46 - 2900 Hellerup - Denmark - VAT: 37207187</span>
+            <div class="flex items-center md:justify-end gap-5 text-lg">
+                <a href="https://www.facebook.com/CinemaTaztic" target="_blank" rel="noopener" aria-label="Cinemataztic on Facebook" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.linkedin.com/company/cinemataztic" target="_blank" rel="noopener" aria-label="Cinemataztic on LinkedIn" class="text-gray-400 hover:text-brand-cyan transition"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="docs-nav.js?v=5"></script>
+    <script src="lightbox.js?v=3"></script>
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileDrawer').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
