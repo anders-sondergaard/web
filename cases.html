@@ -461,10 +461,14 @@
             conveyor.steps = Math.max(0, cardStates.length - conveyor.visibleSlots);
             track.style.height = `${winH + conveyor.steps * STEP_PX}px`;
 
-            // Reading order -> path order, so the starting layout reads left to right, top to bottom
+            // Reading order -> path order, so the starting layout reads left to right, top to bottom.
+            // A short last row takes the first slots of its row on the path, so no slot is left empty
+            // and the last card scrolls all the way up (it starts out of view, so the order still reads right).
+            const n = cardStates.length;
             cardStates.forEach((state, j) => {
                 const row = Math.floor(j / cols), c = j % cols;
-                state.k = row * cols + (row % 2 === 0 ? cols - 1 - c : c);
+                const m = conveyor.steps ? Math.min(cols, n - row * cols) : cols;
+                state.k = row * cols + (row % 2 === 0 ? m - 1 - c : c);
             });
 
             conveyor.target = conveyor.s = scrollToShift();
