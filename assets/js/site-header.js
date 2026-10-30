@@ -58,7 +58,7 @@
 const SITE_PRODUCTS = [
     { href: 'programmatic.html', name: 'Programmatic', rgb: '61 192 200', text: 'Automated, targetable cinema ad buying.' },
     { href: 'cinegame.html', name: 'CineGame', rgb: '248 105 185', text: 'Branded games on the big screen.' },
-    { href: 'cinefun.html', name: 'CineFun', rgb: '108 238 196', text: 'Quizzes and games before and after the film.' },
+    { href: 'cinefun.html', name: 'CineFun', rgb: '108 238 196', text: 'Quizzes and games before and after the movie.' },
     { href: 'leadsite.html', name: 'Leadsite', rgb: '254 169 23', text: 'A wheel of fortune that collects sign-ups.' },
 ];
 const productsBase = (a) => a.getAttribute('href').replace(/products\.html$/, '');
