@@ -326,6 +326,8 @@ const productsBase = (a) => a.getAttribute('href').replace(/products\.html$/, ''
             -webkit-backdrop-filter: blur(40px); backdrop-filter: blur(40px);
             transition: opacity 350ms ease-out, left 450ms ${EASE}, top 450ms ${EASE}, width 450ms ${EASE}, height 450ms ${EASE};
         }
+        /* On a coloured hero the bar is solid, so no blur is needed; Safari also keeps a stale blur while the bar fades between hero colours */
+        header.on-hero .nav-hover { -webkit-backdrop-filter: none; backdrop-filter: none; }
         header nav > a:not(.btn-shine):hover, header nav .nav-dd__toggle, header nav .nav-dd__toggle:hover { color: inherit; }
     `;
     document.head.appendChild(style);
