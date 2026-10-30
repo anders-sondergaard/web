@@ -53,6 +53,76 @@
     update();
 })();
 
+// The four products, for the Products dropdown and the phone menu. Paths are relative to the Products
+// link, so the same list works from the docs pages (../products.html).
+const SITE_PRODUCTS = [
+    { href: 'programmatic.html', name: 'Programmatic', rgb: '61 192 200', text: 'Automated, targetable cinema ad buying.' },
+    { href: 'cinegame.html', name: 'CineGame', rgb: '248 105 185', text: 'Branded games on the big screen.' },
+    { href: 'cinefun.html', name: 'CineFun', rgb: '108 238 196', text: 'Quizzes and games before and after the film.' },
+    { href: 'leadsite.html', name: 'Leadsite', rgb: '254 169 23', text: 'A wheel of fortune that collects sign-ups.' },
+];
+const productsBase = (a) => a.getAttribute('href').replace(/products\.html$/, '');
+
+// Products dropdown in the top menu: a dark panel with the four products opens on hover or keyboard
+// focus. On touch screens the first tap opens it and a second tap on Products goes to the page.
+(function () {
+    const link = [...document.querySelectorAll('body > header nav a')].find(a => /(^|\/)products\.html$/.test(a.getAttribute('href') || ''));
+    if (!link) return;
+    const base = productsBase(link);
+
+    const style = document.createElement('style');
+    style.textContent = `
+        .nav-dd { position: relative; }
+        .nav-dd__toggle { display: inline-flex; align-items: center; gap: 0.4rem; }
+        .nav-dd__toggle i { font-size: 9px; transition: transform 200ms; }
+        .nav-dd__panel {
+            position: absolute; top: 100%; left: 50%; width: 360px; padding-top: 22px;
+            opacity: 0; visibility: hidden; transform: translate(-50%, 6px);
+            transition: opacity 180ms, transform 180ms, visibility 180ms;
+        }
+        .nav-dd:hover .nav-dd__panel, .nav-dd:focus-within .nav-dd__panel, .nav-dd.is-open .nav-dd__panel { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+        .nav-dd:hover .nav-dd__toggle i, .nav-dd:focus-within .nav-dd__toggle i, .nav-dd.is-open .nav-dd__toggle i { transform: rotate(180deg); }
+        .nav-dd__box {
+            background: rgb(18 18 22 / 0.97); border: 1px solid #1f1f26; border-radius: 16px; padding: 8px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+        }
+        .nav-dd__item { display: flex; gap: 14px; padding: 12px; border-radius: 10px; transition: background 150ms; }
+        .nav-dd__item:hover, .nav-dd__item:focus-visible { background: rgb(255 255 255 / 0.05); outline: none; }
+        .nav-dd__bar { flex: none; width: 3px; border-radius: 2px; background: var(--c); box-shadow: 0 0 10px var(--c); }
+        .nav-dd__name { display: block; font-size: 13px; font-weight: 800; letter-spacing: 0.08em; color: #ffffff; transition: color 150ms; }
+        .nav-dd__item:hover .nav-dd__name, .nav-dd__item:focus-visible .nav-dd__name { color: var(--c); }
+        .nav-dd__text { display: block; margin-top: 3px; font-size: 12px; font-weight: 400; line-height: 1.4; letter-spacing: 0; text-transform: none; color: #9ca3af; }
+        .nav-dd__all { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; padding: 12px; border-top: 1px solid #1f1f26; font-size: 10px; color: #9ca3af; transition: color 150ms; }
+        .nav-dd__all:hover { color: #ffffff; }
+        @media (prefers-reduced-motion: reduce) {
+            .nav-dd__panel, .nav-dd__toggle i { transition: none; }
+        }
+    `;
+    document.head.appendChild(style);
+
+    const dd = document.createElement('div');
+    dd.className = 'nav-dd';
+    link.replaceWith(dd);
+    link.classList.add('nav-dd__toggle');
+    link.setAttribute('aria-haspopup', 'true');
+    link.setAttribute('aria-expanded', 'false');
+    link.insertAdjacentHTML('beforeend', ' <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>');
+    dd.appendChild(link);
+    dd.insertAdjacentHTML('beforeend', `
+        <div class="nav-dd__panel"><div class="nav-dd__box">
+            ${SITE_PRODUCTS.map(p => `<a href="${base}${p.href}" class="nav-dd__item" style="--c: rgb(${p.rgb})"><span class="nav-dd__bar"></span><span><span class="nav-dd__name">${p.name}</span><span class="nav-dd__text">${p.text}</span></span></a>`).join('')}
+            <a href="${link.getAttribute('href')}" class="nav-dd__all"><span>All products</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div></div>`);
+
+    const setOpen = (open) => { dd.classList.toggle('is-open', open); link.setAttribute('aria-expanded', String(open)); };
+    const touch = window.matchMedia('(hover: none)');
+    link.addEventListener('click', (e) => {
+        if (touch.matches && !dd.classList.contains('is-open')) { e.preventDefault(); setOpen(true); }
+    });
+    document.addEventListener('click', (e) => { if (!dd.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { setOpen(false); if (dd.contains(document.activeElement)) document.activeElement.blur(); } });
+})();
+
 // Phone menu: a full-screen dark panel under the menu bar with big
 // links that rise in one after another, then the office. The
 // hamburger folds into a cross. Built from each page's own #mobileDrawer, so the links stay per page.
@@ -83,6 +153,13 @@
             color: rgba(255, 255, 255, 0.6); transition: color 150ms;
         }
         .m-menu__links a:hover, .m-menu__links a.is-current { color: #ffffff; }
+        .m-menu__sub { display: flex; flex-direction: column; gap: 2px; margin: 0 0 6px; padding-left: 16px; border-left: 1px solid #1f1f26; }
+        .m-menu__links .m-menu__sub a {
+            display: flex; align-items: center; gap: 10px; padding: 6px 0;
+            font-size: 18px; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255, 255, 255, 0.75);
+        }
+        .m-menu__links .m-menu__sub a:hover, .m-menu__links .m-menu__sub a.is-current { color: #ffffff; }
+        .m-menu__sub a::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); }
         .m-menu__rise { opacity: 0; transform: translateY(24px); transition: opacity 500ms ease, transform 600ms cubic-bezier(0.22, 1, 0.36, 1); }
         .m-menu.is-open .m-menu__rise { opacity: 1; transform: none; transition-delay: calc(80ms + var(--i, 0) * 55ms); }
         .m-menu__rule { border: 0; border-top: 1px solid #1f1f26; margin: 40px 0; }
@@ -136,6 +213,14 @@
         link.textContent = a.textContent.trim();
         if (link.getAttribute('href') === here) link.classList.add('is-current');
         nav.appendChild(link);
+        // The four products under Products
+        if (/(^|\/)products\.html$/.test(link.getAttribute('href'))) {
+            const base = productsBase(link);
+            const sub = document.createElement('div');
+            sub.className = 'm-menu__sub';
+            sub.innerHTML = SITE_PRODUCTS.map(p => `<a href="${base}${p.href}" style="--c: rgb(${p.rgb})"${new URL(base + p.href, location.href).pathname === location.pathname ? ' class="is-current"' : ''}>${p.name}</a>`).join('');
+            nav.appendChild(sub);
+        }
     });
     // Everything after the links rises in on the same stagger
     [...nav.children, ...menu.querySelectorAll('.m-menu__inner > .m-menu__rise')].forEach((el, i) => {
@@ -222,11 +307,11 @@
 // Menu frame: a square frame (3px, in the text colour, over a soft blurred tint) sits around the link of
 // the page you are on, slides to whichever link the pointer is over, and slides back when the pointer
 // leaves the menu (on a page with no link of its own, the front page, it fades out instead). The text
-// never changes colour. The white Guide button has its own look and is left out.
+// never changes colour, Products with its dropdown included. The white Guide button has its own look and is left out.
 (function () {
     const nav = document.querySelector('header nav');
     if (!nav) return;
-    const links = [...nav.querySelectorAll(':scope > a')].filter(a => !a.classList.contains('btn-shine'));
+    const links = [...nav.querySelectorAll(':scope > a, :scope > .nav-dd > .nav-dd__toggle')].filter(a => !a.classList.contains('btn-shine'));
     if (!links.length) return;
     // The page you are on was marked by colouring its link; the frame marks it now
     const current = links.find(a => a.classList.contains('text-brand-cyan')) || null;
@@ -241,7 +326,7 @@
             -webkit-backdrop-filter: blur(40px); backdrop-filter: blur(40px);
             transition: opacity 350ms ease-out, left 450ms ${EASE}, top 450ms ${EASE}, width 450ms ${EASE}, height 450ms ${EASE};
         }
-        header nav > a:not(.btn-shine):hover { color: inherit; }
+        header nav > a:not(.btn-shine):hover, header nav .nav-dd__toggle, header nav .nav-dd__toggle:hover { color: inherit; }
     `;
     document.head.appendChild(style);
     const box = document.createElement('span');
